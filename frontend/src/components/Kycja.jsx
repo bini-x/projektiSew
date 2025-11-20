@@ -8,6 +8,7 @@ function Kycja() {
   return (
     <div className="min-h-screen flex justify-center items-center">
       <div>
+        <h1>hsaldaskdalsdk</h1>
         <p className="font-bold py-10 text-2xl">Kycu</p>
         <form action="">
           <div>
