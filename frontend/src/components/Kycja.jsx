@@ -4,7 +4,7 @@ import { useState } from "react";
 
 function Kycja() {
   const [showPassword, setShowPassword] = useState(false);
-
+//ky osht kyqja
   return (
     <div className="min-h-screen flex justify-center items-center">
       <div>
