@@ -5,6 +5,7 @@ import "./index.css";
 import ListaKompanive from "./components/ListaKompanive";
 import RrethNesh from "./components/RrethNesh";
 import Kycja from "./components/Kycja";
+import Regjistrimi from "./components/Regjistrimi";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/listaKompanive" element={<ListaKompanive />} />
         <Route path="/rrethNesh" element={<RrethNesh />} />
         <Route path="/kycja" element={<Kycja />} />
+        <Route path="/regjistrimi" element={<Regjistrimi />} />
       </Routes>
     </BrowserRouter>
   );

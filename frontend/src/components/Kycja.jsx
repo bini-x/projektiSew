@@ -1,20 +1,43 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../index.css";
 import { useState } from "react";
 
 function Kycja() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [data, setData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const validateForm = () => {
+    if (!data.email) {
+      alert("sheno email");
+      return;
+    }
+    if (!data.password) {
+      alert("sheno password");
+      return;
+    }
+
+    navigate("/");
+  };
 
   return (
     <div className="min-h-screen flex justify-center items-center">
       <div>
         <p className="font-bold py-10 text-2xl">Kycu</p>
-        <form action="">
+        <form onSubmit={validateForm}>
           <div>
             <label htmlFor="email" className="block">
               Email
             </label>
-            <input type="text" placeholder="Email" className="border" />
+            <input
+              type="text"
+              placeholder="Email"
+              className="border"
+              onChange={(e) => setData({ ...data, email: e.target.value })}
+            />
           </div>
           <div>
             <label htmlFor="fjalekalimi">Fjalekalimi</label>
@@ -23,6 +46,7 @@ function Kycja() {
                 type={showPassword ? "text" : "password"}
                 placeholder="Fjalekalimi"
                 className="border"
+                onChange={(e) => setData({ ...data, password: e.target.value })}
               />
               <button
                 type="button"
@@ -33,11 +57,11 @@ function Kycja() {
               </button>
             </div>
           </div>
-          <Link to="/" className="block">
+          <button type="submit" className="block">
             Kycu
-          </Link>
+          </button>
           <p className="inline">Nuk keni llogari?</p>
-          <Link to="/regjistrohu">Regjistrohu</Link>
+          <Link to="/regjistrimi">Regjistrohu</Link>
         </form>
       </div>
     </div>
