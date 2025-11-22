@@ -31,7 +31,9 @@ function Kycja() {
               bg-white rounded-lg shadow-2xl p-8 sm:p-10 md:p-12"
       >
         <div>
-          <p className="font-bold py-10 text-2xl">Kycu</p>
+          <h1 className="font-bold text-4xl flex justify-center items-center mb-2 sm:mb-6 md:mb-9">
+            Kycu
+          </h1>
           <form onSubmit={validateForm} className="space-y-5">
             <div>
               <label htmlFor="email" className="block">
