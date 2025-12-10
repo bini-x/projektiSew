@@ -2,6 +2,8 @@ import axios from "axios";
 import "../index.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
 function PublikoPune() {
   const navigate = useNavigate();
@@ -59,99 +61,161 @@ function PublikoPune() {
   };
 
   return (
-    <div>
-      <Link to="/" className="underline text-blue-600">
-        Ballina
-      </Link>
+    <div className="min-h-screen grid place-items-center py-8 px-4 space-y-10 bg-linear-to-br from-blue-50 via-white to-indigo-50">
+      {/* <Link to="/" className="underline text-blue-600"> */}
+      {/*   Ballina */}
+      {/* </Link> */}
+      <div className="grid rounded-3xl shadow-lg w-full max-w-xl py-10 sm:max-w-2xl md:max-w-4xl bg-gradient-to-r from-blue-600 to-indigo-600">
+        <h1 className="text-white text-3xl md:text-4xl px-10">
+          Publiko Punë të Re
+        </h1>
+        <p className="text-xl px-10 text-blue-100 py-3">
+          Plotësoni formularin për të publikuar shpalljen tuaj
+        </p>
+      </div>
 
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="pozitaPunes"> </label>
-        <input
-          className="border"
-          type="text"
-          id="pozitaPunes"
-          placeholder="Sheno Poziten e Punes"
-          onChange={(e) =>
-            setFormData({ ...formData, pozitaPunes: e.target.value })
-          }
-        />
-        <label htmlFor="kategoriaPunes"> </label>
-        <select
-          id="kategoriaPunes"
-          className="border"
-          value={formData.kategoriaPunes}
-          onChange={(e) =>
-            setFormData({ ...formData, kategoriaPunes: e.target.value })
-          }
-        >
-          <option value="" disabled>
-            Kategoria
-          </option>
-          <option value="administrate">Administrate</option>
-          <option value="it">IT</option>
-        </select>
-        <label htmlFor="lokacioniPunes"> </label>
-        <input
-          className="border"
-          type="text"
-          id="lokacioniPunes"
-          placeholder="Sheno Lokacionin e Punes"
-          onChange={(e) =>
-            setFormData({ ...formData, lokacioniPunes: e.target.value })
-          }
-        />
-        <label htmlFor="pershkrimiPunes"></label>
-        <textarea
-          id="pershkrimiPunes"
-          rows="5"
-          cols="40"
-          className="border mx-5"
-          placeholder="Pershkrimi Punes"
-          onChange={(e) =>
-            setFormData({ ...formData, pershkrimiPunes: e.target.value })
-          }
-        ></textarea>
-        <div>
-          <label htmlFor="pyetja"></label>
+      <div className="grid rounded-3xl shadow-2xl w-full max-w-xl py-10 sm:max-w-2xl md:max-w-4xl ">
+        <h1 className="text-xl md:text-2xl px-10">Informacione Bazike</h1>
+        <form onSubmit={handleSubmit} className="grid gap-4 p-10">
+          <label htmlFor="pozitaPunes"> </label>
           <input
+            className="border border-gray-400 block rounded-xl p-3 "
             type="text"
-            placeholder="Sheno pyetjen"
-            className="border"
-            value={pyetjaTanishme}
-            onChange={(e) => setPyetjaTanishme(e.target.value)}
+            id="pozitaPunes"
+            placeholder="Pozita e Punës"
+            onChange={(e) =>
+              setFormData({ ...formData, pozitaPunes: e.target.value })
+            }
           />
-
-          <button
-            type="button"
-            className="cursor-pointer mx-5 publikoPune !bg-green-400"
-            onClick={() => shtoPyetjen()}
+          <label htmlFor="kategoriaPunes"> </label>
+          <select
+            id="kategoriaPunes"
+            className="border border-gray-400 block rounded-xl p-3 "
+            value={formData.kategoriaPunes}
+            onChange={(e) =>
+              setFormData({ ...formData, kategoriaPunes: e.target.value })
+            }
           >
-            Shto Pyetje
-          </button>
-        </div>
-        <div>
-          {pyetjet.length > 0 && <h4>Pyetjet e shtuara: </h4>}
-          {pyetjet.map((pyetja, i) => {
-            return (
-              <div key={i}>
-                {pyetja}
+            <option value="" disabled>
+              Kategoria
+            </option>
+            <option value="administrate">Administrate</option>
+            <option value="it">IT</option>
+          </select>
+          <label htmlFor="lokacioniPunes"> </label>
+          <input
+            className="border border-gray-400 block rounded-xl p-3 "
+            type="text"
+            id="lokacioniPunes"
+            placeholder="Lokacioni i Punës"
+            onChange={(e) =>
+              setFormData({ ...formData, lokacioniPunes: e.target.value })
+            }
+          />
+          <label htmlFor="niveliPunes"></label>
+          <select
+            id="niveliPunes"
+            className="border border-gray-400 block rounded-xl p-3 "
+            value={formData.kategoriaPunes}
+            onChange={(e) =>
+              setFormData({ ...formData, kategoriaPunes: e.target.value })
+            }
+          >
+            <option value="">Zgjidh Nivelin</option>
+            <option value="internship">Praktikë</option>
+            <option value="entry">Entry Level</option>
+            <option value="junior">Junior</option>
+            <option value="mid">Mid-Level</option>
+            <option value="senior">Senior</option>
+            <option value="lead">Lead</option>
+            <option value="manager">Menaxher</option>
+            <option value="director">Drejtor</option>
+          </select>
+          <label htmlFor="llojIPunesimit"></label>
+          <select
+            id="llojIPunesimit"
+            className="border border-gray-400 block rounded-xl p-3 "
+            value={formData.kategoriaPunes}
+            onChange={(e) =>
+              setFormData({ ...formData, kategoriaPunes: e.target.value })
+            }
+          >
+            <option value="">Zgjidh Llojin</option>
+            <option value="fulltime">Full-Time</option>
+            <option value="parttime">Part-Time</option>
+            <option value="contract">Kontraktë</option>
+            <option value="temporary">E Përkohshme</option>
+            <option value="internship">Praktikë</option>
+          </select>
+          <label htmlFor="pershkrimiPunes"></label>
+          <textarea
+            id="pershkrimiPunes"
+            rows="5"
+            cols="40"
+            className="border border-gray-400 block rounded-xl p-3 "
+            placeholder="Pershkrimi Punes"
+            onChange={(e) =>
+              setFormData({ ...formData, pershkrimiPunes: e.target.value })
+            }
+          ></textarea>
+          <hr className="border-gray-200 my-5" />
+          {pyetjet.length > 0 && (
+            <>
+              <h1 className="text-xl md:text-2xl">Pyetje për Aplikantët</h1>
+              <div className="bg-linear-to-br from-gray-50 to-blue-50 grid rounded-2xl border-2 border-gray-200 hover:border-blue-300 transition-all duration-200">
+                {/*
+        The line below is unnecessary and has been removed:
+        {pyetjet.length > 0}
+      */}
+                {pyetjet.map((pyetja, i) => {
+                  return (
+                    <div
+                      key={i}
+                      className="p-4 sm:p-5 rounded-xl flex justify-between items-center"
+                    >
+                      <span>{pyetja}</span>
+                      <button
+                        type="button"
+                        className="cursor-pointer rounded-2xl text-red-400 hover:text-red-600 p-2"
+                        onClick={() => fshijPyetjen(i)}
+                      >
+                        <FontAwesomeIcon icon={faTrashCan} />
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          )}
+          <form onSubmit={handleSubmit} className="grid gap-6 ">
+            <div className="border p-10 rounded-2xl border-blue-100 bg-linear-to-br from-gray-50 to-blue-50 ">
+              <label htmlFor="pyetja"></label>
+              <input
+                type="text"
+                placeholder="Sheno pyetjen"
+                className="border border-gray-400 block rounded-xl p-3 w-full"
+                value={pyetjaTanishme}
+                onChange={(e) => setPyetjaTanishme(e.target.value)}
+              />
+              <div className="grid grid-cols-2 gap-4 my-3">
+                <button type="submit" className="publikoPune">
+                  Konfirmo
+                </button>
                 <button
                   type="button"
-                  className="cursor-pointer mx-5 publikoPune !bg-red-400"
-                  onClick={() => fshijPyetjen(i)}
+                  className="cursor-pointer  publikoPune !bg-green-400"
+                  onClick={() => shtoPyetjen()}
                 >
-                  Fshij Pyetjen
+                  Shto Pyetje
                 </button>
               </div>
-            );
-          })}
-        </div>
-        <button type="submit" className="mx-5 publikoPune">
-          Konfirmo
-        </button>
-      </form>
+            </div>
+          </form>
+        </form>
+      </div>
     </div>
   );
 }
 
 export default PublikoPune;
+4;
