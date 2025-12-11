@@ -15,7 +15,7 @@ function PublikoPune() {
     lokacioniPunes: "",
     pershkrimiPunes: "",
     niveliPunes: "",
-    llojIPunesimit: "",
+    llojiPunesimit: "",
   });
 
   const shtoPyetjen = () => {
@@ -39,6 +39,8 @@ function PublikoPune() {
       lokacioniPunes: formData.lokacioniPunes,
       pershkrimiPunes: formData.pershkrimiPunes,
       pyetjet: pyetjet,
+      niveliPunes: formData.niveliPunes,
+      llojiPunesimit: formData.llojiPunesimit,
     };
 
     const response = await axios.post(
@@ -54,6 +56,8 @@ function PublikoPune() {
         kategoriaPunes: "",
         lokacioniPunes: "",
         pershkrimiPunes: "",
+        niveliPunes: "",
+        llojiPunesimit: "",
       });
       setPyetjet([]);
       setPyetjaTanishme("");
@@ -123,29 +127,33 @@ function PublikoPune() {
               setFormData({ ...formData, niveliPunes: e.target.value })
             }
           >
-            <option value="">Zgjidh Nivelin</option>
-            <option value="internship">Praktikë</option>
-            <option value="entry">Entry Level</option>
+            <option value="" disabled>
+              Zgjedh Nivelin
+            </option>
+            <option value="praktike">Praktikë</option>
+            <option value="fillestar">Fillestar</option>
             <option value="junior">Junior</option>
             <option value="mid">Mid-Level</option>
             <option value="senior">Senior</option>
-            <option value="lead">Lead</option>
-            <option value="manager">Menaxher</option>
-            <option value="director">Drejtor</option>
+            <option value="lider">Lider</option>
+            <option value="menaxher">Menaxher</option>
+            <option value="drejtor">Drejtor</option>
           </select>
-          <label htmlFor="llojIPunesimit"></label>
+          <label htmlFor="llojiPunesimit"></label>
           <select
-            id="llojIPunesimit"
+            id="llojiPunesimit"
             className="border border-gray-400 block rounded-xl p-3 "
-            value={formData.llojIPunesimit}
+            value={formData.llojiPunesimit}
             onChange={(e) =>
-              setFormData({ ...formData, llojIPunesimit: e.target.value })
+              setFormData({ ...formData, llojiPunesimit: e.target.value })
             }
           >
-            <option value="">Zgjidh Llojin</option>
+            <option value="" disabled>
+              Zgjedh Llojin
+            </option>
             <option value="fulltime">Full-Time</option>
             <option value="parttime">Part-Time</option>
-            <option value="contract">Kontraktë</option>
+            <option value="contract">Kontratë</option>
             <option value="temporary">E Përkohshme</option>
             <option value="internship">Praktikë</option>
           </select>
@@ -165,10 +173,6 @@ function PublikoPune() {
             <>
               <h1 className="text-xl md:text-2xl">Pyetje për Aplikantët</h1>
               <div className="bg-linear-to-br from-gray-50 to-blue-50 grid rounded-2xl border-2 border-gray-200 hover:border-blue-300 transition-all duration-200">
-                {/*
-        The line below is unnecessary and has been removed:
-        {pyetjet.length > 0}
-      */}
                 {pyetjet.map((pyetja, i) => {
                   return (
                     <div
@@ -189,31 +193,29 @@ function PublikoPune() {
               </div>
             </>
           )}
-          <form onSubmit={handleSubmit} className="grid gap-6 ">
-            <div className="border rounded-2xl border-blue-100 bg-linear-to-br from-gray-50 to-blue-50 flex justify-between gap-5 py-10 px-2">
-              <label htmlFor="pyetja"></label>
-              <input
-                type="text"
-                placeholder="Sheno pyetjen"
-                className="border border-gray-400 block rounded-xl p-1 w-full"
-                value={pyetjaTanishme}
-                onChange={(e) => setPyetjaTanishme(e.target.value)}
-              />
-              <button
-                type="button"
-                className="cursor-pointer  publikoPune !bg-green-400 w-fit py-2"
-                onClick={() => shtoPyetjen()}
-              >
-                Shto
-              </button>
-            </div>
+          <div className="border rounded-2xl border-blue-100 bg-linear-to-br from-gray-50 to-blue-50 flex justify-between gap-5 py-10 px-2">
+            <label htmlFor="pyetja"></label>
+            <input
+              type="text"
+              placeholder="Sheno pyetjen"
+              className="border border-gray-400 block rounded-xl p-1 w-full"
+              value={pyetjaTanishme}
+              onChange={(e) => setPyetjaTanishme(e.target.value)}
+            />
+            <button
+              type="button"
+              className="cursor-pointer  publikoPune !bg-green-400 w-fit py-2"
+              onClick={() => shtoPyetjen()}
+            >
+              Shto
+            </button>
+          </div>
 
-            <div className="flex justify-end">
-              <button type="submit" className="publikoPune w-fit">
-                Publiko
-              </button>
-            </div>
-          </form>
+          <div className="flex justify-end">
+            <button type="submit" className="publikoPune w-fit">
+              Publiko
+            </button>
+          </div>
         </form>
       </div>
     </div>

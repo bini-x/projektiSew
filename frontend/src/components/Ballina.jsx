@@ -4,26 +4,40 @@ import "../index.css";
 import ShpalljaCard from "./ShpalljaCard";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 function Ballina() {
   const [shpalljaData, setShpalljaData] = useState([]);
+  const [kerkoParams] = useSearchParams();
 
   useEffect(() => {
-    const fetchShpalljaData = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:3000/api/shpallja/kompania",
-        );
-        setShpalljaData(response.data.data || []);
+        const params = new URLSearchParams(kerkoParams);
+
+        if (params.toString()) {
+          const response = await axios.get(
+            `http://localhost:3000/api/shpallja/kerko?${params.toString()}`,
+          );
+          if (response.data.success) {
+            setShpalljaData(response.data.data || []);
+          } else {
+            console.error("Gabim ne kerkim: ", response.data.error);
+          }
+        } else {
+          const response = await axios.get(
+            "http://localhost:3000/api/shpallja/kompania",
+          );
+          setShpalljaData(response.data.data || []);
+        }
       } catch (err) {
         console.error(err);
         setShpalljaData([]);
       }
     };
 
-    fetchShpalljaData();
-  }, []);
+    fetchData();
+  }, [kerkoParams]);
 
   return (
     <div>
@@ -37,6 +51,15 @@ function Ballina() {
         {shpalljaData.map((shpallja) => {
           return <ShpalljaCard key={shpallja._id} shpallja={shpallja} />;
         })}
+        {shpalljaData.length === 0 && (
+          <div className="text-center p-10">
+            <p>
+              {kerkoParams.toString()
+                ? "Nuk u gjet asnjë punë me këto kërkime"
+                : "Nuk ka punë të disponueshme"}
+            </p>
+          </div>
+        )}{" "}
       </div>
     </div>
   );

@@ -30,6 +30,8 @@ function Shpallja() {
     }
   }, [id]);
 
+  console.log(shpallja);
+
   if (!shpallja) {
     return (
       <div>

@@ -5,7 +5,7 @@ const Perdorues = require("../models/perdoruesSchema");
 router.get("/", async (req, res) => {
   try {
     if (!req.session.userId) {
-      return res.status(400).json({
+      return res.status(401).json({
         success: false,
         error: "Nuk jeni kycur",
       });

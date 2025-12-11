@@ -21,6 +21,27 @@ const shpalljaSchema = new mongoose.Schema({
   pyetjet: {
     type: [String],
   },
+  niveliPunes: {
+    type: String,
+    enum: [
+      "praktike",
+      "fillestar",
+      "junior",
+      "mid",
+      "senior",
+      "lider",
+      "menaxher",
+      "drejtor",
+    ],
+  },
+  llojiPunesimit: {
+    type: String,
+    enum: ["fulltime", "parttime", "contract", "temporary", "internship"],
+  },
+  dataKrijimit: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 const Shpallja = mongoose.model("Shpallja", shpalljaSchema, "shpalljet");
