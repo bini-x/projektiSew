@@ -22,7 +22,7 @@ function App() {
         <Route path="/regjistrimi" element={<Regjistrimi />} />
         <Route path="/publikoPune" element={<PublikoPune />} />
         <Route path="/shpallja/:id" element={<Shpallja />} />
-        <Route path="/profili" element={<Profili />} />
+        <Route path="/profili/:id" element={<Profili />} />
       </Routes>
     </BrowserRouter>
   );

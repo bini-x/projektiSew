@@ -84,6 +84,10 @@ function Ballina() {
     };
 
     fetchPerdoruesiData();
+  }, []);
+
+  useEffect(() => {
+    console.log(perdoruesiData);
   }, [perdoruesiData]);
 
   return (
@@ -93,7 +97,7 @@ function Ballina() {
           <div className="flex justify-between bg-white shadow-md py-7 px-6 mx-auto flex justify-between items-center ml-auto text-l rounded-2xl">
             <Header />
             <div className="flex space-x-4 ml-auto items-center">
-              <Link to="/profili">
+              <Link to={`/profili/${perdoruesiData._id}`}>
                 {perdoruesiData.emri ? (
                   <FontAwesomeIcon icon={faUser} />
                 ) : (
@@ -119,13 +123,9 @@ function Ballina() {
 
             {perdoruesiData ? (
               <div className="flex space-x-4 ml-auto items-center">
-                <Link to="/profili">
-                  {perdoruesiData.emri ? (
-                    <FontAwesomeIcon icon={faUser} />
-                  ) : (
-                    <FontAwesomeIcon icon={faBriefcase} />
-                  )}
-                  {perdoruesiData.emri || perdoruesiData.kompania}
+                <Link to={`/profili/${perdoruesiData._id}`}>
+                  <FontAwesomeIcon icon={faUser} />
+                  {perdoruesiData.emri}
                 </Link>
                 <button
                   type="button"
@@ -149,8 +149,7 @@ function Ballina() {
 
           <div className="flex justify-center items-center text-5xl my-15">
             <h1 className="">
-              Gjeni punen perfekte per ju{" "}
-              {perdoruesiData?.emri || perdoruesiData?.kompania}
+              Gjeni punen perfekte per ju {perdoruesiData?.emri}
             </h1>
           </div>
 

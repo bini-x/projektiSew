@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const shpalljaSchema = new mongoose.Schema({
+  emailKompanise: {
+    type: String,
+    required: true,
+  },
   pozitaPunes: {
     type: String,
     required: true,

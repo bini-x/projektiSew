@@ -1,7 +1,7 @@
 import axios from "axios";
 import "../index.css";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
@@ -10,6 +10,7 @@ function PublikoPune() {
   const [pyetjet, setPyetjet] = useState([]);
   const [pyetjaTanishme, setPyetjaTanishme] = useState("");
   const [formData, setFormData] = useState({
+    emailKompanise: "",
     pozitaPunes: "",
     kategoriaPunes: "",
     lokacioniPunes: "",
@@ -30,10 +31,39 @@ function PublikoPune() {
     setPyetjet(pyetjetReja);
   };
 
+  useEffect(() => {
+    const fetchPerdoruesiData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/kycja/perdoruesi",
+          {
+            withCredentials: true,
+          },
+        );
+
+        if (response.data.success) {
+          setFormData({
+            ...formData,
+            emailKompanise: response.data.userResponse.email,
+          });
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchPerdoruesiData();
+  }, []);
+
+  useEffect(() => {
+    console.log(formData);
+  }, [formData]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     let dataToSend = {
+      emailKompanise: formData.emailKompanise,
       pozitaPunes: formData.pozitaPunes,
       kategoriaPunes: formData.kategoriaPunes,
       lokacioniPunes: formData.lokacioniPunes,
@@ -52,6 +82,7 @@ function PublikoPune() {
       alert("Puna u shpall");
 
       setFormData({
+        emailKompanise: "",
         pozitaPunes: "",
         kategoriaPunes: "",
         lokacioniPunes: "",

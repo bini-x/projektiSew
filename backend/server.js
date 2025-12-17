@@ -6,6 +6,7 @@ const kycjaApi = require("./routes/kycjaApi");
 const shpalljaApi = require("./routes/shpalljaApi");
 const kerkoApi = require("./routes/kerkoApi");
 const ckycjaApi = require("./routes/ckyckjaApi");
+const profiliApi = require("./routes/profiliApi");
 const session = require("express-session");
 require("dotenv").config();
 
@@ -37,6 +38,7 @@ app.use("/api/shpallja", shpalljaApi);
 app.use("/api/regjistrimi", regjistrimiApi);
 app.use("/api/kycja", kycjaApi);
 app.use("/api/ckycja", ckycjaApi);
+app.use("/api/profili", profiliApi);
 
 app.use(express.urlencoded({ extended: true }));
 

@@ -44,6 +44,7 @@ router.get("/:id", async (req, res) => {
 
 router.post("/kompania", async (req, res) => {
   const {
+    emailKompanise,
     pozitaPunes,
     kategoriaPunes,
     lokacioniPunes,
@@ -54,6 +55,7 @@ router.post("/kompania", async (req, res) => {
   } = req.body;
 
   console.log(
+    emailKompanise,
     pozitaPunes,
     kategoriaPunes,
     lokacioniPunes,
@@ -64,6 +66,7 @@ router.post("/kompania", async (req, res) => {
   );
 
   const shpallja = new Shpallja({
+    emailKompanise,
     pozitaPunes,
     kategoriaPunes,
     lokacioniPunes,
