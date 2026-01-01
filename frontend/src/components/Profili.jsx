@@ -9,8 +9,11 @@ import { faX } from "@fortawesome/free-solid-svg-icons";
 function Profili() {
   const [perdoruesiData, setPerdoruesiData] = useState({});
   const [shpalljaData, setShpalljaData] = useState([]);
-  // const [klikimiShpalljes, setKlikimiShpalljes] = useState(false);
+  const [shpalljaKlikuarId, setShpalljaKlikuarId] = useState(false);
   const [shpalljaKlikuar, setShpalljaKlikuar] = useState(null);
+  const [aplikimet, setAplikimet] = useState([]);
+  const [aplikimiKlikuar, setAplikimiKlikuar] = useState(null);
+  const [fshehShpalljenKlikuar, setFshehShpalljenKlikuar] = useState(false);
   const { id } = useParams();
 
   useEffect(() => {
@@ -59,6 +62,29 @@ function Profili() {
   }, [perdoruesiData]);
 
   useEffect(() => {
+    const fetchData = async () => {
+      if (!shpalljaKlikuarId) {
+        setAplikimet([]);
+        return;
+      }
+
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/api/shpallja/${shpalljaKlikuarId}/aplikimet`,
+        );
+
+        if (response.data.success) {
+          setAplikimet(response.data.aplikimet);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, [shpalljaKlikuarId]);
+
+  useEffect(() => {
     console.log("shpallja: ", shpalljaData);
   }, [shpalljaData]);
 
@@ -74,6 +100,7 @@ function Profili() {
   }
 
   const hapShpalljen = (shpallja) => {
+    setShpalljaKlikuarId(shpallja._id);
     setShpalljaKlikuar(shpallja);
   };
 
@@ -85,16 +112,16 @@ function Profili() {
     });
   };
 
-  const fshijShpalljen = async (id) => {
+  const fshijShpalljen = async (idShpallja) => {
     try {
       const confirmed = window.confirm(
         "A jeni i sigurt qe doni ta fshini shpalljen?",
       );
 
       if (confirmed) {
-        await axios.delete(`http://localhost:3000/api/shpallja/${id}`);
+        await axios.delete(`http://localhost:3000/api/shpallja/${idShpallja}`);
 
-        setShpalljaData(shpalljaData.filter((sh) => sh._id !== id));
+        setShpalljaData(shpalljaData.filter((sh) => sh._id !== idShpallja));
         setShpalljaKlikuar(null);
       }
     } catch (error) {
@@ -123,8 +150,12 @@ function Profili() {
     }
   };
 
+  const hapAplikimin = async (aplikimi) => {
+    setAplikimiKlikuar(aplikimi);
+  };
+
   return (
-    <div className="">
+    <div>
       {/* <img src="" alt="Foto e Profilit" /> */}
       <h1>{perdoruesiData.emri || perdoruesiData.kompania}</h1>
       <h2>{perdoruesiData.mbiemri}</h2>
@@ -142,6 +173,7 @@ function Profili() {
               <p>Lokacioni: {sh.lokacioniPunes}</p>
               <p>Niveli: {sh.niveliPunes}</p>
             </div>
+
             <button
               className="publikoPune cursor-pointer"
               type="button"
@@ -154,7 +186,9 @@ function Profili() {
       })}
 
       {shpalljaKlikuar && (
-        <div className="border absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-xl">
+        <div
+          className={`border absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-xl ${fshehShpalljenKlikuar ? "hidden" : "block"}`}
+        >
           <form onSubmit={ruajNdryshimet}>
             <label htmlFor="pozitaPunes">Pozita e punes:</label>
             <input
@@ -200,10 +234,68 @@ function Profili() {
               Perfundo
             </button>
           </form>
+          <div className="mt-6">
+            <h4 className="font-bold mb-2">Aplikimet ({aplikimet.length}):</h4>
+
+            {aplikimet.length === 0 ? (
+              <p className="text-gray-500">Nuk ka aplikime</p>
+            ) : (
+              <div className="space-y-2 max-h-60 overflow-y-auto">
+                {aplikimet.map((a) => (
+                  <div key={a._id} className="border p-2 flex justify-between">
+                    <div>
+                      <p className="font-medium">
+                        {a.emriAplikantit} {a.mbiemriAplikantit}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        {a.emailAplikantit}
+                      </p>
+                    </div>
+                    <div>
+                      <button
+                        type="button"
+                        className="publikoPune"
+                        onClick={() => {
+                          hapAplikimin(a);
+                          setFshehShpalljenKlikuar(!fshehShpalljenKlikuar);
+                        }}
+                      >
+                        Shiko Me Shume
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
           <FontAwesomeIcon
             icon={faX}
-            onClick={() => setShpalljaKlikuar(null)}
+            onClick={() => {
+              setShpalljaKlikuar(null);
+            }}
           ></FontAwesomeIcon>
+        </div>
+      )}
+
+      {aplikimiKlikuar && (
+        <div className="border absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-xl">
+          <div className="space-y-2 overflow-y-auto">
+            <p>Emri: {aplikimiKlikuar.emriAplikantit}</p>
+            <p>Mbiemri: {aplikimiKlikuar.mbiemriAplikantit}</p>
+            <p>Email: {aplikimiKlikuar.emailAplikantit}</p>
+            <p>eksperienca</p>
+            <p>niveli</p>
+            <p>.</p>
+            <p>.</p>
+            <p>.</p>
+            <FontAwesomeIcon
+              icon={faX}
+              onClick={() => {
+                setAplikimiKlikuar(null);
+                setFshehShpalljenKlikuar(false);
+              }}
+            ></FontAwesomeIcon>
+          </div>
         </div>
       )}
     </div>

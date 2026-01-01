@@ -6,6 +6,7 @@ import Header from "./Header";
 function Aplikimi() {
   const [shpallja, setShpallja] = useState(null);
   const [aplikimi, setAplikimi] = useState({
+    emailKompanise: "",
     emailAplikantit: "",
     emriAplikantit: "",
     mbiemriAplikantit: "",
@@ -38,6 +39,7 @@ function Aplikimi() {
     e.preventDefault();
     try {
       const dataToSend = {
+        emailKompanise: shpallja.emailKompanise,
         emailAplikantit: aplikimi.emailAplikantit,
         emriAplikantit: aplikimi.emriAplikantit,
         mbiemriAplikantit: aplikimi.mbiemriAplikantit,
@@ -73,6 +75,7 @@ function Aplikimi() {
     <div>
       <p>Pozita e Punes: {shpallja.pozitaPunes}</p>
       <p>Kategoria e Punes: {shpallja.kategoriaPunes}</p>
+      <p>Kompania: {shpallja.emailKompanise}</p>
       <form onSubmit={shtoAplikimin}>
         <div className="flex flex-col">
           <label htmlFor="emri">Emri</label>

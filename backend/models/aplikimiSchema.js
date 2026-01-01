@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 
 const aplikimiSchema = new mongoose.Schema({
+  shpalljaId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Shpallja",
+    required: true,
+  },
   emailAplikantit: {
     type: String,
     required: true,
