@@ -11,7 +11,14 @@ const shpalljaSchema = new mongoose.Schema({
   },
   kategoriaPunes: {
     type: String,
-    enum: ["administrate", "it"],
+    enum: [
+      "Administrate",
+      "IT",
+      "Dizajner",
+      "Infermieri",
+      "Edukim",
+      "Shitje dhe Marketing",
+    ],
     required: true,
   },
   lokacioniPunes: {
@@ -32,7 +39,7 @@ const shpalljaSchema = new mongoose.Schema({
       "Praktike",
       "Fillestar",
       "Junior",
-      "Mid",
+      "Mid-Level",
       "Senior",
       "Lider",
       "Menaxher",
