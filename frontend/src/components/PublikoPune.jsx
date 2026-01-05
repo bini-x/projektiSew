@@ -16,8 +16,15 @@ function PublikoPune() {
     lokacioniPunes: "",
     pershkrimiPunes: "",
     niveliPunes: "",
-    llojiPunesimit: "",
+    llojiPunesimit: [],
+    eksperienca: "",
   });
+
+  const employmentTypes = [
+    { value: "Fulltime", label: "Fulltime" },
+    { value: "Part-time", label: "Part-time" },
+    { value: "Praktike", label: "Praktike" },
+  ];
 
   const shtoPyetjen = () => {
     if (pyetjaTanishme.trim()) {
@@ -30,6 +37,26 @@ function PublikoPune() {
     const pyetjetReja = pyetjet.filter((_, i) => i !== index);
     setPyetjet(pyetjetReja);
   };
+
+  // qetu
+  const handleEmploymentTypeChange = (typeValue) => {
+    setFormData((prev) => {
+      const currentTypes = prev.llojiPunesimit || [];
+
+      if (currentTypes.includes(typeValue)) {
+        return {
+          ...prev,
+          llojiPunesimit: currentTypes.filter((type) => type !== typeValue),
+        };
+      } else {
+        return {
+          ...prev,
+          llojiPunesimit: [...currentTypes, typeValue],
+        };
+      }
+    });
+  };
+  // dej qetu
 
   useEffect(() => {
     const fetchPerdoruesiData = async () => {
@@ -71,6 +98,7 @@ function PublikoPune() {
       pyetjet: pyetjet,
       niveliPunes: formData.niveliPunes,
       llojiPunesimit: formData.llojiPunesimit,
+      eksperienca: formData.eksperienca,
     };
 
     const response = await axios.post(
@@ -88,7 +116,8 @@ function PublikoPune() {
         lokacioniPunes: "",
         pershkrimiPunes: "",
         niveliPunes: "",
-        llojiPunesimit: "",
+        llojiPunesimit: [],
+        eksperienca: "",
       });
       setPyetjet([]);
       setPyetjaTanishme("");
@@ -104,7 +133,7 @@ function PublikoPune() {
         <p className="text-xl px-10 text-gray-600 py-3">
           Plotësoni formularin për të publikuar shpalljen tuaj
         </p>
-        <hr className="border-gray-400 mx-5 my-3" />
+        <hr className="border-gray-400" />
         <h1 className="text-xl md:text-2xl px-10 mt-6">Informacione Bazike</h1>
         <form onSubmit={handleSubmit} className="grid gap-4 p-10">
           <div>
@@ -148,22 +177,6 @@ function PublikoPune() {
               </select>
             </div>
             <div className="col-span-1">
-              <label htmlFor="lokacioniPunes" className="label">
-                Lokacioni
-              </label>
-              <input
-                className="input"
-                type="text"
-                id="lokacioniPunes"
-                placeholder="Lokacioni i Punës"
-                onChange={(e) =>
-                  setFormData({ ...formData, lokacioniPunes: e.target.value })
-                }
-              />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="col-span-1">
               <label htmlFor="niveliPunes" className="label">
                 Niveli Punes
               </label>
@@ -188,6 +201,79 @@ function PublikoPune() {
                 <option value="Drejtor">Drejtor</option>
               </select>
             </div>
+          </div>
+
+          <hr className="border-gray-400 mt-10" />
+
+          <h1 className="text-xl md:text-2xl mt-6">Informacione Shtese</h1>
+          <div className="mt-4">
+            <label className="label block mb-2">Lloji i Punësimit</label>
+            <div className="flex flex-wrap gap-3">
+              {employmentTypes.map((type) => (
+                <button
+                  key={type.value}
+                  type="button"
+                  onClick={() => handleEmploymentTypeChange(type.value)}
+                  className={`
+                    px-4 py-2.5 rounded-md border-2 text-sm font-medium
+                    transition-all duration-200 ease-in-out
+                    ${
+                      (formData.llojiPunesimit || []).includes(type.value)
+                        ? "bg-blue-500 text-white border-blue-500 shadow-sm"
+                        : "bg-white text-gray-700 border-gray-300 hover:border-gray-400"
+                    }
+                  `}
+                >
+                  {type.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div className="col-span-1">
+              <label htmlFor="lokacioniPunes" className="label">
+                Lokacioni
+              </label>
+              <select
+                id="lokacioniPunes"
+                className="input"
+                value={formData.lokacioniPunes}
+                onChange={(e) =>
+                  setFormData({ ...formData, lokacioniPunes: e.target.value })
+                }
+              >
+                <option value="Prishtine">Prishtinë</option>
+                <option value="Prizren">Prizren</option>
+                <option value="Peje">Pejë</option>
+                <option value="Gjakove">Gjakovë</option>
+                <option value="Mitrovice">Mitrovicë</option>
+                <option value="Ferizaj">Ferizaj</option>
+                <option value="Gjilan">Gjilan</option>
+                <option value="Vushtrri">Vushtrri</option>
+                <option value="Podujeve">Podujevë</option>
+                <option value="Suhareke">Suharekë</option>
+                <option value="Rahovec">Rahovec</option>
+                <option value="Drenas">Drenas</option>
+                <option value="Lipjan">Lipjan</option>
+                <option value="Malisheve">Malishevë</option>
+                <option value="Kamenice">Kamenicë</option>
+                <option value="Viti">Viti</option>
+                <option value="Skenderaj">Skenderaj</option>
+                <option value="Istog">Istog</option>
+                <option value="Kline">Klinë</option>
+                <option value="Decan">Deçan</option>
+                <option value="Junik">Junik</option>
+                <option value="Dragash">Dragash</option>
+                <option value="Kaçanik">Kaçanik</option>
+                <option value="Hani_i_Elezit">Hani i Elezit</option>
+                <option value="Shtime">Shtime</option>
+                <option value="Obiliq">Obiliq</option>
+                <option value="Fushe_Kosove">Fushë Kosovë</option>
+                <option value="Kllokot">Kllokot</option>
+              </select>
+            </div>
+
             <div className="col-span-1">
               <label htmlFor="eksperienca" className="label">
                 Eksperienca
@@ -211,9 +297,9 @@ function PublikoPune() {
               </select>
             </div>
           </div>
-          <hr className="border-gray-400 mt-10" />
 
-          <h1 className="text-xl md:text-2xl  mt-6">
+          <hr className="border-gray-400 mt-10" />
+          <h1 className="text-xl md:text-2xl mt-6">
             Pershkrimi dhe Pergjegjesite e punes
           </h1>
           <label htmlFor="pershkrimiPunes" className="label"></label>
@@ -227,6 +313,7 @@ function PublikoPune() {
               setFormData({ ...formData, pershkrimiPunes: e.target.value })
             }
           ></textarea>
+
           {pyetjet.length > 0 && (
             <>
               <h1 className="label !text-l">Pergjegjesite</h1>
@@ -240,10 +327,14 @@ function PublikoPune() {
                       <span>{pyetja}</span>
                       <button
                         type="button"
-                        className="cursor-pointer rounded-2xl text-red-400 hover:text-red-600 p-2"
+                        className="cursor-pointer rounded-2xl text-red-400 hover:text-red-600 p-0"
                         onClick={() => fshijPyetjen(i)}
                       >
-                        <FontAwesomeIcon icon={faTrashCan} />
+                        <FontAwesomeIcon
+                          icon={faTrashCan}
+                          className="w-4 h-4"
+                          style={{ display: "block" }}
+                        />
                       </button>
                     </div>
                   );
@@ -251,6 +342,7 @@ function PublikoPune() {
               </div>
             </>
           )}
+
           <div className="border border-gray-400 rounded-sm flex justify-between gap-5 py-10 px-4">
             <input
               type="text"
@@ -261,15 +353,15 @@ function PublikoPune() {
             />
             <button
               type="button"
-              className="cursor-pointer  publikoPune !bg-green-400 w-fit py-2"
+              className="cursor-pointer publikoPune !bg-green-400 w-fit py-2"
               onClick={() => shtoPyetjen()}
             >
               Shto
             </button>
           </div>
 
-          <hr className="border-gray-300 my-3" />
-          <h1 className="text-xl md:text-2xl  mt-6">Kerkesat dhe Aftesite</h1>
+          <hr className="border-gray-400 " />
+          <h1 className="text-xl md:text-2xl mt-6">Kerkesat dhe Aftesite</h1>
           <div className="flex justify-end">
             <button type="submit" className="publikoPune w-fit">
               Publiko

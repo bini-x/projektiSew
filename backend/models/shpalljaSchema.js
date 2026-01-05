@@ -49,11 +49,16 @@ const shpalljaSchema = new mongoose.Schema({
     default: "",
   },
   llojiPunesimit: {
-    type: String,
-    enum: ["", "fulltime", "parttime", "contract", "temporary", "internship"],
+    type: [String],
+    enum: ["", "Fulltime", "Part-time", "Praktike"],
     required: false,
-    default: "",
+    default: [],
   },
+  eksperienca: {
+    type: String,
+    required: false,
+  },
+
   dataKrijimit: {
     type: Date,
     default: Date.now,

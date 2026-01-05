@@ -76,6 +76,7 @@ router.post("/kompania", async (req, res) => {
     pyetjet,
     niveliPunes,
     llojiPunesimit,
+    eksperienca,
   } = req.body;
 
   console.log(
@@ -87,6 +88,7 @@ router.post("/kompania", async (req, res) => {
     pyetjet,
     niveliPunes,
     llojiPunesimit,
+    eksperienca,
   );
 
   const shpallja = new Shpallja({
@@ -98,6 +100,7 @@ router.post("/kompania", async (req, res) => {
     pyetjet: pyetjet || [],
     niveliPunes,
     llojiPunesimit,
+    eksperienca,
   });
 
   const shpalljaPunes = await shpallja.save();

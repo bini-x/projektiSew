@@ -102,7 +102,7 @@ function Shpallja() {
                 <div className="grid grid-cols-3 w-fit gap-4">
                   <p className="info">
                     <FontAwesomeIcon icon={faClock} className="mr-2" />
-                    Full Time
+                    {shpallja.llojiPunesimit}
                   </p>
                   <p className="info">
                     <FontAwesomeIcon icon={faLocationDot} className="mr-2" />
