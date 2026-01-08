@@ -10,7 +10,10 @@ import { useNavigate, useParams } from "react-router-dom";
 
 function Shpallja() {
   const navigate = useNavigate();
+  const [shpalljet, setShpalljet] = useState([]);
   const [shpallja, setShpallja] = useState(null);
+  const [perdoruesiData, setPerdoruesiData] = useState({});
+
   const { id } = useParams();
 
   useEffect(() => {
@@ -22,7 +25,7 @@ function Shpallja() {
         setShpallja(response.data.data);
       } catch (error) {
         console.log("Error:", error);
-        setShpallja([]);
+        setShpallja(null);
       }
     };
 
@@ -32,6 +35,67 @@ function Shpallja() {
   }, [id]);
 
   console.log(shpallja);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/api/profili/${id}`,
+        );
+        setPerdoruesiData(response.data.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    if (id) {
+      fetchData();
+    }
+  }, [id]);
+
+  useEffect(() => {
+    console.log("perdoruesi: ", perdoruesiData);
+  }, [perdoruesiData]);
+
+  useEffect(() => {
+    const fetchShpalljet = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/shpallja/kompania",
+        );
+
+        if (Array.isArray(response.data.data) && perdoruesiData.email) {
+          const shpalljetFiltruara = response.data.data.filter((shpallja) => {
+            return shpallja.emailKompanise === perdoruesiData.email;
+          });
+
+          setShpalljet(shpalljetFiltruara);
+
+          // Nëse nuk kemi shpallje të vetme, përdor të parën nga lista
+          if (!shpallja && shpalljetFiltruara.length > 0) {
+            setShpallja(shpalljetFiltruara[0]);
+          }
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    if (perdoruesiData.email) {
+      fetchShpalljet();
+    }
+  }, [perdoruesiData.email, shpallja]);
+
+  if (!perdoruesiData) {
+    return (
+      <div>
+        <Header />
+        <div className="text-center p-10">
+          <p>Diqka shkoi keq!</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!shpallja) {
     return (
@@ -47,6 +111,7 @@ function Shpallja() {
   return (
     <div className="min-h-screen bg-gray-100">
       <Header />
+
       <h1>{shpallja.emailKompanise}</h1>
       <div className="max-w-6xl mx-auto p-4 md:p-8">
         <div className="flex flex-col lg:flex-row gap-8">
@@ -103,7 +168,7 @@ function Shpallja() {
                 <div className="grid grid-cols-3 w-fit gap-4">
                   <p className="info">
                     <FontAwesomeIcon icon={faClock} className="mr-2" />
-                    {shpallja.llojiPunesimit}
+                    {shpallja.orari}
                   </p>
                   <p className="info">
                     <FontAwesomeIcon icon={faLocationDot} className="mr-2" />
@@ -111,7 +176,7 @@ function Shpallja() {
                   </p>
                   <p className="info">
                     <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
-                    EUR 1k-2.5k/muaj
+                    {shpallja.pagaPrej}-{shpallja.pagaDeri}
                   </p>
                 </div>
 
@@ -144,10 +209,9 @@ function Shpallja() {
                   <div className="text-center">
                     <p className="font-medium text-gray-700">Aplikante</p>
                     <p className="text-lg font-bold mt-1">
-                      {shpallja.aplikante || "0"}
+                      {shpallja.numriAplikimeve}
                     </p>
                   </div>
-
                   <div className="h-8 w-px bg-gray-400 mx-auto"></div>
 
                   <div className="text-center">

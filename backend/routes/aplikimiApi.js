@@ -21,6 +21,12 @@ router.post("/:id/aplikimi", async (req, res) => {
 
     await aplikimi.save();
 
+    await Shpallja.findByIdAndUpdate(
+      shpalljaId,
+      { $inc: { numriAplikimeve: 1 } },
+      { new: true },
+    );
+
     return res.status(200).json({
       success: true,
       data: aplikimi,
@@ -54,6 +60,7 @@ router.get("/:shpalljaId/aplikimet", async (req, res) => {
     return res.status(200).json({
       success: true,
       aplikimet,
+      numriAplikimeve: shpallja.numriAplikimeve,
     });
   } catch (error) {
     console.error(error);

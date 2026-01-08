@@ -66,6 +66,10 @@ const shpalljaSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  numriAplikimeve: {
+    type: Number,
+    default: 0,
+  },
   dataKrijimit: {
     type: Date,
     default: Date.now,

@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import "../App.css";
 import "../index.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,8 +7,12 @@ import { faAtlassian } from "@fortawesome/free-brands-svg-icons/faAtlassian";
 import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { faBriefcase } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
 
-function Header({ perdoruesiData, onCkycja }) {
+function Header() {
+  const navigate = useNavigate();
+  const [perdoruesiData, setPerdoruesiData] = useState(null);
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -19,8 +23,54 @@ function Header({ perdoruesiData, onCkycja }) {
     setIsMenuOpen(false);
   };
 
+  const handleCkycja = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/ckycja/perdoruesi",
+        {},
+        { withCredentials: true },
+      );
+
+      setPerdoruesiData(null);
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+
+      console.log("Ckycja u be", response.data);
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+      setPerdoruesiData(null);
+      localStorage.clear();
+    }
+  };
+
+  useEffect(() => {
+    const fetchPerdoruesiData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/kycja/perdoruesi",
+          {
+            withCredentials: true,
+          },
+        );
+
+        if (response.data.success) {
+          setPerdoruesiData(response.data.userResponse);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchPerdoruesiData();
+  }, []);
+
+  useEffect(() => {
+    console.log(perdoruesiData);
+  }, [perdoruesiData]);
+
   return (
-    <div className="flex items-center w-full">
+    <div className="flex items-center w-full bg-white shadow-md py-7 px-6 mx-auto flex justify-between items-center text-l rounded-2xl">
       <Link to="/" className="flex items-center mr-8">
         <FontAwesomeIcon icon={faAtlassian} className="text-2xl" />
       </Link>
@@ -62,7 +112,7 @@ function Header({ perdoruesiData, onCkycja }) {
             <button
               type="button"
               className="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600 transition"
-              onClick={onCkycja}
+              onClick={handleCkycja}
             >
               C'kycu
             </button>

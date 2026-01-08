@@ -4,10 +4,11 @@ import "../index.css";
 import ShpalljaCard from "./ShpalljaCard";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import PublikoPune from "./PublikoPune";
 
 function Ballina() {
+  const navigate = useNavigate();
   const [shpalljaData, setShpalljaData] = useState([]);
   const [perdoruesiData, setPerdoruesiData] = useState(null);
   const [kerkoParams] = useSearchParams();
@@ -25,6 +26,7 @@ function Ballina() {
       localStorage.removeItem("token");
 
       console.log("Ckycja u be", response.data);
+      navigate("/");
     } catch (error) {
       console.error(error);
       setPerdoruesiData(null);
@@ -90,16 +92,12 @@ function Ballina() {
     <div>
       {perdoruesiData?.tipiPerdoruesit === "punedhenes" ? (
         <>
-          <div className="bg-white shadow-md py-7 px-6 mx-auto flex justify-between items-center text-l rounded-2xl">
-            <Header perdoruesiData={perdoruesiData} onCkycja={handleCkycja} />
-          </div>
+          <Header />
           <PublikoPune />
         </>
       ) : (
         <>
-          <div className="bg-white shadow-md py-7 px-6 mx-auto flex justify-between items-center text-l rounded-2xl">
-            <Header perdoruesiData={perdoruesiData} onCkycja={handleCkycja} />
-          </div>
+          <Header />
 
           <div className="flex justify-center items-center px-4 my-8 md:my-12 lg:my-15">
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-center font-semi-bold leading-tight">
