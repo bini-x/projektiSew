@@ -39,6 +39,23 @@ router.post("/:id/aplikimi", async (req, res) => {
   }
 });
 
+router.get("/aplikimet", async (req, res) => {
+  try {
+    const aplikimet = await Aplikimi.find();
+
+    return res.status(200).json({
+      success: true,
+      data: aplikimet,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      error: "Gabim i brendshem i serverit",
+    });
+  }
+});
+
 router.get("/:shpalljaId/aplikimet", async (req, res) => {
   try {
     const shpalljaId = req.params.shpalljaId;

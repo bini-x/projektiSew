@@ -7,64 +7,77 @@ router.post("/perdoruesi", async (req, res) => {
     const { email, fjalekalimi } = req.body;
     console.log(req.body);
 
-    let userResponse;
+    let perdoruesiObj;
 
-    const user = await Perdorues.findOne({ email, fjalekalimi });
-    if (!user) {
+    const perdoruesi = await Perdorues.findOne({ email, fjalekalimi });
+    if (!perdoruesi) {
       return res.status(400).json({
         status: "failed",
         error: "perdoruesi nuk ekziston",
       });
     }
 
-    if (user.tipiPerdoruesit === "aplikant") {
-      userResponse = {
-        _id: user._id,
-        emri: user.emri,
-        mbiemri: user.mbiemri,
-        email: user.email,
-        tipiPerdoruesit: user.tipiPerdoruesit,
+    if (perdoruesi.tipiPerdoruesit === "aplikant") {
+      perdoruesiObj = {
+        _id: perdoruesi._id,
+        emri: perdoruesi.emri,
+        mbiemri: perdoruesi.mbiemri,
+        email: perdoruesi.email,
+        tipiPerdoruesit: perdoruesi.tipiPerdoruesit,
       };
-    } else if (user.tipiPerdoruesit === "punedhenes") {
-      userResponse = {
-        _id: user._id,
-        kompania: user.kompania,
-        email: user.email,
-        tipiPerdoruesit: user.tipiPerdoruesit,
+    } else if (perdoruesi.tipiPerdoruesit === "punedhenes") {
+      perdoruesiObj = {
+        _id: perdoruesi._id,
+        kompania: perdoruesi.kompania,
+        email: perdoruesi.email,
+        tipiPerdoruesit: perdoruesi.tipiPerdoruesit,
       };
     }
 
-    req.session.userId = user._id;
+    req.session.perdoruesiId = perdoruesiObj._id;
 
     res.json({
       success: true,
-      userResponse,
+      perdoruesiObj,
     });
   } catch (err) {
     console.error(err);
+    return res.status(500).json({
+      success: false,
+      error: "Gabim i serverit",
+    });
   }
 });
 
 router.get("/perdoruesi", async (req, res) => {
   try {
-    if (!req.session.userId) {
-      return res.status(401).json({
+    const perdoruesiId = req.session.perdoruesiId;
+    if (!perdoruesiId) {
+      return res.status(200).json({
         success: false,
-        error: "Nuk jeni kycur",
+        message: "Nuk jeni kycur",
       });
     }
 
-    const user = await Perdorues.findById(req.session.userId);
+    const perdoruesi = await Perdorues.findById(perdoruesiId);
+
+    if (!perdoruesi) {
+      req.session.destroy();
+      return res.status(200).json({
+        success: false,
+        message: "Sesioni ka skaduar",
+      });
+    }
 
     return res.status(200).json({
       success: true,
-      userResponse: {
-        _id: user._id,
-        emri: user.emri,
-        mbiemri: user.mbiemri,
-        email: user.email,
-        kompania: user.kompania,
-        tipiPerdoruesit: user.tipiPerdoruesit,
+      perdoruesiObj: {
+        _id: perdoruesi._id,
+        emri: perdoruesi.emri,
+        mbiemri: perdoruesi.mbiemri,
+        email: perdoruesi.email,
+        kompania: perdoruesi.kompania,
+        tipiPerdoruesit: perdoruesi.tipiPerdoruesit,
       },
     });
   } catch (err) {

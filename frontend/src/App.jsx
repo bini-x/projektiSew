@@ -14,23 +14,33 @@ import Aplikimi from "./components/Aplikimi";
 import Footeri from "./components/Footeri";
 import MenaxhoShpalljet from "./components/MenaxhoShpalljet";
 import KonfigurimetLlogarise from "./components/KonfigurimetLlogarise";
-import { useEffect, useState } from "react";
 import BallinaMysafir from "./components/BallinaMysafir";
+import Perdoruesi from "./PerdoruesiContext";
+import { useEffect, useState } from "react";
 
 function App() {
+  const { perdoruesiData } = Perdoruesi.usePerdoruesi();
   const [eshteKycur, setEshteKycur] = useState(false);
 
   useEffect(() => {
-    const checkKycja = () => {
-      if (localStorage.getItem("user")) {
-        setEshteKycur(true);
-      } else {
-        setEshteKycur(false);
+    const kontrolloKycjen = () => {
+      try {
+        if (perdoruesiData) {
+          setEshteKycur(true);
+        } else {
+          setEshteKycur(false);
+        }
+      } catch (error) {
+        console.error(error);
       }
     };
 
-    checkKycja();
-  }, []);
+    kontrolloKycjen();
+  }, [perdoruesiData]);
+
+  useEffect(() => {
+    console.log("PERDORUESI: ", perdoruesiData);
+  }, [perdoruesiData]);
 
   return (
     <div className="min-h-screen flex flex-col">

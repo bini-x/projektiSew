@@ -6,10 +6,11 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useSearchParams } from "react-router-dom";
 import PublikoPune from "./PublikoPune";
+import Perdoruesi from "../PerdoruesiContext";
 
 function Ballina() {
+  const { perdoruesiData } = Perdoruesi.usePerdoruesi();
   const [shpalljaData, setShpalljaData] = useState([]);
-  const [perdoruesiData, setPerdoruesiData] = useState(null);
   const [kerkoParams] = useSearchParams();
 
   useEffect(() => {
@@ -40,27 +41,6 @@ function Ballina() {
 
     fetchData();
   }, [kerkoParams]);
-
-  useEffect(() => {
-    const fetchPerdoruesiData = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:3000/api/kycja/perdoruesi",
-          {
-            withCredentials: true,
-          },
-        );
-
-        if (response.data.success) {
-          setPerdoruesiData(response.data.userResponse);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchPerdoruesiData();
-  }, []);
 
   useEffect(() => {
     console.log(perdoruesiData);

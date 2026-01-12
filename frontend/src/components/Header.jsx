@@ -12,10 +12,11 @@ import {
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { faBriefcase } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import Perdoruesi from "../PerdoruesiContext";
 
 function Header() {
   const navigate = useNavigate();
-  const [perdoruesiData, setPerdoruesiData] = useState(null);
+  const { perdoruesiData, setPerdoruesiData } = Perdoruesi.usePerdoruesi();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -74,31 +75,6 @@ function Header() {
       localStorage.clear();
     }
   };
-
-  useEffect(() => {
-    const fetchPerdoruesiData = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:3000/api/kycja/perdoruesi",
-          {
-            withCredentials: true,
-          },
-        );
-
-        if (response.data.success) {
-          setPerdoruesiData(response.data.userResponse);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchPerdoruesiData();
-  }, []);
-
-  useEffect(() => {
-    console.log(perdoruesiData);
-  }, [perdoruesiData]);
 
   // Check if user is punedhenes
   const isPunedhenes = perdoruesiData?.tipiPerdoruesit === "punedhenes";

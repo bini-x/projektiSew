@@ -4,11 +4,13 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-regular-svg-icons";
 import { faEyeSlash } from "@fortawesome/free-regular-svg-icons/faEyeSlash";
+import Perdoruesi from "../PerdoruesiContext";
 import axios from "axios";
 
 function Kycja() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const { setPerdoruesiData } = Perdoruesi.usePerdoruesi();
 
   const changeImage = () => {
     setShowPassword(!showPassword);
@@ -28,9 +30,11 @@ function Kycja() {
         data,
         { withCredentials: true },
       );
-      console.log("success", response.data);
+      if (response.data.success) {
+        console.log("success", response.data);
+        setPerdoruesiData(response.data.perdoruesiObj);
+      }
       navigate("/");
-      localStorage.setItem("user", JSON.stringify(response.data.user));
     } catch (err) {
       if (err.response.data.error.includes("nuk ekziston")) {
         alert("Perdoruesi nuk ekziston");

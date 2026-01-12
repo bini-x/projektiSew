@@ -38,8 +38,8 @@ app.use(
 );
 
 app.use("/api/shpallja", kerkoApi);
-app.use("/api/shpallja", shpalljaApi);
 app.use("/api/shpallja", aplikimiApi);
+app.use("/api/shpallja", shpalljaApi);
 app.use("/api/regjistrimi", regjistrimiApi);
 app.use("/api/kycja", kycjaApi);
 app.use("/api/ckycja", ckycjaApi);

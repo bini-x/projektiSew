@@ -5,7 +5,8 @@ const Shpallja = require("../models/shpalljaSchema");
 
 router.get("/:id", async (req, res) => {
   try {
-    const perdoruesi = await Perdorues.findById(req.params.id);
+    const id = req.params.id;
+    const perdoruesi = await Perdorues.findById(id);
 
     if (!perdoruesi) {
       return res.status(404).json({
@@ -29,23 +30,26 @@ router.get("/:id", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   try {
-    const perdoruesi = await Perdorues.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        new: true,
-        runValidators: true,
-      },
-    );
+    const id = req.params.id;
+    const updateData = req.body;
 
-    // const shpallja = await Shpallja.findByIdAndUpdate(
-    //   req.params.id,
-    //   { $set: { emailKompanise: perdoruesi.email } },
-    //   {
-    //     new: true,
-    //     runValidators: true,
-    //   },
-    // );
+    const perdoruesiVjeter = await Perdorues.findById(id);
+
+    const perdoruesi = await Perdorues.findByIdAndUpdate(id, updateData, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (
+      perdoruesiVjeter.tipiPerdoruesit === "punedhenes" &&
+      updateData.email &&
+      updateData.email !== perdoruesiVjeter.email
+    ) {
+      await Shpallja.updateMany(
+        { emailKompanise: perdoruesiVjeter.email },
+        { $set: { emailKompanise: updateData.email } },
+      );
+    }
 
     res.status(200).json({
       success: true,

@@ -34,7 +34,7 @@ router.get("/:id", async (req, res) => {
     if (!shpallja) {
       return res.status(404).json({
         success: false,
-        message: "Shpallja u gjet",
+        message: "Shpallja nuk u gjet",
       });
     }
 
