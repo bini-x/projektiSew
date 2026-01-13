@@ -6,7 +6,14 @@ const dergoMesazhin = require("../emailservice");
 
 router.post("/:id/aplikimi", async (req, res) => {
   try {
-    const { emailAplikantit, emriAplikantit, mbiemriAplikantit } = req.body;
+    const {
+      emailAplikantit,
+      emriAplikantit,
+      mbiemriAplikantit,
+      eksperienca,
+      niveliPunes,
+      letraMotivuese,
+    } = req.body;
     console.log(req.body);
 
     const shpalljaId = req.params.id;
@@ -17,6 +24,9 @@ router.post("/:id/aplikimi", async (req, res) => {
       emailAplikantit,
       emriAplikantit,
       mbiemriAplikantit,
+      eksperienca,
+      niveliPunes,
+      letraMotivuese,
     });
 
     await aplikimi.save();
@@ -29,6 +39,23 @@ router.post("/:id/aplikimi", async (req, res) => {
     return res.status(200).json({
       success: true,
       data: aplikimi,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      error: "Gabim i brendshem i serverit",
+    });
+  }
+});
+
+router.get("/aplikimet", async (req, res) => {
+  try {
+    const aplikimet = await Aplikimi.find();
+
+    return res.status(200).json({
+      success: true,
+      data: aplikimet,
     });
   } catch (error) {
     console.error(error);

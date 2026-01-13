@@ -4,35 +4,14 @@ import "../index.css";
 import ShpalljaCard from "./ShpalljaCard";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import PublikoPune from "./PublikoPune";
+import Perdoruesi from "../PerdoruesiContext";
 
 function Ballina() {
-  const navigate = useNavigate();
+  const { perdoruesiData } = Perdoruesi.usePerdoruesi();
   const [shpalljaData, setShpalljaData] = useState([]);
-  const [perdoruesiData, setPerdoruesiData] = useState(null);
   const [kerkoParams] = useSearchParams();
-
-  const handleCkycja = async () => {
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/api/ckycja/perdoruesi",
-        {},
-        { withCredentials: true },
-      );
-
-      setPerdoruesiData(null);
-      localStorage.removeItem("user");
-      localStorage.removeItem("token");
-
-      console.log("Ckycja u be", response.data);
-      navigate("/");
-    } catch (error) {
-      console.error(error);
-      setPerdoruesiData(null);
-      localStorage.clear();
-    }
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,27 +43,6 @@ function Ballina() {
   }, [kerkoParams]);
 
   useEffect(() => {
-    const fetchPerdoruesiData = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:3000/api/kycja/perdoruesi",
-          {
-            withCredentials: true,
-          },
-        );
-
-        if (response.data.success) {
-          setPerdoruesiData(response.data.userResponse);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchPerdoruesiData();
-  }, []);
-
-  useEffect(() => {
     console.log(perdoruesiData);
   }, [perdoruesiData]);
 
@@ -101,7 +59,7 @@ function Ballina() {
 
           <div className="flex justify-center items-center px-4 my-8 md:my-12 lg:my-15">
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-center font-semi-bold leading-tight">
-              Gjeni punen perfekte per ju {perdoruesiData?.emri}
+              Gjeni punen perfekte per ju
             </h1>
           </div>
 

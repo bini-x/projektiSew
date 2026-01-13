@@ -102,7 +102,7 @@ function Regjistrimi() {
                 <label
                   htmlFor="aplikant"
                   className="flex items-center justify-center p-3 border border-[#f7f7f7] rounded-lg cursor-pointer 
-                 bg-[#e2e2e2] transition-all duration-200
+                 bg-[#f7f7f7] transition-all duration-200
                  peer-checked:border-[#6a6a6a] peer-checked:font-semibold"
                 >
                   <span className="text-sm sm:text-base">Aplikant</span>
