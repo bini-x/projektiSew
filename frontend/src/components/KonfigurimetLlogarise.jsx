@@ -2,10 +2,17 @@ import Header from "./Header";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-
+import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function KonfigurimetLlogarise() {
   const [perdoruesiData, setPerdoruesiData] = useState({});
+    const [showPassword, setShowPassword] = useState(false);
+
+    const changeImage = () => {
+    setShowPassword(!showPassword);
+  };
 
   const { id } = useParams();
   useEffect(() => {
@@ -146,14 +153,34 @@ function KonfigurimetLlogarise() {
             <label htmlFor="fjalekalimi" className="block text-sm font-medium text-[#0F4C75]">
               Fjalëkalimi
             </label>
+            <div className="relative">
             <input
               id="fjalekalimi"
-              type="password"
+                  type={showPassword ? "text" : "password"}
               className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#3282B8] focus:border-transparent transition"
               onChange={modifikoProfilin}
               value={perdoruesiData.fjalekalimi || ""}
-              placeholder="••••••••"
+              placeholder="Fjalekalimi"
             />
+            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer">
+                  <FontAwesomeIcon
+                    icon={faEye}
+                    className={
+                      showPassword ? "!hidden" : "!block text-gray-800"
+                    }
+                    onClick={changeImage}
+                    size="sm"
+                  />
+                  <FontAwesomeIcon
+                    icon={faEyeSlash}
+                    className={
+                      showPassword ? "!block text-gray-600" : "!hidden"
+                    }
+                    onClick={changeImage}
+                    size="sm"
+                  />
+                </div>
+              </div>
           </div>
 
           {/* Submit button */}
