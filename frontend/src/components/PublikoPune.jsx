@@ -196,17 +196,67 @@ function PublikoPune() {
                       })
                     }
                   >
-                    <option value="" disabled>
+                    <option value=""hidden disabled>
                       Kategoria
                     </option>
-                    <option value="Administrate">Administrate</option>
-                    <option value="IT">IT</option>
-                    <option value="Dizajner">Dizajner</option>
-                    <option value="Infermieri">Infermieri</option>
-                    <option value="Edukim">Edukim</option>
-                    <option value="Shitje dhe Marketing">
-                      Shitje dhe Marketing
-                    </option>
+                    <option value="industria">Industria</option>
+                <option value="administrate">Administratë</option>
+                <option value="agrikulture-industri-ushqimore">
+                  Agrikulturë dhe Industri Ushqimore
+                </option>
+                <option value="arkitekture">Arkitekturë</option>
+                <option value="banka">Banka</option>
+                <option value="retail-distribuim">Retail dhe Distribuim</option>
+                <option value="ndertimtari-patundshmeri">
+                  Ndërtimtari & Patundshmëri
+                </option>
+                <option value="mbeshtetje-konsumatoreve-call-center">
+                  Mbështetje e Konsumatorëve, Call Center
+                </option>
+                <option value="ekonomi-finance-kontabilitet">
+                  Ekonomi, Financë, Kontabilitet
+                </option>
+                <option value="edukim-shkence-hulumtim">
+                  Edukim, Shkencë & Hulumtim
+                </option>
+                <option value="pune-te-pergjithshme">
+                  Punë të Përgjithshme
+                </option>
+                <option value="burime-njerezore">Burime Njerëzore</option>
+                <option value="teknologji-informacioni">
+                  Teknologji e Informacionit
+                </option>
+                <option value="sigurim">Sigurim</option>
+                <option value="gazetari-shtyp-media">
+                  Gazetari, Shtyp & Media
+                </option>
+                <option value="ligj-legjislacion">Ligj & Legjislacion</option>
+                <option value="menaxhment">Menaxhment</option>
+                <option value="marketing-reklamim-pr">
+                  Marketing, Reklamim & PR
+                </option>
+                <option value="inxhinieri">Inxhinieri</option>
+                <option value="shendetesi-medicine">
+                  Shëndetësi, Medicinë
+                </option>
+                <option value="Prodhim">Prodhim</option>
+                <option value="Siguri$Mbrojtje">Siguri&Mbrojtje</option>
+                <option value="Industri te sherbimit">
+                  Industri te sherbimit
+                </option>
+                <option value="Telekomunikim">Telekomunikim</option>
+                <option value="Tekstil, Lekure, Industri Veshembathje">
+                  Tekstil, Lekure, Industri Veshembathje
+                </option>
+                <option value="Gastronomi, Hoteleri, Turizem">
+                  Gastronomi, Hoteleri, Turizem
+                </option>
+                <option value="Transport, Logjistike">
+                  Transport, Logjistike
+                </option>
+                <option value="IT">
+                  IT
+                </option>
                   </select>
                 </div>
 
@@ -222,7 +272,7 @@ function PublikoPune() {
                       setFormData({ ...formData, niveliPunes: e.target.value })
                     }
                   >
-                    <option value="" disabled>
+                    <option value=""hidden disabled>
                       Zgjedh Nivelin
                     </option>
                     <option value="Praktike">Praktikë</option>
@@ -353,6 +403,7 @@ function PublikoPune() {
                     setFormData({ ...formData, lokacioniPunes: e.target.value })
                   }
                 >
+                  <option value=""hidden disabled>Lokacioni</option>
                   <option value="Prishtine">Prishtinë</option>
                   <option value="Prizren">Prizren</option>
                   <option value="Peje">Pejë</option>
