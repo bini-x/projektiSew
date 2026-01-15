@@ -59,20 +59,33 @@ function Aplikimi() {
     e.preventDefault();
     setIsSubmitting(true);
 
+    const formData = new FormData();
+
+    if (cvFile) {
+      formData.append("cvFile", cvFile);
+    } else {
+      alert("Ju lutem ngarkoni cv-ne");
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
-      const dataToSend = {
-        emailKompanise: shpallja.emailKompanise,
-        emailAplikantit: aplikimi.emailAplikantit,
-        emriAplikantit: aplikimi.emriAplikantit,
-        mbiemriAplikantit: aplikimi.mbiemriAplikantit,
-        nrTelefonit: aplikimi.nrTelefonit,
-        eksperienca: aplikimi.eksperienca,
-        letraMotivuese: aplikimi.letraMotivuese,
-      };
+      formData.append("emailKompanise", shpallja.emailKompanise);
+      formData.append("emailAplikantit", aplikimi.emailAplikantit);
+      formData.append("emriAplikantit", aplikimi.emriAplikantit);
+      formData.append("mbiemriAplikantit", aplikimi.mbiemriAplikantit);
+      formData.append("nrTelefonit", aplikimi.nrTelefonit);
+      formData.append("eksperienca", aplikimi.eksperienca);
+      formData.append("letraMotivuese", aplikimi.letraMotivuese);
 
       const response = await axios.post(
         `http://localhost:3000/api/shpallja/${id}/aplikimi`,
-        dataToSend,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
       );
 
       if (response.data.success) {

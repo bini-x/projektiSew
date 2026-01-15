@@ -6,6 +6,26 @@ const aplikimiSchema = new mongoose.Schema({
     ref: "Shpallja",
     required: true,
   },
+  emriFileCv: {
+    type: String,
+    required: false,
+  },
+  mimetype: {
+    type: String,
+    required: true,
+  },
+  size: {
+    type: Number,
+    required: false,
+  },
+  data: {
+    type: Buffer,
+    required: true,
+  },
+  uploadDate: {
+    type: Date,
+    required: false,
+  },
   emailAplikantit: {
     type: String,
     required: true,
@@ -33,6 +53,17 @@ const aplikimiSchema = new mongoose.Schema({
   letraMotivuese: {
     type: String,
     required: true,
+  },
+  status: {
+    type: String,
+    default: "pending",
+    enum: [
+      "pending",
+      "reviewed",
+      "accepted",
+      "rejected",
+      "interview_scheduled",
+    ],
   },
 });
 

@@ -189,6 +189,17 @@ function MenaxhoShpalljet() {
     }),
   );
 
+  const handleDownloadCv = async (aplikimiId, filename) => {
+    try {
+      window.open(
+        `http://localhost:3000/api/shpallja/${aplikimiId}/download`,
+        "_blank",
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="bg-white min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -806,6 +817,23 @@ function MenaxhoShpalljet() {
                   <p className="px-1.5 text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
                     {aplikimiKlikuar.letraMotivuese}
                   </p>
+                </div>
+                <div className="flex justify-between bg-linear-to-br from-gray-50 to-gray-100/50 rounded-lg p-4 max-h-48 overflow-y-auto border border-gray-200">
+                  <p className="px-1.5 text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
+                    {aplikimiKlikuar.emriFileCv}
+                  </p>
+                  <button
+                    type="button"
+                    className="publikoPune"
+                    onClick={() =>
+                      handleDownloadCv(
+                        aplikimiKlikuar._id,
+                        aplikimiKlikuar.emriFileCv,
+                      )
+                    }
+                  >
+                    Download CV
+                  </button>
                 </div>
               </div>
             </div>
