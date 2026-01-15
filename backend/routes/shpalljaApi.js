@@ -34,7 +34,7 @@ router.get("/:id", async (req, res) => {
     if (!shpallja) {
       return res.status(404).json({
         success: false,
-        message: "Shpallja u gjet",
+        message: "Shpallja nuk u gjet",
       });
     }
 
@@ -89,6 +89,7 @@ router.post("/kompania", async (req, res) => {
     eksperienca,
     pagaPrej,
     pagaDeri,
+    perdoruesiId,
   } = req.body;
 
   if (pagaDeri < pagaPrej) {
@@ -111,6 +112,7 @@ router.post("/kompania", async (req, res) => {
     eksperienca,
     pagaPrej,
     pagaDeri,
+    perdoruesiId,
   );
 
   const shpallja = new Shpallja({
@@ -126,6 +128,7 @@ router.post("/kompania", async (req, res) => {
     eksperienca,
     pagaPrej,
     pagaDeri,
+    perdoruesiId,
   });
 
   const shpalljaPunes = await shpallja.save();

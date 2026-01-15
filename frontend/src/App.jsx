@@ -12,14 +12,46 @@ import Profili from "./components/Profili";
 import VerifikoEmail from "./components/VerifikoEmail";
 import Aplikimi from "./components/Aplikimi";
 import Footeri from "./components/Footeri";
+import MenaxhoShpalljet from "./components/MenaxhoShpalljet";
+import KonfigurimetLlogarise from "./components/KonfigurimetLlogarise";
+import BallinaMysafir from "./components/BallinaMysafir";
+import Perdoruesi from "./PerdoruesiContext";
+import MenaxhoAplikimet from "./components/MenaxhoAplikimet";
+import { useEffect, useState } from "react";
 
 function App() {
+  const { perdoruesiData } = Perdoruesi.usePerdoruesi();
+  const [eshteKycur, setEshteKycur] = useState(false);
+
+  useEffect(() => {
+    const kontrolloKycjen = () => {
+      try {
+        if (perdoruesiData) {
+          setEshteKycur(true);
+        } else {
+          setEshteKycur(false);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    kontrolloKycjen();
+  }, [perdoruesiData]);
+
+  useEffect(() => {
+    console.log("PERDORUESI: ", perdoruesiData);
+  }, [perdoruesiData]);
+
   return (
     <div className="min-h-screen flex flex-col">
       <BrowserRouter>
-        <div className="flex-grow">
+        <div className="grow">
           <Routes>
-            <Route path="/" element={<Ballina />} />
+            <Route
+              path="/"
+              element={eshteKycur ? <Ballina /> : <BallinaMysafir />}
+            />
             <Route path="/listaPuneve" element={<ListaPuneve />} />
             <Route path="/listaKompanive" element={<ListaKompanive />} />
             <Route path="/rrethNesh" element={<RrethNesh />} />
@@ -28,6 +60,19 @@ function App() {
             <Route path="/publikoPune" element={<PublikoPune />} />
             <Route path="/shpallja/:id" element={<Shpallja />} />
             <Route path="/profili/:id" element={<Profili />} />
+            <Route
+              path="/profili/:id/menaxhoShpalljet"
+              element={<MenaxhoShpalljet />}
+            />
+            <Route
+              path="/profili/:id/menaxhoAplikimet"
+              element={<MenaxhoAplikimet />}
+            />
+
+            <Route
+              path="/profili/:id/konfigurimet"
+              element={<KonfigurimetLlogarise />}
+            />
             <Route path="/verifiko" element={<VerifikoEmail />} />
             <Route path=":id/aplikimi" element={<Aplikimi />} />
           </Routes>
@@ -39,4 +84,3 @@ function App() {
 }
 
 export default App;
-

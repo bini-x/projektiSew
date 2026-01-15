@@ -32,6 +32,10 @@ const perdoruesSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  nrTelefonit: {
+    type: Number,
+    required: false,
+  },
 });
 
 const Perdorues = mongoose.model("Perdorues", perdoruesSchema, "perdoruesit");

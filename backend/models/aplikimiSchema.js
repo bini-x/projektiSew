@@ -18,6 +18,22 @@ const aplikimiSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  eksperienca: {
+    type: String,
+    required: false,
+  },
+  niveliPunes: {
+    type: String,
+    required: false,
+  },
+  nrTelefonit: {
+    type: Number,
+    required: false,
+  },
+  letraMotivuese: {
+    type: String,
+    required: true,
+  },
 });
 
 const Aplikimi = mongoose.model("Aplikimi", aplikimiSchema, "aplikimet");

@@ -4,11 +4,13 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-regular-svg-icons";
 import { faEyeSlash } from "@fortawesome/free-regular-svg-icons/faEyeSlash";
+import Perdoruesi from "../PerdoruesiContext";
 import axios from "axios";
 
 function Kycja() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const { setPerdoruesiData } = Perdoruesi.usePerdoruesi();
 
   const changeImage = () => {
     setShowPassword(!showPassword);
@@ -28,9 +30,11 @@ function Kycja() {
         data,
         { withCredentials: true },
       );
-      console.log("success", response.data);
+      if (response.data.success) {
+        console.log("success", response.data);
+        setPerdoruesiData(response.data.perdoruesiObj);
+      }
       navigate("/");
-      localStorage.setItem("user", JSON.stringify(response.data.user));
     } catch (err) {
       if (err.response.data.error.includes("nuk ekziston")) {
         alert("Perdoruesi nuk ekziston");
@@ -133,9 +137,9 @@ function Kycja() {
             <div className="text-center">
               <Link
                 to="/"
-                className="text-blue-600 underline text-sm sm:text-base hover:text-blue-800"
+                className="text-[#0F4C75] text-sm sm:text-base hover:bg-[#0F4C75] hover:text-white  border p-2"
               >
-                Ballina
+                Kthehu Tek Ballina
               </Link>
             </div>
           </form>

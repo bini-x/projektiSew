@@ -1,12 +1,12 @@
 function Footer() {
   return (
-    <footer className="bg-slate-900 text-gray-300 mt-auto">
+    <footer className="bg-[#1B262C] text-gray-300 mt-auto">
       <div className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-4 gap-10">
         <div>
           <h3 className="text-xl font-semibold text-white mb-4">Punësohu</h3>
           <p className="text-sm leading-relaxed">
             Platformë moderne për lidhjen e punëkërkuesve me kompanitë më të
-            mira në Kosovë dhe rajon.
+            mira në Kosovë.
           </p>
         </div>
 
@@ -19,7 +19,7 @@ function Footer() {
             <li className="hover:text-white cursor-pointer">Regjistrohu</li>
             <li className="hover:text-white cursor-pointer">Ngarko CV</li>
             <li className="hover:text-white cursor-pointer">
-              Këshilla karriere
+              Apliko për punë
             </li>
           </ul>
         </div>
