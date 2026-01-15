@@ -68,32 +68,34 @@ function Kerkimi() {
                 <option value="" hidden>
                   Qyteti
                 </option>
-                <option value="Decan">Decan</option>
-                <option value="Drenas">Drenas</option>
-                <option value="Gjakove">Gjakove</option>
-                <option value="Gjilan">Gjilan</option>
-                <option value="Dragash">Dragash</option>
-                <option value="Kacanik">Kacanik</option>
-                <option value="Kline">Kline</option>
-                <option value="Fushe Kosove">Fushe Kosove</option>
-                <option value="Kamenice">Kamenice</option>
-                <option value="Mitrovica">Mitrovica</option>
-                <option value="Lipjan">Lipjan</option>
-                <option value="Obiliq">Obiliq</option>
-                <option value="Rahovec">Rahovec</option>
-                <option value="Peje">Peje</option>
-                <option value="Podujeve">Podujeve</option>
-                <option value="Prishtine">Prishtine</option>
-                <option value="Prizren">Prizren</option>
-                <option value="Skenderaj">Skenderaj</option>
-                <option value="Shtime">Shtime</option>
-                <option value="Suhareke">Suhareke</option>
-                <option value="Ferizaj">Ferizaj</option>
-                <option value="Viti">Viti</option>
-                <option value="Vushtrri">Vushtrri</option>
-                <option value="Malisheve">Malisheve</option>
-                <option value="Junik">Junik</option>
-                <option value="Hani I Elezit">Hani I Elezit</option>
+                <option value="Prishtine">Prishtinë</option>
+                  <option value="Prizren">Prizren</option>
+                  <option value="Peje">Pejë</option>
+                  <option value="Gjakove">Gjakovë</option>
+                  <option value="Mitrovice">Mitrovicë</option>
+                  <option value="Ferizaj">Ferizaj</option>
+                  <option value="Gjilan">Gjilan</option>
+                  <option value="Vushtrri">Vushtrri</option>
+                  <option value="Podujeve">Podujevë</option>
+                  <option value="Suhareke">Suharekë</option>
+                  <option value="Rahovec">Rahovec</option>
+                  <option value="Drenas">Drenas</option>
+                  <option value="Lipjan">Lipjan</option>
+                  <option value="Malisheve">Malishevë</option>
+                  <option value="Kamenice">Kamenicë</option>
+                  <option value="Viti">Viti</option>
+                  <option value="Skenderaj">Skenderaj</option>
+                  <option value="Istog">Istog</option>
+                  <option value="Kline">Klinë</option>
+                  <option value="Decan">Deçan</option>
+                  <option value="Junik">Junik</option>
+                  <option value="Dragash">Dragash</option>
+                  <option value="Kaçanik">Kaçanik</option>
+                  <option value="Hani_i_Elezit">Hani i Elezit</option>
+                  <option value="Shtime">Shtime</option>
+                  <option value="Obiliq">Obiliq</option>
+                  <option value="Fushe_Kosove">Fushë Kosovë</option>
+                  <option value="Kllokot">Kllokot</option>
               </select>
             </div>
 
@@ -164,6 +166,9 @@ function Kerkimi() {
                 </option>
                 <option value="Transport, Logjistike">
                   Transport, Logjistike
+                </option>
+                <option value="IT">
+                  IT
                 </option>
               </select>
             </div>

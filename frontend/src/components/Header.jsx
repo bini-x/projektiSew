@@ -66,6 +66,8 @@ function Header() {
       );
 
       setPerdoruesiData(null);
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
 
       console.log("Ckycja u be", response.data);
       closeDropdown();
@@ -73,6 +75,7 @@ function Header() {
     } catch (error) {
       console.error(error);
       setPerdoruesiData(null);
+      localStorage.clear();
     }
   };
 
@@ -146,29 +149,16 @@ function Header() {
                     Profili
                   </Link>
                   <hr className="my-2 border-gray-200" />
-                  {isPunedhenes ? (
-                    <Link
-                      to={`/profili/${perdoruesiData._id}/menaxhoShpalljet`}
-                      className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors"
-                    >
-                      <SquareChartGantt
-                        size={20}
-                        className="mr-3 text-gray-500"
-                      />
-                      Menaxho Punet
-                    </Link>
-                  ) : (
-                    <Link
-                      to={`/profili/${perdoruesiData._id}/menaxhoAplikimet`}
-                      className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors"
-                    >
-                      <SquareChartGantt
-                        size={20}
-                        className="mr-3 text-gray-500"
-                      />
-                      Menaxho Aplikimet
-                    </Link>
-                  )}
+                  <Link
+                    to={`/profili/${perdoruesiData._id}/menaxhoShpalljet`}
+                    className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors"
+                  >
+                    <SquareChartGantt
+                      size={20}
+                      className="mr-3 text-gray-500"
+                    />
+                    Menaxho Punet
+                  </Link>
                   <hr className="my-2 border-gray-200" />
                   <Link
                     to={`/profili/${perdoruesiData._id}/konfigurimet`}
