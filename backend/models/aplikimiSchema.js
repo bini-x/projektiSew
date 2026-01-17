@@ -65,6 +65,10 @@ const aplikimiSchema = new mongoose.Schema({
       "interview_scheduled",
     ],
   },
+  dataKrijimit: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 const Aplikimi = mongoose.model("Aplikimi", aplikimiSchema, "aplikimet");

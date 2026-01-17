@@ -48,7 +48,12 @@ function Aplikimi() {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file && file.type === "application/pdf") {
+    if (
+      (file && file.type === "application/pdf") ||
+      file.type === "application/msword" ||
+      file.type ===
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ) {
       setCvFile(file);
     } else {
       alert("Ju lutem ngarkoni vetëm skedarë PDF");
