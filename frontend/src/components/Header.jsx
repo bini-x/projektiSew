@@ -66,6 +66,8 @@ function Header() {
       );
 
       setPerdoruesiData(null);
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
 
       console.log("Ckycja u be", response.data);
       closeDropdown();
@@ -73,6 +75,7 @@ function Header() {
     } catch (error) {
       console.error(error);
       setPerdoruesiData(null);
+      localStorage.clear();
     }
   };
 
@@ -155,7 +158,7 @@ function Header() {
                         size={20}
                         className="mr-3 text-gray-500"
                       />
-                      Menaxho Punet
+                      Menaxho Shpalljet
                     </Link>
                   ) : (
                     <Link

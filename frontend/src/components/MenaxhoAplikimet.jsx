@@ -102,32 +102,7 @@ function MenaxhoAplikimet() {
     fetchData();
   }, [aplikimet]);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     if (!shpalljaZgjedhurPerAplikante) {
-  //       setAplikimet([]);
-  //       return;
-  //     }
-  //
-  //     try {
-  //       const response = await axios.get(
-  //         `http://localhost:3000/api/shpallja/${shpalljaZgjedhurPerAplikante._id}/aplikimet`,
-  //       );
-  //
-  //       if (response.data.success) {
-  //         console.log("Aplikimet data:", response.data.aplikimet);
-  //         setAplikimet(response.data.aplikimet);
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //       setAplikimet([]);
-  //     }
-  //   };
-  //
-  //   fetchData();
-  // }, [shpalljaZgjedhurPerAplikante]);
-
-  const modifikoShpalljen = (e) => {
+  const modifikoAplikimin = (e) => {
     const { id, value } = e.target;
     setAplikimiKlikuar({
       ...aplikimiKlikuar,
@@ -135,52 +110,23 @@ function MenaxhoAplikimet() {
     });
   };
 
-  const fshijShpalljen = async (idShpallja) => {
-    try {
-      const confirmed = window.confirm(
-        "A jeni i sigurt qe doni ta fshini shpalljen?",
-      );
-      if (confirmed) {
-        await axios.delete(`http://localhost:3000/api/shpallja/${idShpallja}`);
-        setShpalljaData(shpalljaData.filter((sh) => sh._id !== idShpallja));
-        setShpalljaKlikuar(null);
-        setShfaqMeny(null);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const ruajNdryshimet = async (e) => {
     e.preventDefault();
     try {
       await axios.put(
-        `http://localhost:3000/api/shpallja/${shpalljaKlikuar._id}`,
-        shpalljaKlikuar,
+        `http://localhost:3000/api/shpallja/aplikimi/${aplikimiKlikuar._id}`,
+        aplikimiKlikuar,
       );
-      setShpalljaData(
-        shpalljaData.map((sh) =>
-          sh._id === shpalljaKlikuar._id ? shpalljaKlikuar : sh,
+      setAplikimet(
+        aplikimet.map((sh) =>
+          sh._id === aplikimiKlikuar._id ? aplikimiKlikuar : sh,
         ),
       );
       alert("Ndryshimet u ruajten");
-      setShpalljaKlikuar(null);
+      setAplikimiKlikuar(null);
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const shfaqAplikantPopup = (e, shpallja) => {
-    e.stopPropagation();
-    setShpalljaZgjedhurPerAplikante(shpallja);
-    setShfaqPopupAplikanteve(true);
-    setShfaqMeny(null);
-  };
-
-  const mbyllAplikantPopup = () => {
-    setShfaqPopupAplikanteve(false);
-    setShpalljaZgjedhurPerAplikante(null);
-    setAplikimiKlikuar(null);
   };
 
   const hapAplikimin = (aplikimi) => {
@@ -200,14 +146,14 @@ function MenaxhoAplikimet() {
     return sorted;
   };
 
-  const filteredData = sortimDates(
-    shpalljaData.filter((sh) => {
-      const matchesSearch = sh.pozitaPunes
-        .toLowerCase()
-        .includes(kerko.toLowerCase());
-      return matchesSearch;
-    }),
-  );
+  // const filteredData = sortimDates(
+  //   aplikimet.filter((sh) => {
+  //     const matchesSearch = sh?.pozitaPunes
+  //       .toLowerCase()
+  //       .includes(kerko?.toLowerCase());
+  //     return matchesSearch;
+  //   }),
+  // );
 
   return (
     <div className="bg-white min-h-screen">
@@ -332,14 +278,14 @@ function MenaxhoAplikimet() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {shpalljaData.map((sh) => (
+                {aplikimet.map((sh) => (
                   <tr key={sh._id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
                       <div className="text-sm font-medium text-gray-900">
-                        {sh.pozitaPunes}
+                        {sh.emriAplikantit}
                       </div>
                       <div className="text-sm text-gray-500">
-                        {sh.kategoriaPunes}
+                        {sh?.kategoriaPunes}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -350,20 +296,15 @@ function MenaxhoAplikimet() {
                       })}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {sh.lokacioniPunes}
+                      {sh?.lokacioniPunes}
                     </td>
                     <td className="py-4 whitespace-nowrap">
                       <span className="py-1 w-full items-center justify-center inline-flex text-sm font-medium">
-                        {sh.orari}
+                        {sh?.orari}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <button
-                        onClick={(e) => shfaqAplikantPopup(e, sh)}
-                        className="text-sm text-indigo-600 hover:text-indigo-900 font-medium"
-                      >
-                        {sh.numriAplikimeve || 0} aplikant
-                      </button>
+                      {sh?.numriAplikimeve || 0} aplikant
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="relative">
@@ -380,7 +321,7 @@ function MenaxhoAplikimet() {
                           <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
                             <button
                               onClick={() => {
-                                setShpalljaKlikuar(sh);
+                                setAplikimiKlikuar(sh);
                                 setShfaqMeny(null);
                               }}
                               className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2 rounded-t-lg"
@@ -390,11 +331,6 @@ function MenaxhoAplikimet() {
                                 className="text-sm"
                               />
                               <span>Modifiko</span>
-                            </button>
-                            <button
-                              onClick={() => fshijShpalljen(sh._id)}
-                              className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50 flex items-center space-x-2 rounded-b-lg"
-                            >
                               <FontAwesomeIcon
                                 icon={faTrash}
                                 className="text-sm"
@@ -410,108 +346,101 @@ function MenaxhoAplikimet() {
               </tbody>
             </table>
           </div>
-
-          {/* Mobile Cards */}
+          Mobile Cards
           <div className="lg:hidden divide-y divide-gray-200">
-            {filteredData.map((sh) => (
-              <div key={sh._id} className="p-4 hover:bg-gray-50">
-                <div className="flex justify-between items-start mb-3">
-                  <div className="flex-1">
-                    <div className="text-base font-medium text-gray-900 mb-1">
-                      {sh.pozitaPunes}
-                    </div>
-                    <div className="text-sm text-gray-500 mb-2">
-                      {sh.kategoriaPunes}
-                    </div>
-
-                    <div className="space-y-2">
-                      <div className="flex items-center text-sm text-gray-600">
-                        <Calendar size={14} className="mr-2 text-gray-400" />
-                        {new Date(sh.dataKrijimit).toLocaleDateString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                        })}
-                      </div>
-
-                      <div className="flex items-center text-sm text-gray-600">
-                        <MapPin size={14} className="mr-2 text-gray-400" />
-                        {sh.lokacioniPunes}
-                      </div>
-
-                      <div className="flex items-center text-sm text-gray-600">
-                        <Building size={14} className="mr-2 text-gray-400" />
-                        <span className="px-2 py-1 bg-gray-100 rounded">
-                          {sh.orari}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="relative ml-2">
-                    <button
-                      onClick={() =>
-                        setShfaqMeny(shfaqMeny === sh._id ? null : sh._id)
-                      }
-                      className="text-gray-400 hover:text-gray-600 p-2"
-                    >
-                      <FontAwesomeIcon icon={faEllipsisVertical} />
-                    </button>
-
-                    {shfaqMeny === sh._id && (
-                      <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
-                        <button
-                          onClick={() => {
-                            setShpalljaKlikuar(sh);
-                            setShfaqMeny(null);
-                          }}
-                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2 rounded-t-lg"
-                        >
-                          <FontAwesomeIcon
-                            icon={faPencil}
-                            className="text-sm"
-                          />
-                          <span>Modifiko</span>
-                        </button>
-                        <button
-                          onClick={() => fshijShpalljen(sh._id)}
-                          className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50 flex items-center space-x-2 rounded-b-lg"
-                        >
-                          <FontAwesomeIcon icon={faTrash} className="text-sm" />
-                          <span>Fshij</span>
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <div className="flex justify-between items-center mt-4 pt-3 border-t border-gray-100">
-                  <button
-                    onClick={(e) => shfaqAplikantPopup(e, sh)}
-                    className="text-sm text-indigo-600 hover:text-indigo-900 font-medium"
-                  >
-                    {sh.numriAplikimeve || 0} aplikant
-                  </button>
-                </div>
-              </div>
-            ))}
+            {/*   {filteredData.map((sh) => ( */}
+            {/*     <div key={sh._id} className="p-4 hover:bg-gray-50"> */}
+            {/*       <div className="flex justify-between items-start mb-3"> */}
+            {/*         <div className="flex-1"> */}
+            {/*           <div className="text-base font-medium text-gray-900 mb-1"> */}
+            {/*             {sh.pozitaPunes} */}
+            {/*           </div> */}
+            {/*           <div className="text-sm text-gray-500 mb-2"> */}
+            {/*             {sh.kategoriaPunes} */}
+            {/*           </div> */}
+            {/**/}
+            {/*           <div className="space-y-2"> */}
+            {/*             <div className="flex items-center text-sm text-gray-600"> */}
+            {/*               <Calendar size={14} className="mr-2 text-gray-400" /> */}
+            {/*               {new Date(sh.dataKrijimit).toLocaleDateString("en-US", { */}
+            {/*                 month: "short", */}
+            {/*                 day: "numeric", */}
+            {/*                 year: "numeric", */}
+            {/*               })} */}
+            {/*             </div> */}
+            {/**/}
+            {/*             <div className="flex items-center text-sm text-gray-600"> */}
+            {/*               <MapPin size={14} className="mr-2 text-gray-400" /> */}
+            {/*               {sh.lokacioniPunes} */}
+            {/*             </div> */}
+            {/**/}
+            {/*             <div className="flex items-center text-sm text-gray-600"> */}
+            {/*               <Building size={14} className="mr-2 text-gray-400" /> */}
+            {/*               <span className="px-2 py-1 bg-gray-100 rounded"> */}
+            {/*                 {sh.orari} */}
+            {/*               </span> */}
+            {/*             </div> */}
+            {/*           </div> */}
+            {/*         </div> */}
+            {/**/}
+            {/*         <div className="relative ml-2"> */}
+            {/*           <button */}
+            {/*             onClick={() => */}
+            {/*               setShfaqMeny(shfaqMeny === sh._id ? null : sh._id) */}
+            {/*             } */}
+            {/*             className="text-gray-400 hover:text-gray-600 p-2" */}
+            {/*           > */}
+            {/*             <FontAwesomeIcon icon={faEllipsisVertical} /> */}
+            {/*           </button> */}
+            {/**/}
+            {/*           {shfaqMeny === sh._id && ( */}
+            {/*             <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10"> */}
+            {/*               <button */}
+            {/*                 onClick={() => { */}
+            {/*                   setShpalljaKlikuar(sh); */}
+            {/*                   setShfaqMeny(null); */}
+            {/*                 }} */}
+            {/*                 className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2 rounded-t-lg" */}
+            {/*               > */}
+            {/*                 <FontAwesomeIcon */}
+            {/*                   icon={faPencil} */}
+            {/*                   className="text-sm" */}
+            {/*                 /> */}
+            {/*                 <span>Modifiko</span> */}
+            {/*               </button> */}
+            {/*               <button className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50 flex items-center space-x-2 rounded-b-lg"> */}
+            {/*                 <FontAwesomeIcon icon={faTrash} className="text-sm" /> */}
+            {/*                 <span>Fshij</span> */}
+            {/*               </button> */}
+            {/*             </div> */}
+            {/*           )} */}
+            {/*         </div> */}
+            {/*       </div> */}
+            {/**/}
+            {/*       <div className="flex justify-between items-center mt-4 pt-3 border-t border-gray-100"> */}
+            {/*         <button className="text-sm text-indigo-600 hover:text-indigo-900 font-medium"> */}
+            {/*           {sh.numriAplikimeve || 0} aplikant */}
+            {/*         </button> */}
+            {/*       </div> */}
+            {/*     </div> */}
+            {/*   ))} */}
+            {/* </div> */}
+            {/* {filteredData.length === 0 && ( */}
+            {/*   <div className="text-center py-12 text-gray-500"> */}
+            {/*     Nuk ka shpallje për të shfaqur */}
+            {/*   </div> */}
+            {/* )} */}
           </div>
-
-          {filteredData.length === 0 && (
-            <div className="text-center py-12 text-gray-500">
-              Nuk ka shpallje për të shfaqur
-            </div>
-          )}
         </div>
       </div>
 
-      {shpalljaKlikuar && (
+      {aplikimiKlikuar && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg w-fit overflow-y-auto shadow-xl">
             <div className="bg-[#f8f8f9] p-6 flex justify-between items-center">
               <h2 className="text-xl font-bold">Modifiko Shpalljen</h2>
               <button
-                onClick={() => setShpalljaKlikuar(null)}
+                onClick={() => setAplikimiKlikuar(null)}
                 className="cursor-pointer text-xl hover:text-gray-700"
               >
                 <X size={24} />
@@ -523,95 +452,94 @@ function MenaxhoAplikimet() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label
-                      htmlFor="pozitaPunes"
+                      htmlFor="emriAplikantit"
                       className="block text-sm font-medium text-gray-600 mb-2"
                     >
-                      Pozita e punes
+                      Emri
                     </label>
                     <input
-                      id="pozitaPunes"
+                      id="emriAplikantit"
                       type="text"
-                      value={shpalljaKlikuar.pozitaPunes}
-                      onChange={modifikoShpalljen}
+                      value={aplikimiKlikuar.emriAplikantit}
+                      onChange={modifikoAplikimin}
                       className="input-ShpalljaProfil"
-                      placeholder="Senior Full Stack Developer"
+                      placeholder="Sheno Emrin"
                     />
                   </div>
 
                   <div>
                     <label
-                      htmlFor="niveliPunes"
+                      htmlFor="mbiemriAplikantit"
                       className="block text-sm font-medium text-gray-600 mb-2"
                     >
-                      Niveli i punes
+                      Mbiemri
                     </label>
                     <input
-                      id="niveliPunes"
+                      id="mbiemriAplikantit"
                       type="text"
-                      value={shpalljaKlikuar.niveliPunes || ""}
-                      onChange={modifikoShpalljen}
+                      value={aplikimiKlikuar.mbiemriAplikantit || ""}
+                      onChange={modifikoAplikimin}
                       className="input-ShpalljaProfil"
                       placeholder="Full-time"
                     />
                   </div>
                 </div>
 
-                <div>
-                  <label
-                    htmlFor="lokacioniPunes"
-                    className="block text-sm font-medium text-gray-600 mb-2"
-                  >
-                    Lokacioni i punes
-                  </label>
-                  <input
-                    id="lokacioniPunes"
-                    type="text"
-                    value={shpalljaKlikuar.lokacioniPunes || ""}
-                    onChange={modifikoShpalljen}
-                    className="input-ShpalljaProfil"
-                    placeholder="Pristina, Kosovo"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="llojiPunes"
-                    className="block text-sm font-medium text-gray-600 mb-2"
-                  >
-                    Lloji i Punes
-                  </label>
-                  <input
-                    id="llojiPunes"
-                    type="text"
-                    value={shpalljaKlikuar.llojiPunes || ""}
-                    onChange={modifikoShpalljen}
-                    className="input-ShpalljaProfil"
-                    placeholder="Full-time"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="pershkrimiPunes"
-                    className="block text-sm font-medium text-gray-600 mb-2"
-                  >
-                    Pershkrimi i punes
-                  </label>
-                  <textarea
-                    id="pershkrimiPunes"
-                    value={shpalljaKlikuar.pershkrimiPunes || ""}
-                    onChange={modifikoShpalljen}
-                    rows="5"
-                    className="input-ShpalljaProfil"
-                    placeholder="Pershkrimi"
-                  />
-                </div>
+                {/* <div> */}
+                {/*   <label */}
+                {/*     htmlFor="lokacioniPunes" */}
+                {/*     className="block text-sm font-medium text-gray-600 mb-2" */}
+                {/*   > */}
+                {/*     Lokacioni i punes */}
+                {/*   </label> */}
+                {/*   <input */}
+                {/*     id="lokacioniPunes" */}
+                {/*     type="text" */}
+                {/*     value={shpalljaKlikuar.lokacioniPunes || ""} */}
+                {/*     onChange={modifikoAplikimin} */}
+                {/*     className="input-ShpalljaProfil" */}
+                {/*     placeholder="Pristina, Kosovo" */}
+                {/*   /> */}
+                {/* </div> */}
+                {/**/}
+                {/* <div> */}
+                {/*   <label */}
+                {/*     htmlFor="llojiPunes" */}
+                {/*     className="block text-sm font-medium text-gray-600 mb-2" */}
+                {/*   > */}
+                {/*     Lloji i Punes */}
+                {/*   </label> */}
+                {/*   <input */}
+                {/*     id="llojiPunes" */}
+                {/*     type="text" */}
+                {/*     value={shpalljaKlikuar.llojiPunes || ""} */}
+                {/*     onChange={modifikoAplikimin} */}
+                {/*     className="input-ShpalljaProfil" */}
+                {/*     placeholder="Full-time" */}
+                {/*   /> */}
+                {/* </div> */}
+                {/**/}
+                {/* <div> */}
+                {/*   <label */}
+                {/*     htmlFor="pershkrimiPunes" */}
+                {/*     className="block text-sm font-medium text-gray-600 mb-2" */}
+                {/*   > */}
+                {/*     Pershkrimi i punes */}
+                {/*   </label> */}
+                {/*   <textarea */}
+                {/*     id="pershkrimiPunes" */}
+                {/*     value={shpalljaKlikuar.pershkrimiPunes || ""} */}
+                {/*     onChange={modifikoAplikimin} */}
+                {/*     rows="5" */}
+                {/*     className="input-ShpalljaProfil" */}
+                {/*     placeholder="Pershkrimi" */}
+                {/*   /> */}
+                {/* </div> */}
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <button
                     type="button"
                     className="publikoPune bg-red-500 cursor-pointer"
-                    onClick={() => fshijShpalljen(shpalljaKlikuar._id)}
                   >
                     Fshij Shpalljen
                   </button>
@@ -652,10 +580,7 @@ function MenaxhoAplikimet() {
                   </div>
                 </div>
 
-                <button
-                  onClick={mbyllAplikantPopup}
-                  className="cursor-pointer text-xl hover:text-gray-700"
-                >
+                <button className="cursor-pointer text-xl hover:text-gray-700">
                   <X size={24} />
                 </button>
               </div>
@@ -714,121 +639,121 @@ function MenaxhoAplikimet() {
         </div>
       )}
 
-      {aplikimiKlikuar && (
-        <div className="fixed inset-0 bg-black/20 flex items-center justify-center z-60 p-4 animate-in fade-in duration-200">
-          <div className="bg-white rounded-2xl w-full max-w-2xl shadow-2xl max-h-[90vh] flex flex-col animate-in slide-in-from-bottom-4 duration-300">
-            <div className="relative px-6 py-6 rounded-t-2xl">
-              <div className="flex items-start justify-between">
-                <div>
-                  <h2 className="text-2xl font-bold mb-1">
-                    {aplikimiKlikuar.emriAplikantit}{" "}
-                    {aplikimiKlikuar.mbiemriAplikantit}
-                  </h2>
-                  <p className="text-gray-400 text-sm">
-                    {aplikimiKlikuar.emailAplikantit}
-                  </p>
-                </div>
-                <button
-                  onClick={mbyllAplikimin}
-                  className="cursor-pointer text-xl hover:text-gray-700"
-                >
-                  <X size={24} />
-                </button>
-              </div>
-
-              <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full blur-3xl -z-10"></div>
-              <div className="absolute bottom-0 left-0 w-32 h-32 bg-indigo-400/20 rounded-full blur-2xl -z-10"></div>
-            </div>
-
-            <div className="p-6 space-y-4 overflow-y-auto flex-1 bg-gray-50">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-8 h-8 flex items-center justify-center">
-                      <User size={18} />
-                    </div>
-                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                      Emri
-                    </span>
-                  </div>
-                  <p className="px-1.5 text-lg font-semibold text-gray-900">
-                    {aplikimiKlikuar.emriAplikantit}
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-8 h-8 flex items-center justify-center">
-                      <User size={18} />
-                    </div>
-                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                      Mbiemri
-                    </span>
-                  </div>
-                  <p className="px-1.5 text-lg font-semibold text-gray-900">
-                    {aplikimiKlikuar.mbiemriAplikantit}
-                  </p>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-8 h-8 flex items-center justify-center">
-                    <Mail size={16} />
-                  </div>
-                  <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Email
-                  </span>
-                </div>
-                <p className="px-1.5 text-base font-medium text-gray-900">
-                  {aplikimiKlikuar.emailAplikantit}
-                </p>
-              </div>
-
-              <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-8 h-8 flex items-center justify-center">
-                    <BriefcaseBusiness size={16} />
-                  </div>
-                  <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Eksperienca
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <p className="px-1.5 text-base font-medium text-gray-900">
-                    {aplikimiKlikuar.eksperienca}
-                  </p>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="w-8 h-8 flex items-center justify-center">
-                    <FileText size={16} />
-                  </div>
-                  <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Letra Motivuese
-                  </span>
-                </div>
-                <div className="bg-linear-to-br from-gray-50 to-gray-100/50 rounded-lg p-4 max-h-48 overflow-y-auto border border-gray-200">
-                  <p className="px-1.5 text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
-                    {aplikimiKlikuar.letraMotivuese}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="px-6 py-4 bg-white/80 backdrop-blur-lg border-t border-gray-100 rounded-b-2xl flex justify-end items-center gap-3">
-              <button
-                onClick={mbyllAplikimin}
-                className="px-5 py-2.5 text-sm text-white font-semibold hover:text-black bg-[#0F4C75] hover:bg-white hover:border rounded-xl transition-all duration-200"
-              >
-                Mbyll
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* {aplikimiKlikuar && ( */}
+      {/*   <div className="fixed inset-0 bg-black/20 flex items-center justify-center z-60 p-4 animate-in fade-in duration-200"> */}
+      {/*     <div className="bg-white rounded-2xl w-full max-w-2xl shadow-2xl max-h-[90vh] flex flex-col animate-in slide-in-from-bottom-4 duration-300"> */}
+      {/*       <div className="relative px-6 py-6 rounded-t-2xl"> */}
+      {/*         <div className="flex items-start justify-between"> */}
+      {/*           <div> */}
+      {/*             <h2 className="text-2xl font-bold mb-1"> */}
+      {/*               {aplikimiKlikuar.emriAplikantit}{" "} */}
+      {/*               {aplikimiKlikuar.mbiemriAplikantit} */}
+      {/*             </h2> */}
+      {/*             <p className="text-gray-400 text-sm"> */}
+      {/*               {aplikimiKlikuar.emailAplikantit} */}
+      {/*             </p> */}
+      {/*           </div> */}
+      {/*           <button */}
+      {/*             onClick={mbyllAplikimin} */}
+      {/*             className="cursor-pointer text-xl hover:text-gray-700" */}
+      {/*           > */}
+      {/*             <X size={24} /> */}
+      {/*           </button> */}
+      {/*         </div> */}
+      {/**/}
+      {/*         <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full blur-3xl -z-10"></div> */}
+      {/*         <div className="absolute bottom-0 left-0 w-32 h-32 bg-indigo-400/20 rounded-full blur-2xl -z-10"></div> */}
+      {/*       </div> */}
+      {/**/}
+      {/*       <div className="p-6 space-y-4 overflow-y-auto flex-1 bg-gray-50"> */}
+      {/*         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4"> */}
+      {/*           <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"> */}
+      {/*             <div className="flex items-center gap-2 mb-2"> */}
+      {/*               <div className="w-8 h-8 flex items-center justify-center"> */}
+      {/*                 <User size={18} /> */}
+      {/*               </div> */}
+      {/*               <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider"> */}
+      {/*                 Emri */}
+      {/*               </span> */}
+      {/*             </div> */}
+      {/*             <p className="px-1.5 text-lg font-semibold text-gray-900"> */}
+      {/*               {aplikimiKlikuar.emriAplikantit} */}
+      {/*             </p> */}
+      {/*           </div> */}
+      {/**/}
+      {/*           <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"> */}
+      {/*             <div className="flex items-center gap-2 mb-2"> */}
+      {/*               <div className="w-8 h-8 flex items-center justify-center"> */}
+      {/*                 <User size={18} /> */}
+      {/*               </div> */}
+      {/*               <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider"> */}
+      {/*                 Mbiemri */}
+      {/*               </span> */}
+      {/*             </div> */}
+      {/*             <p className="px-1.5 text-lg font-semibold text-gray-900"> */}
+      {/*               {aplikimiKlikuar.mbiemriAplikantit} */}
+      {/*             </p> */}
+      {/*           </div> */}
+      {/*         </div> */}
+      {/**/}
+      {/*         <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"> */}
+      {/*           <div className="flex items-center gap-2 mb-2"> */}
+      {/*             <div className="w-8 h-8 flex items-center justify-center"> */}
+      {/*               <Mail size={16} /> */}
+      {/*             </div> */}
+      {/*             <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider"> */}
+      {/*               Email */}
+      {/*             </span> */}
+      {/*           </div> */}
+      {/*           <p className="px-1.5 text-base font-medium text-gray-900"> */}
+      {/*             {aplikimiKlikuar.emailAplikantit} */}
+      {/*           </p> */}
+      {/*         </div> */}
+      {/**/}
+      {/*         <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"> */}
+      {/*           <div className="flex items-center gap-2 mb-2"> */}
+      {/*             <div className="w-8 h-8 flex items-center justify-center"> */}
+      {/*               <BriefcaseBusiness size={16} /> */}
+      {/*             </div> */}
+      {/*             <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider"> */}
+      {/*               Eksperienca */}
+      {/*             </span> */}
+      {/*           </div> */}
+      {/*           <div className="flex items-center gap-2"> */}
+      {/*             <p className="px-1.5 text-base font-medium text-gray-900"> */}
+      {/*               {aplikimiKlikuar.eksperienca} */}
+      {/*             </p> */}
+      {/*           </div> */}
+      {/*         </div> */}
+      {/**/}
+      {/*         <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm"> */}
+      {/*           <div className="flex items-center gap-2 mb-3"> */}
+      {/*             <div className="w-8 h-8 flex items-center justify-center"> */}
+      {/*               <FileText size={16} /> */}
+      {/*             </div> */}
+      {/*             <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider"> */}
+      {/*               Letra Motivuese */}
+      {/*             </span> */}
+      {/*           </div> */}
+      {/*           <div className="bg-linear-to-br from-gray-50 to-gray-100/50 rounded-lg p-4 max-h-48 overflow-y-auto border border-gray-200"> */}
+      {/*             <p className="px-1.5 text-sm text-gray-700 leading-relaxed whitespace-pre-wrap"> */}
+      {/*               {aplikimiKlikuar.letraMotivuese} */}
+      {/*             </p> */}
+      {/*           </div> */}
+      {/*         </div> */}
+      {/*       </div> */}
+      {/**/}
+      {/*       <div className="px-6 py-4 bg-white/80 backdrop-blur-lg border-t border-gray-100 rounded-b-2xl flex justify-end items-center gap-3"> */}
+      {/*         <button */}
+      {/*           onClick={mbyllAplikimin} */}
+      {/*           className="px-5 py-2.5 text-sm text-white font-semibold hover:text-black bg-[#0F4C75] hover:bg-white hover:border rounded-xl transition-all duration-200" */}
+      {/*         > */}
+      {/*           Mbyll */}
+      {/*         </button> */}
+      {/*       </div> */}
+      {/*     </div> */}
+      {/*   </div> */}
+      {/* )} */}
     </div>
   );
 }
