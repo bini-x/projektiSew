@@ -295,7 +295,7 @@ function MenaxhoShpalljet() {
           </div>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+        <div className="bg-white border border-gray-200 rounded-lg overflow-visible">
           <div className="hidden lg:block">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
@@ -355,6 +355,7 @@ function MenaxhoShpalljet() {
                       </button>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      {/* 3 dots */}
                       <div className="relative">
                         <button
                           onClick={() =>
@@ -364,9 +365,8 @@ function MenaxhoShpalljet() {
                         >
                           <FontAwesomeIcon icon={faEllipsisVertical} />
                         </button>
-
                         {shfaqMeny === sh._id && (
-                          <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
+                          <div className="absolute right-6  top-0 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
                             <button
                               onClick={() => {
                                 setShpalljaKlikuar(sh);
