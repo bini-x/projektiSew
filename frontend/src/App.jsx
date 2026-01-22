@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import Ballina from "./components/Ballina";
 import ListaPuneve from "./components/ListaPuneve";
 import "./index.css";
@@ -19,6 +20,7 @@ import Perdoruesi from "./PerdoruesiContext";
 import ProfiliVizitor from "./components/ProfiliVizitor"
 import LlogaritPagen from "./components/LlogaritPagen";
 import MenaxhoAplikimet from "./components/MenaxhoAplikimet";
+import PunetRuajtura from "./components/PunetRuajtura";
 import { useEffect, useState } from "react";
 
 
@@ -77,6 +79,10 @@ function App() {
             />
             <Route path="/verifiko" element={<VerifikoEmail />} />
             <Route path=":id/aplikimi" element={<Aplikimi />} />
+            <Route
+              path="/profili/:id/punetRuajtura"
+              element={<PunetRuajtura />}
+            />
             <Route path="/kompania/:id" element={<ProfiliVizitor />} />
 
             {}

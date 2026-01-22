@@ -167,7 +167,7 @@ function MenaxhoAplikimet() {
           </p>
         </div>
 
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-6 border-b border-gray-200 gap-4">
+        <div className="tabela">
           <div className="flex space-x-8 overflow-x-auto pb-2 lg:pb-4">
             {["Active", "Expired"].map((faqja) => (
               <button
@@ -195,7 +195,7 @@ function MenaxhoAplikimet() {
                 placeholder="Kërko aplikime..."
                 value={kerko}
                 onChange={(e) => setKerko(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent w-full"
+                className="input-kerkimi"
               />
             </div>
             <div className="relative">
@@ -218,7 +218,7 @@ function MenaxhoAplikimet() {
                         setSortimiDates("teRejat");
                         setMenyRadhitjes(false);
                       }}
-                      className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded flex items-center justify-between"
+                      className="butonSortimi"
                     >
                       <span>Më e re</span>
                       {sortimiDates === "teRejat" && (
@@ -233,7 +233,7 @@ function MenaxhoAplikimet() {
                         setSortimiDates("teVjetrat");
                         setMenyRadhitjes(false);
                       }}
-                      className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded flex items-center justify-between"
+                      className="butonSortimi"
                     >
                       <span>Më e vjetër</span>
                       {sortimiDates === "teVjetrat" && (
@@ -255,24 +255,12 @@ function MenaxhoAplikimet() {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Pozita
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Data e Aplikimit
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Lokacioni
-                  </th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Orari
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Statusi
-                  </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Veprime
-                  </th>
+                  <th className="tableHead">Pozita</th>
+                  <th className="tableHead">Data e Aplikimit</th>
+                  <th className="tableHead">Lokacioni</th>
+                  <th className="tableHead text-center ">Orari</th>
+                  <th className="tableHead">Statusi</th>
+                  <th className="tableHead text-right">Veprime</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -290,7 +278,7 @@ function MenaxhoAplikimet() {
                           {shpallja?.kategoriaPunes || "N/A"}
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="tableData text-gray-500">
                         {new Date(aplikimi.dataKrijimit).toLocaleDateString(
                           "en-US",
                           {
@@ -300,21 +288,21 @@ function MenaxhoAplikimet() {
                           },
                         )}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className="tableData">
                         {shpallja?.lokacioniPunes || "N/A"}
                       </td>
-                      <td className="py-4 whitespace-nowrap">
+                      <td className="tableData">
                         <span className="py-1 w-full items-center justify-center inline-flex text-sm font-medium">
                           {shpallja?.orari || "N/A"}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="tableData">
                         {/* TODO: Statusin Ne pritje apo Refuzuar */}
-                        <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
+                        <span className="px-1 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
                           Në pritje
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <td className="tableData text-right">
                         <div className="relative">
                           <button
                             onClick={() =>
@@ -368,12 +356,12 @@ function MenaxhoAplikimet() {
                       <div className="text-base font-medium text-gray-900 mb-1">
                         {shpallja?.pozitaPunes || "N/A"}
                       </div>
-                      <div className="text-sm text-gray-500 mb-2">
+                      <div className="tableInfo mb-2">
                         {shpallja?.kategoriaPunes || "N/A"}
                       </div>
 
                       <div className="space-y-2">
-                        <div className="flex items-center text-sm text-gray-600">
+                        <div className="tableInfo">
                           <Calendar size={14} className="mr-2 text-gray-400" />
                           {new Date(aplikimi.dataKrijimit).toLocaleDateString(
                             "en-US",
@@ -385,12 +373,12 @@ function MenaxhoAplikimet() {
                           )}
                         </div>
 
-                        <div className="flex items-center text-sm text-gray-600">
+                        <div className="tableInfo">
                           <MapPin size={14} className="mr-2 text-gray-400" />
                           {shpallja?.lokacioniPunes || "N/A"}
                         </div>
 
-                        <div className="flex items-center text-sm text-gray-600">
+                        <div className="tableInfo">
                           <Building size={14} className="mr-2 text-gray-400" />
                           <span className="px-2 py-1 bg-gray-100 rounded">
                             {shpallja?.orari || "N/A"}

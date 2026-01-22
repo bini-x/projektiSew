@@ -76,7 +76,7 @@ function Regjistrimi() {
   return (
     <div className="flex justify-center items-center min-h-screen p-4">
       <div
-        className="w-full max-w-[650px]
+        className="w-full max-w-162.5
                 bg-white rounded-lg shadow-2xl 
                 p-4 sm:p-6 md:p-8 lg:p-10"
       >
@@ -99,12 +99,7 @@ function Regjistrimi() {
                   required
                   onChange={(e) => setTipiPerdoruesit(e.target.value)}
                 />
-                <label
-                  htmlFor="aplikant"
-                  className="flex items-center justify-center p-3 border border-[#f7f7f7] rounded-lg cursor-pointer 
-                 bg-[#f7f7f7] transition-all duration-200
-                 peer-checked:border-[#6a6a6a] peer-checked:font-semibold"
-                >
+                <label htmlFor="aplikant" className="labelRegjistrimi">
                   <span className="text-sm sm:text-base">Aplikant</span>
                 </label>
               </div>
@@ -119,12 +114,7 @@ function Regjistrimi() {
                   required
                   onChange={(e) => setTipiPerdoruesit(e.target.value)}
                 />
-                <label
-                  htmlFor="punedhenes"
-                  className="flex items-center justify-center p-3 border border-[#f7f7f7] rounded-lg cursor-pointer 
-                 bg-[#f7f7f7] transition-all duration-200
-                 peer-checked:border-[#6a6a6a] peer-checked:font-semibold"
-                >
+                <label htmlFor="punedhenes" className="labelRegjistrimi">
                   <span className="text-sm sm:text-base">Punëdhënës</span>
                 </label>
               </div>
@@ -182,7 +172,7 @@ function Regjistrimi() {
                     id={field.id}
                     type={field.type}
                     placeholder={field.placeholder}
-                    className="border-[#f7f7f7] bg-[#f7f7f7] rounded-sm p-2 sm:p-3 w-full h-10 sm:h-12 placeholder-gray-500"
+                    className="border-inputbg bg-inputbg rounded-sm p-2 sm:p-3 w-full h-10 sm:h-12 placeholder-gray-500"
                     onChange={(e) =>
                       setDataAplikant({
                         ...dataAplikant,
@@ -244,7 +234,7 @@ function Regjistrimi() {
                     id={field.id}
                     type={field.type}
                     placeholder={field.placeholder}
-                    className="border-[#f7f7f7] bg-[#f7f7f7] rounded-sm p-2 sm:p-3 w-full h-10 sm:h-12 placeholder-gray-500"
+                    className="border-inputbg bg-inputbg rounded-sm p-2 sm:p-3 w-full h-10 sm:h-12 placeholder-gray-500"
                     onChange={(e) =>
                       setDataPunedhenesi({
                         ...dataPunedhenesi,

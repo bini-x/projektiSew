@@ -46,33 +46,27 @@ function Kycja() {
   return (
     <div className="min-h-screen flex justify-center items-center p-4">
       <div
-        className="w-full max-w-[500px]
+        className="w-full max-w-125
                 bg-white rounded-lg shadow-2xl 
                 p-4 sm:p-6 md:p-8 lg:p-10"
       >
-        <div className="grid grid-cols-1 gap-4 sm:gap-6">
-          {/* Title */}
-          <div className="text-center">
-            <h1 className="font-bold text-3xl sm:text-4xl md:text-5xl mb-2 sm:mb-4 md:mb-6">
-              Kycu
-            </h1>
+        <div className="grid gap-4 sm:gap-6">
+          <div>
+            <h1>Kycu</h1>
           </div>
 
           {/* Form */}
-          <form
-            onSubmit={handleSubmit}
-            className="grid grid-cols-1 gap-4 sm:gap-5"
-          >
+          <form onSubmit={handleSubmit} className="grid gap-4 sm:gap-5">
             {/* Email Field */}
-            <div className="grid grid-cols-1 gap-1">
-              <label htmlFor="email" className="block text-sm sm:text-base">
+            <div className="grid gap-1">
+              <label htmlFor="email" className="text-sm sm:text-base">
                 Email
               </label>
               <input
                 id="email"
                 type="text"
                 placeholder="Email"
-                className="border-[#f7f7f7] bg-[#f7f7f7] rounded-sm p-2 sm:p-3 w-full h-10 sm:h-12 pr-10"
+                className="bg-inputbg rounded-sm w-full p-2 sm:p-3 pr-10 h-10 sm:h-12 "
                 onChange={(e) => setData({ ...data, email: e.target.value })}
               />
             </div>
@@ -89,7 +83,7 @@ function Kycja() {
                   id="fjalekalimi"
                   type={showPassword ? "text" : "password"}
                   placeholder="Fjalekalimi"
-                  className="border-[#f7f7f7] bg-[#f7f7f7] rounded-sm p-2 sm:p-3 w-full h-10 sm:h-12 pr-10"
+                  className="bg-inputbg rounded-sm w-full p-2 sm:p-3 pr-10 h-10 sm:h-12 "
                   onChange={(e) =>
                     setData({ ...data, fjalekalimi: e.target.value })
                   }
@@ -137,7 +131,7 @@ function Kycja() {
             <div className="text-center">
               <Link
                 to="/"
-                className="text-[#0F4C75] text-sm sm:text-base hover:bg-[#0F4C75] hover:text-white  border p-2"
+                className="text-primary text-sm sm:text-base underline"
               >
                 Kthehu Tek Ballina
               </Link>
