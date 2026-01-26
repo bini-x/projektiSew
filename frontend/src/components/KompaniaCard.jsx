@@ -30,15 +30,15 @@ function KompaniaCard({ kompania }) {
         </div>
         <FontAwesomeIcon icon={faBookmark} className="text-l" />
       </div>
-      <p className="grid mt-6 font-bold text-l">{kompania.kompania}</p>
-      <div className="flex gap-5 mt-2">
-        <p className="paragraf">
+      <p className="grid mt-6 font-bold text-xl">{kompania.kompania}</p>
+      <div>
+        <p className="flex items-center text-gray-700 font-medium">
           <FontAwesomeIcon icon={faEnvelope} className="mr-1" />
           {kompania.email}
         </p>
         {/*TODO: Me shtu shpalljet e publikuara per kompani  */}
       </div>
-      <hr className="border-0 h-px bg-linear-to-r from-transparent via-gray-300 to-transparent mt-8 mb-3" />
+      <hr className="hrCard" />
       <div className="flex items-center justify-between">
         <div>
           <p className="paragraf text-sm text-gray-600 flex items-center mt-1">

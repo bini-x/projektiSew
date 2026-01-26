@@ -37,28 +37,26 @@ function BallinaMysafir() {
   return (
     <div>
       <Header />
-      <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-center font-semi-bold leading-tight mt-20">
-        Gjeni punen perfekte per ju
-      </h1>
+      <h1 className="mt-20">Gjeni punen perfekte per ju</h1>
 
       <Kerkimi />
-      <div className="grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-[repeat(2,630px)] justify-center gap-6 mt-20 m-10 md:m-15 lg:15 xl:m-20">
-        <div className="border-gray-300 shadow-xl p-10">
+      <div className="ballinaMysafir">
+        <div className="containerballinamysafir">
           <h1 className="text-2xl font-semibold ">Po punësoni talentë?</h1>
-          <p className="mb-5 mt-1 text-gray-900 font-extralight">
+          <p className="paragrafBallinaMysafir">
             Lidhu me kandidatë të kualifikuar dhe ndërto ekipin tënd. Publiko
             vende pune brenda pak minutash.
           </p>
-          <h2 className="flex gap-2 items-center text-l mb-2">
+          <h2 className="info-ballinaMysafir">
             <BookPlus size={20} />
             Publiko Punë
           </h2>
-          <h2 className="flex gap-2 items-c10enter text-l mb-2">
+          <h2 className="info-ballinaMysafir">
             <Users size={20} />
             Rishikoni aplikantët
           </h2>
 
-          <h2 className="flex gap-2 items-center text-l mb-2">
+          <h2 className="info-ballinaMysafir">
             <BriefcaseBusiness size={20} />
             Menaxho Shpalljet
           </h2>
@@ -70,20 +68,21 @@ function BallinaMysafir() {
             Kycu
           </button>
         </div>
-        <div className="border-gray-300 p-10 shadow-xl">
+        <div className="containerballinamysafir">
           <h1 className="text-2xl font-semibold m-auto">Po kërkoni punë?</h1>
-          <p className="mb-5 mt-1 text-gray-900 font-extralight">
+          <p className="paragrafBallinaMysafir">
             Gjeni mundësi të arta nga kompanit më të mira. Gjej punën e ëndrrave
             sot.
           </p>
-          <h2 className="flex gap-2 items-center text-l mb-2">
+          <br />
+          <h2 className="info-ballinaMysafir">
             <Search size={20} /> Kërko Punë <br />
           </h2>
-          <h2 className="flex gap-2 items-center text-l mb-2">
+          <h2 className="info-ballinaMysafir">
             <UserPen size={20} />
             Ndërto Profilin
           </h2>
-          <h2 className="flex gap-2 items-center text-l mb-2">
+          <h2 className="info-ballinaMysafir">
             <TrendingUp size={20} />
             Menaxho Aplikimet
           </h2>
@@ -98,10 +97,7 @@ function BallinaMysafir() {
       </div>
 
       <div className="m-10 md:m-15 lg:m-20">
-        <h2 className="text-xl sm:text-xl md:text-2xl font-semibold mb-5 px-2">
-          Punë të disponueshme
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
+        <div className="shpalljaCard">
           {shpalljaData.slice(0, 9).map((shpallja) => {
             return <ShpalljaCard key={shpallja._id} shpallja={shpallja} />;
           })}

@@ -189,21 +189,22 @@ function Profili() {
               </div>
 
               <div className="mt-4 sm:mt-0 sm:ml-6 text-center sm:text-left flex-1 relative">
-                <h1 className="text-3xl font-bold text-gray-900 mb-1">
+                <h1 className="text-left text-3xl mb-1">
                   {perdoruesiData?.emri || perdoruesiData?.kompania}{" "}
                   {perdoruesiData?.mbiemri}
                 </h1>
                 <div className="space-y-2 mt-4">
-                  <p className="text-gray-600 flex items-center justify-center sm:justify-start gap-2">
+                  a{" "}
+                  <p className="paragrafProfili">
                     <Mail size={16} />
                     {perdoruesiData.email}
                   </p>
-                  <p className="text-gray-600 flex items-center justify-center sm:justify-start gap-2">
+                  <p className="paragrafProfili">
                     <Phone size={16} />
                     {perdoruesiData.nrTelefonit}
                   </p>
                   <div className="mt-4">
-                    <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                    <div className="flex flex-wrap ">
                       {linkeSociale.map((link) => (
                         <div key={link.id} className="group relative">
                           <a

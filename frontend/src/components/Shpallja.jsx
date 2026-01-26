@@ -1,20 +1,29 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
-import { faBookmark, faClock } from "@fortawesome/free-regular-svg-icons";
-import { faDollarSign } from "@fortawesome/free-solid-svg-icons";
+import { faBookmark as faBookmarkRegular } from "@fortawesome/free-regular-svg-icons";
+import { faBookmark as faBookmarkSolid } from "@fortawesome/free-solid-svg-icons";
+import {
+  faDollarSign,
+  faLocationDot,
+  faClock,
+} from "@fortawesome/free-solid-svg-icons";
 import Header from "./Header";
-import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import Perdoruesi from "../PerdoruesiContext";
 
 function Shpallja() {
   const navigate = useNavigate();
   const [shpallja, setShpallja] = useState(null);
   const [perdoruesiData, setPerdoruesiData] = useState({});
+  const { perdoruesiData: currentUser } = Perdoruesi.usePerdoruesi();
+  const [eshteRuajtur, setEshteRuajtur] = useState(false);
+  const [duke_ngarkuar, setDuke_ngarkuar] = useState(false);
 
   const { id } = useParams();
 
+  // Fetch shpallja data
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -33,8 +42,7 @@ function Shpallja() {
     }
   }, [id]);
 
-  console.log(shpallja);
-
+  // Fetch perdoruesi data
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -52,9 +60,70 @@ function Shpallja() {
     }
   }, [id]);
 
+  // Check if job is saved
   useEffect(() => {
-    console.log("perdoruesi: ", perdoruesiData);
-  }, [perdoruesiData]);
+    const kontrolloStatusin = async () => {
+      if (currentUser && currentUser.tipiPerdoruesit !== "punedhenes" && id) {
+        try {
+          const response = await axios.get(
+            `http://localhost:3000/api/punetRuajtura/eshte-ruajtur/${id}/${currentUser._id}`,
+          );
+          setEshteRuajtur(response.data.eshteRuajtur);
+        } catch (error) {
+          console.error("Gabim gjatë kontrollimit:", error);
+        }
+      }
+    };
+
+    kontrolloStatusin();
+  }, [id, currentUser]);
+
+  // Toggle save/unsave
+  const ndryshoRuajtjen = async () => {
+    if (!currentUser) {
+      alert("Ju lutem kyçuni për të ruajtur punë");
+      return;
+    }
+
+    if (currentUser.tipiPerdoruesit === "punedhenes") {
+      alert("Punëdhënësit nuk mund të ruajnë punë");
+      return;
+    }
+
+    setDuke_ngarkuar(true);
+    try {
+      if (eshteRuajtur) {
+        // Hiq nga të ruajturat
+        const response = await axios.delete(
+          `http://localhost:3000/api/punetRuajtura/hiq/${id}`,
+          {
+            data: { perdoruesiId: currentUser._id },
+          },
+        );
+
+        if (response.data.success) {
+          setEshteRuajtur(false);
+        }
+      } else {
+        // Ruaj shpalljen
+        const response = await axios.post(
+          `http://localhost:3000/api/punetRuajtura/ruaj/${id}`,
+          {
+            perdoruesiId: currentUser._id,
+          },
+        );
+
+        if (response.data.success) {
+          setEshteRuajtur(true);
+        }
+      }
+    } catch (error) {
+      console.error("Gabim gjatë ndryshimit të ruajtjes:", error);
+      alert("Gabim gjatë ruajtjes së punës");
+    } finally {
+      setDuke_ngarkuar(false);
+    }
+  };
 
   if (!perdoruesiData) {
     return (
@@ -86,7 +155,7 @@ function Shpallja() {
       <div className="max-w-6xl mx-auto p-4 md:p-8">
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="lg:w-1/4">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sticky top-10">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 top-10">
               <nav className="space-y-2">
                 <a
                   href="#info-bazike"
@@ -110,13 +179,7 @@ function Shpallja() {
                   href="#kerkesat"
                   className="flex items-center p-2 rounded-lg hover:bg-blue-50 text-gray-700 hover:text-blue-600 transition-colors"
                 >
-                  <span>Kërkesat</span>
-                </a>
-                <a
-                  href="#aplikimi"
-                  className="flex items-center p-2 rounded-lg hover:bg-blue-50 text-gray-700 hover:text-blue-600 transition-colors"
-                >
-                  <span>Aplikimi</span>
+                  <span>Kualifikimet e kërkuara</span>
                 </a>
               </nav>
             </div>
@@ -130,7 +193,25 @@ function Shpallja() {
                     <FontAwesomeIcon icon={faUser} className="text-4xl" />
                     <p className="font-bold text-2xl">{shpallja.pozitaPunes}</p>
                   </div>
-                  <FontAwesomeIcon icon={faBookmark} className="text-xl" />
+
+                  {currentUser?.tipiPerdoruesit !== "punedhenes" && (
+                    <button
+                      onClick={ndryshoRuajtjen}
+                      disabled={duke_ngarkuar}
+                      className={`transition-all duration-200 ${
+                        duke_ngarkuar
+                          ? "opacity-50 cursor-not-allowed"
+                          : "hover:scale-110 cursor-pointer"
+                      }`}
+                    >
+                      <FontAwesomeIcon
+                        icon={
+                          eshteRuajtur ? faBookmarkSolid : faBookmarkRegular
+                        }
+                        className={`text-2xl ${eshteRuajtur ? "text-[#0F4C75]" : "text-gray-600"}`}
+                      />
+                    </button>
+                  )}
                 </div>
 
                 <div className="mt-5"></div>
@@ -150,19 +231,13 @@ function Shpallja() {
                   </p>
                 </div>
 
-                <div className="grid grid-cols-2 w-fit gap-6 mb-8 mt-8">
+                <div className="grid w-fit mb-8 mt-8">
                   <button
                     type="button"
                     className="publikoPune"
                     onClick={() => navigate(`/${id}/aplikimi`)}
                   >
                     Apliko
-                  </button>
-                  <button
-                    type="button"
-                    className="border border-gray-400 rounded-lg py-2 px-4 hover:bg-gray-50 transition-colors cursor-pointer"
-                  >
-                    Ngarko CV
                   </button>
                 </div>
 

@@ -26,12 +26,10 @@ function ListaPuneve() {
   return (
     <div>
       <Header />
-      <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-center font-semi-bold leading-tight mb-15 mt-20">
-        E ardhmja jote fillon këtu
-      </h1>
+      <h1 className="mt-20">E ardhmja jote fillon këtu</h1>
       <Kerkimi />
       <div className="m-10 md:m-20 lg:m-30">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 m-10 md:m-15 lg:m-20">
+        <div className="shpalljaCard">
           {shpalljaData.map((shpallja) => {
             return <ShpalljaCard key={shpallja._id} shpallja={shpallja} />;
           })}
