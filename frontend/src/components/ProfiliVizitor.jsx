@@ -211,7 +211,7 @@ const ListaKompanive = () => {
   return (
      <div className="flex flex-col items-center min-h-screen">
       <Header />
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-4 md:p-8 rounded:lg">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-4 md:p-8 rounded:lg ">
       <div className="max-w-6xl mx-auto">
         {/* Header i listës */}
         <div className="mb-8">

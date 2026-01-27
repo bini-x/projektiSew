@@ -22,6 +22,7 @@ import PunetRuajtura from "./components/PunetRuajtura";
 import { useEffect, useState } from "react";
 import ProfiliVizitor from "./components/ProfiliVizitor";
 import LlogaritPagen from "./components/LlogaritPagen";
+import ProfiliAplikantit from "./components/ProfiliAplikanteve";
 
 function App() {
   const { perdoruesiData } = Perdoruesi.usePerdoruesi();
@@ -65,6 +66,7 @@ function App() {
             <Route path="/kycja" element={<Kycja />} />
             <Route path="/shpallja/:id" element={<Shpallja />} />
             <Route path="/profili/:id" element={<Profili />} />
+            <Route path="/profiliaplikanteve" element={<ProfiliAplikantit />} />
             <Route
               path="/profili/:id/menaxhoShpalljet"
               element={<MenaxhoShpalljet />}
