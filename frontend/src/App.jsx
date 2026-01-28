@@ -17,7 +17,11 @@ import KonfigurimetLlogarise from "./components/KonfigurimetLlogarise";
 import BallinaMysafir from "./components/BallinaMysafir";
 import Perdoruesi from "./PerdoruesiContext";
 import MenaxhoAplikimet from "./components/MenaxhoAplikimet";
+import PunetRuajtura from "./components/PunetRuajtura";
 import { useEffect, useState } from "react";
+import ProfiliVizitor from "./components/ProfiliVizitor";
+import LlogaritPagen from "./components/LlogaritPagen";
+import ProfiliAplikantit from "./components/ProfiliAplikantit";
 
 function App() {
   const { perdoruesiData } = Perdoruesi.usePerdoruesi();
@@ -57,9 +61,11 @@ function App() {
             <Route path="/rrethNesh" element={<RrethNesh />} />
             <Route path="/kycja" element={<Kycja />} />
             <Route path="/regjistrimi" element={<Regjistrimi />} />
-            <Route path="/publikoPune" element={<PublikoPune />} />
+            <Route path="/publikopune" element={<PublikoPune />} />
+            <Route path="/kycja" element={<Kycja />} />
             <Route path="/shpallja/:id" element={<Shpallja />} />
             <Route path="/profili/:id" element={<Profili />} />
+            <Route path="/profiliaplikanteve" element={<ProfiliAplikantit />} />
             <Route
               path="/profili/:id/menaxhoShpalljet"
               element={<MenaxhoShpalljet />}
@@ -68,17 +74,23 @@ function App() {
               path="/profili/:id/menaxhoAplikimet"
               element={<MenaxhoAplikimet />}
             />
-
             <Route
               path="/profili/:id/konfigurimet"
               element={<KonfigurimetLlogarise />}
             />
             <Route path="/verifiko" element={<VerifikoEmail />} />
             <Route path=":id/aplikimi" element={<Aplikimi />} />
+            <Route
+              path="/profili/:id/punetRuajtura"
+              element={<PunetRuajtura />}
+            />
+            <Route path="/kompania/:id" element={<ProfiliVizitor />} />
+            <Route path="/aplikanti/:id" element={<ProfiliAplikantit />} />
+            <Route path="/llogaritpagen" element={<LlogaritPagen />} />
           </Routes>
         </div>
+        <Footeri />
       </BrowserRouter>
-      <Footeri />
     </div>
   );
 }

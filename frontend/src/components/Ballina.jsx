@@ -5,8 +5,8 @@ import ShpalljaCard from "./ShpalljaCard";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useSearchParams } from "react-router-dom";
-import PublikoPune from "./PublikoPune";
 import Perdoruesi from "../PerdoruesiContext";
+import BallinaPundhenesit from "./BallinaPundhenesit";
 
 function Ballina() {
   const { perdoruesiData } = Perdoruesi.usePerdoruesi();
@@ -50,20 +50,18 @@ function Ballina() {
     <div>
       {perdoruesiData?.tipiPerdoruesit === "punedhenes" ? (
         <>
-          <PublikoPune />
+          <BallinaPundhenesit />
         </>
       ) : (
         <>
           <Header />
 
           <div className="flex justify-center items-center px-4 my-8 md:my-12 lg:my-15">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-center font-semi-bold leading-tight">
-              Gjeni punen perfekte per ju
-            </h1>
+            <h1>Gjeni punen perfekte per ju</h1>
           </div>
 
           <Kerkimi />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[repeat(3,430px)] xl:grid-cols-[repeat(3,430px)] gap-10 justify-center auto-rows-[220px] m-10 md:m-15 lg:m-30">
+          <div className="shpalljaCard">
             {shpalljaData.map((shpallja) => {
               return <ShpalljaCard key={shpallja._id} shpallja={shpallja} />;
             })}

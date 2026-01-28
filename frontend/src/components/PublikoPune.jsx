@@ -150,7 +150,7 @@ function PublikoPune() {
   };
 
   return (
-    <div>
+       <div className="flex flex-col items-center min-h-screen">
       <Header />
     <div className="min-h-screen grid place-items-center my-20">
       <div className="grid rounded-xl border-2 border-gray-300 w-full max-w-xl py-10 sm:max-w-2xl md:max-w-4xl">
@@ -597,7 +597,7 @@ function PublikoPune() {
         </form>
       </div>
     </div>
-    </div>
+  </div>
   );
 }
 

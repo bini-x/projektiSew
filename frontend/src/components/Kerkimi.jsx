@@ -35,11 +35,11 @@ function Kerkimi() {
     navigate(`/?${params.toString()}`);
   };
   return (
-    <div className="w-full max-w-sm sm:max-w-2xl lg:max-w-6xl mx-auto px-4 my-8">
-      <div className="border border-gray-200 rounded-4xl shadow-xl bg-white">
+    <div className="w-full max-w-6xl mx-auto px-4 my-8">
+      <div className="bg-white border border-gray-200 rounded-4xl shadow-xl ">
         <form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto] gap-4 p-4">
-            <div className="flex items-center gap-2 px-3 py-2 rounded-lg focus-within:border-blue-500">
+          <div className="responsiveKerko">
+            <div className="kerko">
               <FontAwesomeIcon
                 icon={faMagnifyingGlass}
                 className="text-gray-400"
@@ -55,7 +55,7 @@ function Kerkimi() {
               />
             </div>
 
-            <div className="flex items-center gap-2 px-3 py-2 rounded-lg focus-within:border-blue-500">
+            <div className="kerko">
               <FontAwesomeIcon icon={faLocationDot} className="text-gray-400" />
               <select
                 name="lokacioniPunes"
@@ -69,37 +69,37 @@ function Kerkimi() {
                   Qyteti
                 </option>
                 <option value="Prishtine">Prishtinë</option>
-                  <option value="Prizren">Prizren</option>
-                  <option value="Peje">Pejë</option>
-                  <option value="Gjakove">Gjakovë</option>
-                  <option value="Mitrovice">Mitrovicë</option>
-                  <option value="Ferizaj">Ferizaj</option>
-                  <option value="Gjilan">Gjilan</option>
-                  <option value="Vushtrri">Vushtrri</option>
-                  <option value="Podujeve">Podujevë</option>
-                  <option value="Suhareke">Suharekë</option>
-                  <option value="Rahovec">Rahovec</option>
-                  <option value="Drenas">Drenas</option>
-                  <option value="Lipjan">Lipjan</option>
-                  <option value="Malisheve">Malishevë</option>
-                  <option value="Kamenice">Kamenicë</option>
-                  <option value="Viti">Viti</option>
-                  <option value="Skenderaj">Skenderaj</option>
-                  <option value="Istog">Istog</option>
-                  <option value="Kline">Klinë</option>
-                  <option value="Decan">Deçan</option>
-                  <option value="Junik">Junik</option>
-                  <option value="Dragash">Dragash</option>
-                  <option value="Kaçanik">Kaçanik</option>
-                  <option value="Hani_i_Elezit">Hani i Elezit</option>
-                  <option value="Shtime">Shtime</option>
-                  <option value="Obiliq">Obiliq</option>
-                  <option value="Fushe_Kosove">Fushë Kosovë</option>
-                  <option value="Kllokot">Kllokot</option>
+                <option value="Prizren">Prizren</option>
+                <option value="Peje">Pejë</option>
+                <option value="Gjakove">Gjakovë</option>
+                <option value="Mitrovice">Mitrovicë</option>
+                <option value="Ferizaj">Ferizaj</option>
+                <option value="Gjilan">Gjilan</option>
+                <option value="Vushtrri">Vushtrri</option>
+                <option value="Podujeve">Podujevë</option>
+                <option value="Suhareke">Suharekë</option>
+                <option value="Rahovec">Rahovec</option>
+                <option value="Drenas">Drenas</option>
+                <option value="Lipjan">Lipjan</option>
+                <option value="Malisheve">Malishevë</option>
+                <option value="Kamenice">Kamenicë</option>
+                <option value="Viti">Viti</option>
+                <option value="Skenderaj">Skenderaj</option>
+                <option value="Istog">Istog</option>
+                <option value="Kline">Klinë</option>
+                <option value="Decan">Deçan</option>
+                <option value="Junik">Junik</option>
+                <option value="Dragash">Dragash</option>
+                <option value="Kaçanik">Kaçanik</option>
+                <option value="Hani_i_Elezit">Hani i Elezit</option>
+                <option value="Shtime">Shtime</option>
+                <option value="Obiliq">Obiliq</option>
+                <option value="Fushe_Kosove">Fushë Kosovë</option>
+                <option value="Kllokot">Kllokot</option>
               </select>
             </div>
 
-            <div className="flex items-center gap-2 px-3 py-2 rounded-lg focus-within:border-blue-500">
+            <div className="kerko">
               <FontAwesomeIcon icon={faBriefcase} className="text-gray-400" />
               <select
                 name="kategoriaPunes"
@@ -167,16 +167,11 @@ function Kerkimi() {
                 <option value="Transport, Logjistike">
                   Transport, Logjistike
                 </option>
-                <option value="IT">
-                  IT
-                </option>
+                <option value="IT">IT</option>
               </select>
             </div>
 
-            <button
-              type="submit"
-              className="w-full sm:col-span-2 lg:col-span-1 lg:w-auto px-6 py-2 rounded-4xl bg-[#0F4C75] text-white font-semibold hover:bg-blue-700 transition-colors whitespace-nowrap"
-            >
+            <button type="submit" className="publikoPune">
               Kerko
             </button>
           </div>

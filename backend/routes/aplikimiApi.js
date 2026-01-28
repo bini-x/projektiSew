@@ -123,6 +123,26 @@ router.get("/:shpalljaId/aplikimet", async (req, res) => {
   }
 });
 
+router.put("/aplikimi/:id", async (req, res) => {
+  try {
+    const aplikimi = await Aplikimi.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    return res.status(200).json({
+      status: true,
+      data: aplikimi,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      error: "Gabim i brendshem",
+    });
+  }
+});
+
 router.get("/:id/download", async (req, res) => {
   try {
     const aplikimi = await Aplikimi.findById(req.params.id);

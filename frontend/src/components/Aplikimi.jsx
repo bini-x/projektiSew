@@ -48,7 +48,12 @@ function Aplikimi() {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file && file.type === "application/pdf") {
+    if (
+      (file && file.type === "application/pdf") ||
+      file.type === "application/msword" ||
+      file.type ===
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ) {
       setCvFile(file);
     } else {
       alert("Ju lutem ngarkoni vetëm skedarë PDF");
@@ -124,15 +129,13 @@ function Aplikimi() {
             <div className="flex justify-center mb-4">
               <CheckCircle2 className="w-16 h-16 text-green-500" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              Aplikimi u dërgua me sukses!
-            </h2>
+            <h2>Aplikimi u dërgua me sukses!</h2>
             <p className="text-gray-600 mb-6">
               Faleminderit për aplikimin tuaj. Do t'ju kontaktojmë së shpejti.
             </p>
             <button
               onClick={() => (window.location.href = "/")}
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              className="publikoPune"
             >
               Kthehu në faqen kryesore
             </button>
@@ -148,13 +151,13 @@ function Aplikimi() {
 
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">
+          <h3 className="flex justify-center text-3xl">
             Apliko për këtë pozitë
-          </h1>
+          </h3>
 
           <div className="space-y-3">
             <div className="flex items-center gap-3 text-gray-700">
-              <Briefcase className="w-5 h-5 text-blue-600" />
+              <Briefcase className="w-5 h-5 text-primary" />
               <div>
                 <span className="text-sm text-gray-500">Pozita:</span>
                 <p className="font-semibold">{shpallja.pozitaPunes}</p>
@@ -162,7 +165,7 @@ function Aplikimi() {
             </div>
 
             <div className="flex items-center gap-3 text-gray-700">
-              <FileText className="w-5 h-5 text-blue-600" />
+              <FileText className="w-5 h-5 text-primary" />
               <div>
                 <span className="text-sm text-gray-500">Kategoria:</span>
                 <p className="font-semibold">{shpallja.kategoriaPunes}</p>
@@ -170,7 +173,7 @@ function Aplikimi() {
             </div>
 
             <div className="flex items-center gap-3 text-gray-700">
-              <Building2 className="w-5 h-5 text-blue-600" />
+              <Building2 className="w-5 h-5 text-primary" />
               <div>
                 <span className="text-sm text-gray-500">Kompania:</span>
                 <p className="font-semibold">{shpallja.emailKompanise}</p>
@@ -180,26 +183,21 @@ function Aplikimi() {
         </div>
 
         <div className="bg-white rounded-lg shadow-sm p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            Të dhënat tuaja
-          </h2>
+          <h3>Të dhënat tuaja</h3>
 
           <form onSubmit={shtoAplikimin} className="space-y-6">
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label
-                  htmlFor="emri"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
+                <label htmlFor="emri">
                   Emri <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <User className="icon-aplikimi" />
                   <input
                     id="emri"
                     type="text"
                     required
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                    className="input-aplikimi"
                     placeholder="Shkruani emrin tuaj"
                     value={aplikimi.emriAplikantit}
                     onChange={(e) =>
@@ -213,19 +211,16 @@ function Aplikimi() {
               </div>
 
               <div>
-                <label
-                  htmlFor="mbiemri"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
+                <label htmlFor="mbiemri">
                   Mbiemri <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <User className="icon-aplikimi" />
                   <input
                     id="mbiemri"
                     type="text"
                     required
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                    className="input-aplikimi"
                     placeholder="Shkruani mbiemrin tuaj"
                     value={aplikimi.mbiemriAplikantit}
                     onChange={(e) =>
@@ -240,19 +235,16 @@ function Aplikimi() {
             </div>
 
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
+              <label htmlFor="email">
                 Email <span className="text-red-500">*</span>
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Mail className="icon-aplikimi" />
                 <input
                   id="email"
                   type="email"
                   required
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                  className="input-aplikimi"
                   placeholder="emri@example.com"
                   value={aplikimi.emailAplikantit}
                   onChange={(e) =>
@@ -267,17 +259,14 @@ function Aplikimi() {
 
             <div className="grid grid-cols-2 gap-3 mt-4">
               <div className="col-span-1">
-                <label
-                  htmlFor="telefon"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
+                <label htmlFor="telefon">
                   Numri i Telefonit <span className="text-red-500">*</span>
                 </label>
                 <input
                   id="telefon"
                   type="tel"
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                  className="input-aplikimi pl-2"
                   placeholder="+383 44 123 456"
                   value={aplikimi.nrTelefonit}
                   onChange={(e) =>
@@ -286,15 +275,12 @@ function Aplikimi() {
                 />
               </div>
               <div className="col-span-1">
-                <label
-                  htmlFor="eksperienca"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
+                <label htmlFor="eksperienca">
                   Eksperienca<span className="text-red-500">*</span>
                 </label>
                 <select
                   id="eksperienca"
-                  className="w-full px-4 py-3.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                  className="input-aplikimi pl-2"
                   value={aplikimi.eksperienca}
                   onChange={(e) =>
                     setAplikimi({ ...aplikimi, eksperienca: e.target.value })
@@ -312,16 +298,13 @@ function Aplikimi() {
               </div>
             </div>
             <div>
-              <label
-                htmlFor="cv"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Ngarko CV-në (PDF)
+              <label htmlFor="cv">
+                Ngarko CV-në (PDF) <span className="text-red-500">*</span>
               </label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-secondary transition-colors">
                 <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
                 <label htmlFor="cv" className="cursor-pointer">
-                  <span className="text-blue-600 hover:text-blue-700 font-medium">
+                  <span className="text-blue-600 hover:text-primary font-medium">
                     Kliko për të ngarkuar
                   </span>
                   <span className="text-gray-600"> ose tërhiq këtu</span>
@@ -340,16 +323,13 @@ function Aplikimi() {
             </div>
 
             <div>
-              <label
-                htmlFor="letraMotivuese"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Letra Motivuese
+              <label htmlFor="letraMotivuese">
+                Letra Motivuese <span className="text-red-500">*</span>
               </label>
               <textarea
                 id="letraMotivuese"
                 rows="6"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all resize-none"
+                className="input-aplikimi pl-2"
                 placeholder="Shkruani pse jeni kandidati ideal për këtë pozitë..."
                 value={aplikimi.letraMotivuese}
                 onChange={(e) =>
@@ -362,7 +342,7 @@ function Aplikimi() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all"
+                className="publikoPune w-full disabled:cursor-not-allowed transition-all"
               >
                 {isSubmitting ? "Duke dërguar..." : "Dërgo Aplikimin"}
               </button>
@@ -370,7 +350,7 @@ function Aplikimi() {
           </form>
         </div>
 
-        <p className="text-center text-sm text-gray-500 mt-6">
+        <p className="paragraf text-sm mt-6">
           Të dhënat tuaja do të përdoren vetëm për qëllime të rekrutimit dhe do
           të trajtohen në përputhje me politikat e privatësisë.
         </p>

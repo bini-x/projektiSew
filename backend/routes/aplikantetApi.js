@@ -1,19 +1,20 @@
 const express = require("express");
+const Perdorues = require("../models/perdoruesSchema");
 const router = express.Router();
-const Perdoruesi = require("../models/perdoruesSchema");
 
-router.get("/kompanite", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    const kompanite = await Perdoruesi.find({ tipiPerdoruesit: "punedhenes" });
+    const aplikantet = await Perdorues.find({ tipiPerdoruesit: "aplikant" });
 
     return res.status(200).json({
       success: true,
-      data: kompanite,
+      data: aplikantet,
     });
   } catch (error) {
+    console.error(error);
     return res.status(500).json({
       success: false,
-      error: "Gabim i brendshem i serverit",
+      error: "Gabim i brendshem",
     });
   }
 });
@@ -21,11 +22,11 @@ router.get("/kompanite", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const kompania = await Perdoruesi.findById(id);
+    const aplikanti = await Perdorues.findById(id);
 
     return res.status(200).json({
       success: true,
-      data: kompania,
+      data: aplikanti,
     });
   } catch (error) {
     console.error(error);
