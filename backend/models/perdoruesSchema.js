@@ -47,7 +47,29 @@ const perdoruesSchema = new mongoose.Schema(
   {
     timestamps: true,
   },
-);
+  foto: {
+    emriFoto: {
+      type: String,
+      required: false,
+    },
+    mimetype: {
+      type: String,
+      required: false,
+    },
+    size: {
+      type: Number,
+      required: false,
+    },
+    data: {
+      type: Buffer,
+      required: false,
+    },
+    uploadDate: {
+      type: Date,
+      required: false,
+    },
+  },
+});
 
 const Perdorues = mongoose.model("Perdorues", perdoruesSchema, "perdoruesit");
 module.exports = Perdorues;

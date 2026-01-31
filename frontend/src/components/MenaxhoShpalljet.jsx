@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Header from "./Header";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -38,6 +39,9 @@ function MenaxhoShpalljet() {
   const [shfaqPopupAplikanteve, setShfaqPopupAplikanteve] = useState(false);
   const [shpalljaZgjedhurPerAplikante, setShpalljaZgjedhurPerAplikante] =
     useState(null);
+
+  // State per foto te aplikanteve
+  const [fotoAplikanteve, setFotoAplikanteve] = useState({});
 
   const { id } = useParams();
 
@@ -97,6 +101,9 @@ function MenaxhoShpalljet() {
         if (response.data.success) {
           console.log("Aplikimet data:", response.data.aplikimet);
           setAplikimet(response.data.aplikimet);
+
+          // Ngarko fotot e aplikanteve
+          await ngarkoFotoAplikanteve(response.data.aplikimet);
         }
       } catch (error) {
         console.error(error);
@@ -106,6 +113,35 @@ function MenaxhoShpalljet() {
 
     fetchData();
   }, [shpalljaZgjedhurPerAplikante]);
+
+  // Funksion per te ngarkuar fotot e aplikanteve
+  const ngarkoFotoAplikanteve = async (aplikimet) => {
+    const fotot = {};
+
+    for (const aplikimi of aplikimet) {
+      try {
+        // Kerko perdoruesin sipas email-it
+        const response = await axios.get(
+          `http://localhost:3000/api/profili/email/${aplikimi.emailAplikantit}`,
+        );
+
+        if (response.data.success && response.data.data) {
+          const perdoruesiId = response.data.data._id;
+
+          // Kontrollo nese perdoruesi ka foto dhe foto.data (buffer)
+          if (response.data.data.foto && response.data.data.foto.data) {
+            fotot[aplikimi.emailAplikantit] =
+              `http://localhost:3000/api/profili/${perdoruesiId}/foto?t=${Date.now()}`;
+          }
+        }
+      } catch (error) {
+        // Nese nuk gjendet perdoruesi ose foto, vazhdo me te tjeret
+        console.log(`Foto nuk u gjet per: ${aplikimi.emailAplikantit}`);
+      }
+    }
+
+    setFotoAplikanteve(fotot);
+  };
 
   const modifikoShpalljen = (e) => {
     const { id, value } = e.target;
@@ -175,6 +211,7 @@ function MenaxhoShpalljet() {
     setShfaqPopupAplikanteve(false);
     setShpalljaZgjedhurPerAplikante(null);
     setAplikimiKlikuar(null);
+    setFotoAplikanteve({});
   };
 
   const hapAplikimin = (aplikimi) => {
@@ -224,6 +261,7 @@ function MenaxhoShpalljet() {
 
   return (
     <div className="bg-white min-h-screen">
+      <Header />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-6">
           <h1 className="text-2xl font-semibold text-gray-900">
@@ -659,9 +697,24 @@ function MenaxhoShpalljet() {
                       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
                         <div className="flex items-start gap-4">
                           <div className="relative">
-                            <div className="w-16 h-16 rounded-2xl flex items-center justify-center font-bold text-xl shadow-lg group-hover:scale-110 transition-transform">
-                              {a.emriAplikantit?.charAt(0)}
-                              {a.mbiemriAplikantit?.charAt(0)}
+                            <div className="w-16 h-16 rounded-2xl bg-blue-100 flex items-center justify-center font-bold text-xl shadow-lg group-hover:scale-110 transition-transform overflow-hidden">
+                              {fotoAplikanteve[a.emailAplikantit] ? (
+                                <img
+                                  src={fotoAplikanteve[a.emailAplikantit]}
+                                  alt={`${a.emriAplikantit} ${a.mbiemriAplikantit}`}
+                                  className="w-full h-full object-cover"
+                                  onError={(e) => {
+                                    e.target.style.display = "none";
+                                    const parent = e.target.parentElement;
+                                    parent.innerHTML = `<span class="text-blue-600">${a.emriAplikantit?.charAt(0)}${a.mbiemriAplikantit?.charAt(0)}</span>`;
+                                  }}
+                                />
+                              ) : (
+                                <span className="text-blue-600">
+                                  {a.emriAplikantit?.charAt(0)}
+                                  {a.mbiemriAplikantit?.charAt(0)}
+                                </span>
+                              )}
                             </div>
                           </div>
 
@@ -702,15 +755,39 @@ function MenaxhoShpalljet() {
           <div className="bg-white rounded-2xl w-full max-w-2xl shadow-2xl max-h-[90vh] flex flex-col animate-in slide-in-from-bottom-4 duration-300">
             <div className="relative px-6 py-6 rounded-t-2xl">
               <div className="flex items-start justify-between">
-                <div>
-                  <h2 className="text-2xl font-bold mb-1">
-                    {aplikimiKlikuar.emriAplikantit}{" "}
-                    {aplikimiKlikuar.mbiemriAplikantit}
-                  </h2>
-                  <p className="text-gray-400 text-sm">
-                    {aplikimiKlikuar.emailAplikantit}
-                  </p>
+                <div className="flex items-center gap-4">
+                  {/* Foto e aplikantit ne detaje */}
+                  <div className="w-16 h-16 rounded-2xl bg-blue-100 flex items-center justify-center font-bold text-xl shadow-lg overflow-hidden flex-shrink-0">
+                    {fotoAplikanteve[aplikimiKlikuar.emailAplikantit] ? (
+                      <img
+                        src={fotoAplikanteve[aplikimiKlikuar.emailAplikantit]}
+                        alt={`${aplikimiKlikuar.emriAplikantit} ${aplikimiKlikuar.mbiemriAplikantit}`}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.target.style.display = "none";
+                          const parent = e.target.parentElement;
+                          parent.innerHTML = `<span class="text-blue-600">${aplikimiKlikuar.emriAplikantit?.charAt(0)}${aplikimiKlikuar.mbiemriAplikantit?.charAt(0)}</span>`;
+                        }}
+                      />
+                    ) : (
+                      <span className="text-blue-600">
+                        {aplikimiKlikuar.emriAplikantit?.charAt(0)}
+                        {aplikimiKlikuar.mbiemriAplikantit?.charAt(0)}
+                      </span>
+                    )}
+                  </div>
+
+                  <div>
+                    <h2 className="text-2xl font-bold mb-1">
+                      {aplikimiKlikuar.emriAplikantit}{" "}
+                      {aplikimiKlikuar.mbiemriAplikantit}
+                    </h2>
+                    <p className="text-gray-400 text-sm">
+                      {aplikimiKlikuar.emailAplikantit}
+                    </p>
+                  </div>
                 </div>
+
                 <button
                   onClick={mbyllAplikimin}
                   className="cursor-pointer text-xl hover:text-gray-700"
@@ -818,7 +895,7 @@ function MenaxhoShpalljet() {
                       )
                     }
                   >
-                    Ngarko CV
+                    Shkarko CV
                   </button>
                 </div>
               </div>
