@@ -4,6 +4,7 @@ import { faDollarSign } from "@fortawesome/free-solid-svg-icons";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark as faBookmarkRegular } from "@fortawesome/free-regular-svg-icons";
 import { faBookmark as faBookmarkSolid } from "@fortawesome/free-solid-svg-icons";
+import { faBookmark } from "@fortawesome/free-regular-svg-icons";
 import { faClock } from "@fortawesome/free-regular-svg-icons";
 import { faArrowRightLong } from "@fortawesome/free-solid-svg-icons";
 import "../index.css";
@@ -129,6 +130,27 @@ function ShpalljaCard({ shpallja }) {
               icon={faLocationDot}
               className="mr-1 text-gray-600"
             />
+            </p>
+        <FontAwesomeIcon icon={faBookmark} className="text-l" />
+      </div>
+      <p className="grid mt-6 font-bold text-l">{shpallja.pozitaPunes}</p>
+      <div className="flex gap-5 mt-2">
+        <p className="paragraf">
+          {" "}
+          <FontAwesomeIcon icon={faClock} />
+          {shpallja.orari}
+        </p>
+        <p className="paragraf">{shpallja.niveliPunes}</p>
+      </div>
+      <hr className="border-0 h-px bg-linear-to-r from-transparent via-gray-300 to-transparent mt-8 mb-3" />
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-l font-semibold flex items-center">
+            <FontAwesomeIcon icon={faDollarSign} className="mr-1" />
+            {shpallja.pagaPrej}-{shpallja.pagaDeri}
+          </p>
+          <p className="paragraf text-sm text-gray-600 flex items-center mt-1">
+            <FontAwesomeIcon icon={faLocationDot} className="mr-1" />
             {shpallja.lokacioniPunes}
           </p>
         </div>
@@ -151,7 +173,7 @@ function ShpalljaCard({ shpallja }) {
         </button>
       </div>
     </div>
+    </div>
   );
 }
-
 export default ShpalljaCard;

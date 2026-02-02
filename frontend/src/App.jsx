@@ -62,11 +62,13 @@ function App() {
             <Route path="/rrethNesh" element={<RrethNesh />} />
             <Route path="/kycja" element={<Kycja />} />
             <Route path="/regjistrimi" element={<Regjistrimi />} />
-            <Route path="/publikopune" element={<PublikoPune />} />
             <Route path="/kycja" element={<Kycja />} />
             <Route path="/shpallja/:id" element={<Shpallja />} />
             <Route path="/profili/:id" element={<Profili />} />
             <Route path="/profiliaplikanteve" element={<ProfiliAplikantit />} />
+            <Route path="/publikoPune" element={<PublikoPune />} />
+            <Route path="/shpallja/:id" element={<Shpallja />} />
+            <Route path="/profili/:id" element={<Profili />} />
             <Route path="/profilikompanise" element={<ProfiliKompanise />} />
 
             <Route
