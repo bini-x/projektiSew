@@ -242,7 +242,10 @@ function ProfiliKompanise() {
               <button className="flex items-center justify-center w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 transition-colors duration-200">
                 <Edit2 size={20} className="text-white" />
               </button>
-              <button className="flex items-center gap-2 px-4 py-2 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition-colors">
+              <button
+                onClick={() => navigate("/publikopune")}
+                className="flex items-center gap-2 px-4 py-2 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+              >
                 <Upload size={18} />
                 Publiko Punë
               </button>
@@ -301,7 +304,7 @@ function ProfiliKompanise() {
 
               <div className="mt-4 sm:mt-0 sm:ml-6 text-center sm:text-left flex-1">
                 <h1 className="text-left text-3xl font-bold mb-1 text-gray-900">
-                  {kompaniaData?.emri || "Emri i Kompanisë"}
+                  {kompaniaData?.kompania || "Emri i Kompanisë"}
                 </h1>
                 <div className="space-y-2 mt-4">
                   <p className="paragrafProfili">
@@ -762,4 +765,3 @@ function ProfiliKompanise() {
 }
 
 export default ProfiliKompanise;
-
