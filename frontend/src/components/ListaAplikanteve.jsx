@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Header from "./Header";
 import AplikantiCard from "./AplikantiCard";
+import "../index.css";
 
 function ListaAplikanteve() {
   const [aplikantet, setAplikantet] = useState([]);
@@ -22,18 +23,16 @@ function ListaAplikanteve() {
     };
 
     fetchData();
-  }, [aplikantet]);
-
-  if (aplikantet.length === 0) {
-    return <div>error</div>;
-  }
+  }, []);
 
   return (
     <div>
       <Header />
-      {aplikantet.map((a) => {
-        return <AplikantiCard key={a._id} aplikanti={a} />;
-      })}
+      <div className="kompaniaCard">
+        {aplikantet.map((a) => {
+          return <AplikantiCard key={a._id} aplikanti={a} />;
+        })}
+      </div>
     </div>
   );
 }

@@ -22,6 +22,9 @@ function ProfiliAplikantit() {
   const [shfaqFormenEksperienca, setShfaqFormenEksperienca] = useState(false);
   const [shfaqFormenEdukimi, setShfaqFormenEdukimi] = useState(false);
   const [shfaqFormenProjektet, setShfaqFormenProjektet] = useState(false);
+  // Skills state – simple string array, single input
+  const [shfaqFormenAftesite, setShfaqFormenAftesite] = useState(false);
+  const [aftesiRi, setAftesiRi] = useState("");
 
   const [fotoProfile, setFotoProfile] = useState(null);
   const [poNgarkohetFoto, setPoNgarkohetFoto] = useState(false);
@@ -42,7 +45,6 @@ function ProfiliAplikantit() {
     }
   };
 
-  // Load data on component mount
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -504,6 +506,65 @@ function ProfiliAplikantit() {
     }
   };
 
+  // ========== SKILLS (AFTËSITË) SECTION – CORRECTED FOR [String] SCHEMA ==========
+  const handleShtoAftesine = async () => {
+    if (!aftesiRi.trim()) {
+      alert("Ju lutem shkruani emrin e aftësisë");
+      return;
+    }
+
+    try {
+      const updatedSkills = [
+        ...(perdoruesiData?.aftesite || []),
+        aftesiRi.trim(),
+      ];
+
+      const response = await axios.put(
+        `http://localhost:3000/api/profili/${id}`,
+        {
+          aftesite: updatedSkills,
+        },
+      );
+
+      if (response.data.success) {
+        setPerdoruesiData(response.data.data);
+        setAftesiRi("");
+        setShfaqFormenAftesite(false);
+        alert("Aftësia u shtua me sukses!");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Gabim në ruajtjen e aftësisë");
+    }
+  };
+
+  const handleFshijAftesine = async (index) => {
+    if (!window.confirm("Jeni të sigurt që dëshironi ta fshini këtë aftësi?")) {
+      return;
+    }
+
+    try {
+      const updatedSkills = (perdoruesiData?.aftesite || []).filter(
+        (_, i) => i !== index,
+      );
+
+      const response = await axios.put(
+        `http://localhost:3000/api/profili/${id}`,
+        {
+          aftesite: updatedSkills,
+        },
+      );
+
+      if (response.data.success) {
+        setPerdoruesiData(response.data.data);
+        alert("Aftësia u fshi me sukses!");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Gabim në fshirjen e aftësisë");
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto mb-2 mt-10">
       {/* Profile Header */}
@@ -668,7 +729,7 @@ function ProfiliAplikantit() {
       <div className="min-h-screen bg-gray-100 ">
         <div className="max-w-4xl mx-auto ">
           <div className="bg-white rounded-2xl shadow-lg overflow-hidden p-8">
-            {/* ========== EXPERIENCE SECTION ========== */}
+            {/* Experience Section */}
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-semibold text-gray-900">
                 Eksperienca
@@ -838,7 +899,7 @@ function ProfiliAplikantit() {
 
             <hr className="border-gray-200 my-8" />
 
-            {/* ========== EDUCATION SECTION ========== */}
+            {/* Education Section */}
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-semibold text-gray-900">Edukimi</h2>
               <button
@@ -914,7 +975,7 @@ function ProfiliAplikantit() {
                   <div className="flex items-center">
                     <input
                       type="checkbox"
-                      id="aktuale"
+                      id="aktuale-edu"
                       checked={edukimiRi.aktuale}
                       onChange={(e) =>
                         setEdukimiRi({
@@ -928,7 +989,7 @@ function ProfiliAplikantit() {
                       className="h-4 w-4 text-blue-600 rounded"
                     />
                     <label
-                      htmlFor="aktualet"
+                      htmlFor="aktuale-edu"
                       className="ml-2 text-sm text-gray-700"
                     >
                       Aktualisht studioj këtu
@@ -1004,7 +1065,78 @@ function ProfiliAplikantit() {
 
             <hr className="border-gray-200 my-8" />
 
-            {/* ========== PROJECTS SECTION ========== */}
+            {/* ========== SKILLS (AFTËSITË) SECTION – CORRECTED ========== */}
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-semibold text-gray-900">Aftësitë</h2>
+              <button
+                onClick={() => setShfaqFormenAftesite(!shfaqFormenAftesite)}
+                className="flex items-center gap-1"
+              >
+                <Plus
+                  size={28}
+                  className="hover:bg-gray-100 p-1 rounded-full"
+                />
+              </button>
+            </div>
+
+            {shfaqFormenAftesite && (
+              <div className="mt-3 p-4 bg-gray-50 rounded-lg border border-gray-200 mb-6">
+                <div className="space-y-2">
+                  <input
+                    type="text"
+                    placeholder="Emri i aftësisë (p.sh. React, Projekt Menaxhim)"
+                    value={aftesiRi}
+                    onChange={(e) => setAftesiRi(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  />
+                  <div className="flex gap-2">
+                    <button
+                      onClick={handleShtoAftesine}
+                      className="px-3 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm"
+                    >
+                      Ruaj
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShfaqFormenAftesite(false);
+                        setAftesiRi("");
+                      }}
+                      className="px-3 py-1.5 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 text-sm"
+                    >
+                      Anulo
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="mt-4">
+              <div className="flex flex-wrap gap-2">
+                {perdoruesiData?.aftesite?.map((aftesi, index) => (
+                  <div key={index} className="group relative">
+                    <span className="inline-flex items-center gap-1 px-3 py-1 bg-yellow-50 text-yellow-800 rounded-full text-sm">
+                      {aftesi}
+                    </span>
+                    <button
+                      onClick={() => handleFshijAftesine(index)}
+                      className="absolute -top-1 -right-1 p-0.5 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <X size={12} />
+                    </button>
+                  </div>
+                ))}
+                {(!perdoruesiData?.aftesite ||
+                  perdoruesiData.aftesite.length === 0) && (
+                  <p className="text-gray-500 text-sm py-2">
+                    Nuk ka aftësi të shtuara ende
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <hr className="border-gray-200 my-8" />
+
+            {/* Projects Section */}
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-semibold text-gray-900">
                 Projektet

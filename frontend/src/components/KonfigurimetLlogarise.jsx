@@ -118,10 +118,14 @@ function KonfigurimetLlogarise() {
   };
 
   const modifikoProfilin = (e) => {
-    const { id, value } = e.target;
-    setPerdoruesiData({
-      ...perdoruesiData,
-      [id]: value,
+    const newValue = e.target.value;
+
+    setPerdoruesiData((prev) => {
+      if (prev.tipiPerdoruesit === "aplikant") {
+        return { ...prev, emri: newValue };
+      } else {
+        return { ...prev, kompania: newValue };
+      }
     });
   };
 
@@ -164,7 +168,11 @@ function KonfigurimetLlogarise() {
                   type="text"
                   className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#3282B8] focus:border-transparent transition"
                   onChange={modifikoProfilin}
-                  value={perdoruesiData.emri || ""}
+                  value={
+                    perdoruesiData.tipiPerdoruesit === "aplikant"
+                      ? perdoruesiData.emri
+                      : perdoruesiData.kompania
+                  }
                   placeholder="Shkruani emrin"
                 />
               </div>
