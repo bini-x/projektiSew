@@ -1,13 +1,13 @@
 // backend/routes/punetRuajturaApi.js
 const express = require("express");
 const router = express.Router();
-const PunetRuajtura = require("../models/punetRuajturaSchema");
+const Perdorues = require("../models/perdoruesSchema");
 
 // Ruaj një shpallje
 router.post("/ruaj/:shpalljaId", async (req, res) => {
   try {
     const { shpalljaId } = req.params;
-    const { perdoruesiId } = req.body; // Get user ID from request body
+    const perdoruesiId = req.session.perdoruesiId; // Get user ID from request body
 
     if (!perdoruesiId) {
       return res.status(401).json({
@@ -16,30 +16,29 @@ router.post("/ruaj/:shpalljaId", async (req, res) => {
       });
     }
 
-    // Kontrollo nëse është ruajtur më parë
-    const ekziston = await PunetRuajtura.findOne({
-      perdoruesiId: perdoruesiId,
-      shpalljaId: shpalljaId,
-    });
+    const perdoruesi = await Perdorues.findById(perdoruesiId);
+    if (!perdoruesi) {
+      return res.status(404).json({
+        success: false,
+        message: "Perdoruesi nuk u gjet",
+      });
+    }
 
-    if (ekziston) {
+    // Kontrollo nëse është ruajtur më parë
+    if (perdoruesi.punetRuajtura.includes(shpalljaId)) {
       return res.status(400).json({
         success: false,
         message: "Shpallja është ruajtur më parë",
       });
     }
 
-    const puneRuajtur = new PunetRuajtura({
-      perdoruesiId: perdoruesiId,
-      shpalljaId: shpalljaId,
-    });
+    perdoruesi.punetRuajtura.push(shpalljaId);
+    await perdoruesi.save();
 
-    await puneRuajtur.save();
-
-    return res.status(201).json({
+    return res.status(200).json({
       success: true,
       message: "Shpallja u ruajt me sukses",
-      data: puneRuajtur,
+      data: perdoruesi,
     });
   } catch (err) {
     console.error(err);
@@ -55,7 +54,7 @@ router.post("/ruaj/:shpalljaId", async (req, res) => {
 router.delete("/hiq/:shpalljaId", async (req, res) => {
   try {
     const { shpalljaId } = req.params;
-    const { perdoruesiId } = req.body; // Get user ID from request body
+    const perdoruesiId = req.session.perdoruesiId; // Get user ID from request body
 
     if (!perdoruesiId) {
       return res.status(401).json({
@@ -64,17 +63,19 @@ router.delete("/hiq/:shpalljaId", async (req, res) => {
       });
     }
 
-    const rezultati = await PunetRuajtura.findOneAndDelete({
-      perdoruesiId: perdoruesiId,
-      shpalljaId: shpalljaId,
-    });
-
-    if (!rezultati) {
+    const perdoruesi = await Perdorues.findById(perdoruesiId);
+    if (!perdoruesi) {
       return res.status(404).json({
         success: false,
-        message: "Shpallja e ruajtur nuk u gjet",
+        message: "Perdoruesi nuk u gjet",
       });
     }
+
+    // Hiq shpalljen nga array
+    perdoruesi.punetRuajtura = perdoruesi.punetRuajtura.filter(
+      (id) => id.toString() !== shpalljaId,
+    );
+    await perdoruesi.save();
 
     return res.status(200).json({
       success: true,
@@ -91,9 +92,9 @@ router.delete("/hiq/:shpalljaId", async (req, res) => {
 });
 
 // Merr të gjitha shpalljet e ruajtura për një përdorues
-router.get("/shpalljet-e-ruajtura/:perdoruesiId", async (req, res) => {
+router.get("/shpalljet-e-ruajtura", async (req, res) => {
   try {
-    const { perdoruesiId } = req.params;
+    const perdoruesiId = req.session.perdoruesiId;
 
     if (!perdoruesiId) {
       return res.status(401).json({
@@ -102,15 +103,20 @@ router.get("/shpalljet-e-ruajtura/:perdoruesiId", async (req, res) => {
       });
     }
 
-    const shpalljetRuajtura = await PunetRuajtura.find({
-      perdoruesiId: perdoruesiId,
-    })
-      .populate("shpalljaId")
-      .sort({ createdAt: -1 });
+    const perdoruesi = await Perdorues.findById(perdoruesiId)
+      .populate("punetRuajtura")
+      .select("punetRuajtura");
+
+    if (!perdoruesi) {
+      return res.status(404).json({
+        success: false,
+        message: "Perdoruesi nuk u gjet",
+      });
+    }
 
     return res.status(200).json({
       success: true,
-      data: shpalljetRuajtura,
+      data: perdoruesi.punetRuajtura,
     });
   } catch (err) {
     console.error(err);
@@ -123,9 +129,10 @@ router.get("/shpalljet-e-ruajtura/:perdoruesiId", async (req, res) => {
 });
 
 // Kontrollo nëse një shpallje është e ruajtur
-router.get("/eshte-ruajtur/:shpalljaId/:perdoruesiId", async (req, res) => {
+router.get("/eshte-ruajtur/:shpalljaId", async (req, res) => {
   try {
-    const { shpalljaId, perdoruesiId } = req.params;
+    const { shpalljaId } = req.params;
+    const perdoruesiId = req.session.perdoruesiId;
 
     if (!perdoruesiId) {
       return res.status(200).json({
@@ -134,14 +141,21 @@ router.get("/eshte-ruajtur/:shpalljaId/:perdoruesiId", async (req, res) => {
       });
     }
 
-    const ruajtur = await PunetRuajtura.findOne({
-      perdoruesiId: perdoruesiId,
-      shpalljaId: shpalljaId,
-    });
+    const perdoruesi = await Perdorues.findById(perdoruesiId);
+    if (!perdoruesi) {
+      return res.status(200).json({
+        success: true,
+        eshteRuajtur: false,
+      });
+    }
+
+    const eshteRuajtur = perdoruesi.punetRuajtura.some(
+      (id) => id.toString() === shpalljaId,
+    );
 
     return res.status(200).json({
       success: true,
-      eshteRuajtur: !!ruajtur,
+      eshteRuajtur: eshteRuajtur,
     });
   } catch (err) {
     console.error(err);

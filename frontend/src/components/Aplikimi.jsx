@@ -101,6 +101,14 @@ function Aplikimi() {
       }
     } catch (error) {
       console.log("Error:", error);
+      if (
+        error.response.data.error.includes(
+          "Ju keni aplikuar tashme per kete pozite",
+        )
+      ) {
+        alert("Ju keni aplikuar tashme per kete pozite");
+        return;
+      }
       alert("Diçka shkoi keq. Ju lutem provoni përsëri.");
     } finally {
       setIsSubmitting(false);

@@ -10,7 +10,7 @@ function BallinaPundhenesit() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/aplikantet/",
+          "http://localhost:3000/api/aplikantet/"
         );
 
         if (response.data.success) {
@@ -25,11 +25,18 @@ function BallinaPundhenesit() {
   }, [aplikantet]);
 
   return (
-    <div>
+    <div className="bg-gray-100 min-h-screen font-sans ">
       <Header />
-      {aplikantet.map((a) => {
-        return <AplikantiCard key={a._id} aplikanti={a} />;
-      })}
+      <div className="mt-6 grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 p-6 md:p-12">
+        {aplikantet.map((a) => (
+          <div
+            key={a._id}
+            className="bg-white rounded-xl p-5 shadow-md transition-transform transform hover:-translate-y-1 hover:shadow-xl"
+          >
+            <AplikantiCard aplikanti={a} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

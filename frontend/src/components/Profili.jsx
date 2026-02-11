@@ -1,9 +1,19 @@
-import { useState, useEffect } from "react";
+Profili.jsx;
+import { useState, useEffect, useRef } from "react";
 import "../index.css";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Header from "./Header";
-import { Mail, Phone, Plus, Edit2, Upload, Link, X } from "lucide-react";
+import {
+  Mail,
+  Phone,
+  Plus,
+  Edit2,
+  Upload,
+  Link,
+  X,
+  Camera,
+} from "lucide-react";
 
 function Profili() {
   const navigate = useNavigate();
@@ -18,6 +28,11 @@ function Profili() {
   const [projektet, setProjektet] = useState([]);
   const [shfaqFormenProjektet, setShfaqFormenProjektet] = useState(false);
 
+  // Photo upload states
+  const [fotoProfile, setFotoProfile] = useState(null);
+  const [poNgarkohetFoto, setPoNgarkohetFoto] = useState(false);
+  const inputFotoRef = useRef(null);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -25,6 +40,11 @@ function Profili() {
           `http://localhost:3000/api/profili/${id}`,
         );
         setPerdoruesiData(response.data.data);
+
+        // Ngarko foton e profile nese ekziston
+        if (response.data.data.foto) {
+          setFotoProfile(`http://localhost:3000/api/profili/${id}/foto`);
+        }
       } catch (error) {
         console.error(error);
       }
@@ -43,7 +63,6 @@ function Profili() {
       const response = await axios.post(
         "http://localhost:3000/api/ckycja/perdoruesi",
         {},
-        { withCredentials: true },
       );
       setPerdoruesiData(null);
       console.log("Ckycja u be", response.data);
@@ -54,13 +73,89 @@ function Profili() {
     }
   };
 
-  const getInitials = () => {
+  const merreShkronjatFillestare = () => {
     if (perdoruesiData?.emri && perdoruesiData?.mbiemri) {
       return `${perdoruesiData.emri[0]}${perdoruesiData.mbiemri[0]}`.toUpperCase();
     } else if (perdoruesiData?.kompania) {
       return perdoruesiData.kompania.substring(0, 2).toUpperCase();
     }
     return "?";
+  };
+
+  // Menaxho ngarkimin e fotos
+  const handleNgarkoFoto = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // Valido llojin e file-it (vetem foto)
+    const llojetELejuara = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/webp",
+      "image/gif",
+    ];
+    if (!llojetELejuara.includes(file.type)) {
+      alert("Vetëm fotot janë të lejuara (JPEG, PNG, WEBP, GIF)");
+      return;
+    }
+
+    // Valido madhesine e file-it (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Madhësia e fotos është shumë e madhe. Maksimumi 5MB");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("photoFile", file);
+
+    setPoNgarkohetFoto(true);
+
+    try {
+      const response = await axios.post(
+        `http://localhost:3000/api/profili/${id}/ngarko-foto`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+
+      if (response.data.success) {
+        // Perditeso URL-ne e fotos me timestamp per te rifreshuar
+        setFotoProfile(
+          `http://localhost:3000/api/profili/${id}/foto?t=${Date.now()}`,
+        );
+        alert("Fotoja u ngarkua me sukses!");
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error.response?.data?.message || "Gabim në ngarkimin e fotos");
+    } finally {
+      setPoNgarkohetFoto(false);
+    }
+  };
+
+  // Menaxho fshirjen e fotos
+  const handleFshijFoto = async () => {
+    if (!window.confirm("Jeni të sigurt që dëshironi të fshini foton?")) {
+      return;
+    }
+
+    try {
+      const response = await axios.delete(
+        `http://localhost:3000/api/profili/${id}/foto`,
+      );
+
+      if (response.data.success) {
+        setFotoProfile(null);
+        alert("Fotoja u fshi me sukses!");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Gabim në fshirjen e fotos");
+    }
   };
 
   // Linki i ri
@@ -164,6 +259,7 @@ function Profili() {
   const handleFshijProjektin = (id) => {
     setProjektet(projektet.filter((proj) => proj.id !== id));
   };
+
   return (
     <div className="min-h-screen bg-gray-100">
       <Header perdoruesiData={perdoruesiData} onCkycja={handleCkycja} />
@@ -184,8 +280,54 @@ function Profili() {
 
           <div className="px-8 pb-8">
             <div className="flex flex-col sm:flex-row items-center sm:items-end -mt-16 mb-6">
-              <div className="w-32 h-32 rounded-full bg-blue-100 flex items-center justify-center text-black text-4xl font-bold shadow-xl border-4 border-blue-100">
-                {getInitials()}
+              {/* Foto Profile me mundesi ngarkimi */}
+              <div className="relative group">
+                <div className="w-32 h-32 rounded-full bg-blue-100 flex items-center justify-center text-black text-4xl font-bold shadow-xl border-4 border-blue-100 overflow-hidden">
+                  {fotoProfile ? (
+                    <img
+                      src={fotoProfile}
+                      alt="Foto Profile"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span>{merreShkronjatFillestare()}</span>
+                  )}
+                </div>
+
+                {/* Butonat per ngarkimin/fshirjen e fotos */}
+                <div className="absolute bottom-0 right-0 flex gap-1">
+                  <button
+                    onClick={() => inputFotoRef.current?.click()}
+                    disabled={poNgarkohetFoto}
+                    className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500 hover:bg-blue-600 text-white shadow-lg transition-all duration-200 disabled:bg-gray-400"
+                    title="Ngarko foto"
+                  >
+                    {poNgarkohetFoto ? (
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    ) : (
+                      <Camera size={18} />
+                    )}
+                  </button>
+
+                  {fotoProfile && (
+                    <button
+                      onClick={handleFshijFoto}
+                      className="flex items-center justify-center w-10 h-10 rounded-full bg-red-500 hover:bg-red-600 text-white shadow-lg transition-all duration-200"
+                      title="Fshi foto"
+                    >
+                      <X size={18} />
+                    </button>
+                  )}
+                </div>
+
+                {/* Input i fshehur per file */}
+                <input
+                  ref={inputFotoRef}
+                  type="file"
+                  accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
+                  onChange={handleNgarkoFoto}
+                  className="hidden"
+                />
               </div>
 
               <div className="mt-4 sm:mt-0 sm:ml-6 text-center sm:text-left flex-1 relative">
@@ -194,7 +336,6 @@ function Profili() {
                   {perdoruesiData?.mbiemri}
                 </h1>
                 <div className="space-y-2 mt-4">
-                  a{" "}
                   <p className="paragrafProfili">
                     <Mail size={16} />
                     {perdoruesiData.email}
@@ -578,9 +719,9 @@ function Profili() {
                     <input
                       type="text"
                       placeholder="Emri i projektit"
-                      value={projektRi.name}
+                      value={projektRi.emri}
                       onChange={(e) =>
-                        setProjektRi({ ...projektRi, name: e.target.value })
+                        setProjektRi({ ...projektRi, emri: e.target.value })
                       }
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
@@ -654,7 +795,7 @@ function Profili() {
                           <X size={18} />
                         </button>
                         <h3 className="font-semibold text-lg text-gray-900">
-                          {proj.name}
+                          {proj.emri}
                         </h3>
                         {proj.pershkrimi && (
                           <p className="text-gray-600 mt-2">

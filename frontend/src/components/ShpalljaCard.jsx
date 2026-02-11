@@ -24,7 +24,7 @@ function ShpalljaCard({ shpallja }) {
       if (perdoruesiData && perdoruesiData.tipiPerdoruesit !== "punedhenes") {
         try {
           const response = await axios.get(
-            `http://localhost:3000/api/punetRuajtura/eshte-ruajtur/${shpallja._id}/${perdoruesiData._id}`,
+            `http://localhost:3000/api/punetRuajtura/eshte-ruajtur/${shpallja._id}`,
           );
           setEshteRuajtur(response.data.eshteRuajtur);
         } catch (error) {

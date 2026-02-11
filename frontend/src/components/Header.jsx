@@ -67,7 +67,6 @@ function Header() {
       const response = await axios.post(
         "http://localhost:3000/api/ckycja/perdoruesi",
         {},
-        { withCredentials: true },
       );
 
       setPerdoruesiData(null);

@@ -22,7 +22,7 @@ function KompaniaCard({ kompania }) {
     <div className="border border-gray-200 hover:bg-gray-200 shadow-xl rounded-xl w-full p-3">
       <div className="flex justify-between">
         <div className="w-20 h-20 rounded-full overflow-hidden bg-linear-to-r from-slate-700 via-gray-800 to-black flex items-center justify-center">
-          {/* TODO: Me shtu foton e profilit tkompanise */}
+          {}
 
           <span className="text-white font-bold text-xl">
             {getInitials(kompania.kompania)}
@@ -36,13 +36,13 @@ function KompaniaCard({ kompania }) {
           <FontAwesomeIcon icon={faEnvelope} className="mr-1" />
           {kompania.email}
         </p>
-        {/*TODO: Me shtu shpalljet e publikuara per kompani  */}
+        {}
       </div>
       <hr className="hrCard" />
       <div className="flex items-center justify-between">
         <div>
           <p className="paragraf text-sm text-gray-600 flex items-center mt-1">
-            {/* TODO: Me shtu lokacionin e kompanise */}
+            {}
             <FontAwesomeIcon icon={faLocationDot} className="mr-1" />
             {kompania.lokacioni || "N/A"}
           </p>

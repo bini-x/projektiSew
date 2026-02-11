@@ -28,7 +28,6 @@ function Kycja() {
       const response = await axios.post(
         "http://localhost:3000/api/kycja/perdoruesi",
         data,
-        { withCredentials: true },
       );
       if (response.data.success) {
         console.log("success", response.data);

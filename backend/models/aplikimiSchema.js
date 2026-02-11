@@ -56,14 +56,8 @@ const aplikimiSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    default: "pending",
-    enum: [
-      "pending",
-      "reviewed",
-      "accepted",
-      "rejected",
-      "interview_scheduled",
-    ],
+    default: "Ne_Pritje",
+    enum: ["Ne_Pritje", "Pranuar", "Refuzuar"],
   },
   dataKrijimit: {
     type: Date,

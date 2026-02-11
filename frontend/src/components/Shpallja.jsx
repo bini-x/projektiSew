@@ -16,8 +16,7 @@ import Perdoruesi from "../PerdoruesiContext";
 function Shpallja() {
   const navigate = useNavigate();
   const [shpallja, setShpallja] = useState(null);
-  const [perdoruesiData, setPerdoruesiData] = useState({});
-  const { perdoruesiData: currentUser } = Perdoruesi.usePerdoruesi();
+  const { perdoruesiData } = Perdoruesi.usePerdoruesi();
   const [eshteRuajtur, setEshteRuajtur] = useState(false);
   const [duke_ngarkuar, setDuke_ngarkuar] = useState(false);
 
@@ -42,31 +41,17 @@ function Shpallja() {
     }
   }, [id]);
 
-  // Fetch perdoruesi data
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3000/api/profili/${id}`,
-        );
-        setPerdoruesiData(response.data.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    if (id) {
-      fetchData();
-    }
-  }, [id]);
-
   // Check if job is saved
   useEffect(() => {
     const kontrolloStatusin = async () => {
-      if (currentUser && currentUser.tipiPerdoruesit !== "punedhenes" && id) {
+      if (
+        perdoruesiData &&
+        perdoruesiData.tipiPerdoruesit !== "punedhenes" &&
+        id
+      ) {
         try {
           const response = await axios.get(
-            `http://localhost:3000/api/punetRuajtura/eshte-ruajtur/${id}/${currentUser._id}`,
+            `http://localhost:3000/api/punetRuajtura/eshte-ruajtur/${id}`,
           );
           setEshteRuajtur(response.data.eshteRuajtur);
         } catch (error) {
@@ -76,16 +61,16 @@ function Shpallja() {
     };
 
     kontrolloStatusin();
-  }, [id, currentUser]);
+  }, [id, perdoruesiData]);
 
   // Toggle save/unsave
   const ndryshoRuajtjen = async () => {
-    if (!currentUser) {
+    if (!perdoruesiData) {
       alert("Ju lutem kyçuni për të ruajtur punë");
       return;
     }
 
-    if (currentUser.tipiPerdoruesit === "punedhenes") {
+    if (perdoruesiData.tipiPerdoruesit === "punedhenes") {
       alert("Punëdhënësit nuk mund të ruajnë punë");
       return;
     }
@@ -97,7 +82,7 @@ function Shpallja() {
         const response = await axios.delete(
           `http://localhost:3000/api/punetRuajtura/hiq/${id}`,
           {
-            data: { perdoruesiId: currentUser._id },
+            data: { perdoruesiId: perdoruesiData._id },
           },
         );
 
@@ -109,7 +94,7 @@ function Shpallja() {
         const response = await axios.post(
           `http://localhost:3000/api/punetRuajtura/ruaj/${id}`,
           {
-            perdoruesiId: currentUser._id,
+            perdoruesiId: perdoruesiData._id,
           },
         );
 
@@ -124,17 +109,6 @@ function Shpallja() {
       setDuke_ngarkuar(false);
     }
   };
-
-  if (!perdoruesiData) {
-    return (
-      <div>
-        <Header />
-        <div className="text-center p-10">
-          <p>Diqka shkoi keq!</p>
-        </div>
-      </div>
-    );
-  }
 
   if (!shpallja) {
     return (
@@ -194,7 +168,7 @@ function Shpallja() {
                     <p className="font-bold text-2xl">{shpallja.pozitaPunes}</p>
                   </div>
 
-                  {currentUser?.tipiPerdoruesit !== "punedhenes" && (
+                  {perdoruesiData?.tipiPerdoruesit !== "punedhenes" && (
                     <button
                       onClick={ndryshoRuajtjen}
                       disabled={duke_ngarkuar}
@@ -235,7 +209,13 @@ function Shpallja() {
                   <button
                     type="button"
                     className="publikoPune"
-                    onClick={() => navigate(`/${id}/aplikimi`)}
+                    onClick={() => {
+                      if (!perdoruesiData) {
+                        navigate("/kycja");
+                      } else {
+                        navigate(`/${id}/aplikimi`);
+                      }
+                    }}
                   >
                     Apliko
                   </button>

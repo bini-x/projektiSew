@@ -25,6 +25,19 @@ router.post("/:id/aplikimi", upload.single("cvFile"), async (req, res) => {
     console.log(req.body);
 
     const shpalljaId = req.params.id;
+
+    const aplikimiEkziston = await Aplikimi.findOne({
+      shpalljaId: shpalljaId,
+      emailAplikantit: emailAplikantit,
+    });
+
+    if (aplikimiEkziston) {
+      return res.status(400).json({
+        success: false,
+        error: "Ju keni aplikuar tashme per kete pozite",
+      });
+    }
+
     const shpallja = await Shpallja.findById(shpalljaId);
 
     const aplikimi = new Aplikimi({
@@ -125,10 +138,31 @@ router.get("/:shpalljaId/aplikimet", async (req, res) => {
 
 router.put("/aplikimi/:id", async (req, res) => {
   try {
+    const aplikimiVjeter = await Aplikimi.findById(req.params.id);
     const aplikimi = await Aplikimi.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
     });
+
+    if (
+      aplikimiVjeter.status !== aplikimi.status &&
+      aplikimi.status === "Pranuar"
+    ) {
+      dergoMesazhin(
+        aplikimi.emailAplikantit,
+        "Njoftim rreth aplikimit tuaj",
+        "Urime, jeni pranuar!",
+      );
+    } else if (
+      aplikimiVjeter.status !== aplikimi.status &&
+      aplikimi.status === "Refuzuar"
+    ) {
+      dergoMesazhin(
+        aplikimi.emailAplikantit,
+        "Njoftim rreth aplikimit tuaj",
+        "Ju faleminderit per aplikimin, per fat te keq kesar rradhe kemi vendosur te vazhdojme me kandidate te tjere!",
+      );
+    }
 
     return res.status(200).json({
       status: true,
