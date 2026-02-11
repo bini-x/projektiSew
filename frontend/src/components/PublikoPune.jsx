@@ -24,6 +24,7 @@ function PublikoPune() {
     eksperienca: "",
     pagaPrej: 0,
     pagaDeri: 0,
+    perdoruesiId: "",
   });
 
   const employmentTypes = [
@@ -81,6 +82,7 @@ function PublikoPune() {
           setFormData({
             ...formData,
             emailKompanise: response.data.perdoruesiObj.email,
+            perdoruesiId: response.data.perdoruesiObj._id, // ← ADDED THIS
           });
         }
       } catch (error) {
@@ -111,6 +113,7 @@ function PublikoPune() {
       eksperienca: formData.eksperienca,
       pagaPrej: formData.pagaPrej,
       pagaDeri: formData.pagaDeri,
+      perdoruesiId: formData.perdoruesiId, // ← ADDED THIS
     };
 
     if (dataToSend.pagaDeri < dataToSend.pagaPrej) {
@@ -136,6 +139,7 @@ function PublikoPune() {
         eksperienca: "",
         pagaPrej: 0,
         pagaDeri: 0,
+        perdoruesiId: "", // ← ADDED THIS
       });
       setPyetjet([]);
       setPyetjaTanishme("");

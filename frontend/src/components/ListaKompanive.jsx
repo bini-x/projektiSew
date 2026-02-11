@@ -23,7 +23,7 @@ function ListaKompanive() {
     };
 
     fetchData();
-  }, [kompanite]);
+  }, []);
 
   return (
     <div>

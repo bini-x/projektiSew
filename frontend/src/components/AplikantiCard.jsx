@@ -1,7 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
-import { faBookmark } from "@fortawesome/free-regular-svg-icons";
 import { faArrowRightLong } from "@fortawesome/free-solid-svg-icons";
 import "../index.css";
 import { useNavigate } from "react-router-dom";
@@ -73,10 +71,7 @@ function AplikantiCard({ aplikanti }) {
       <hr className="hrCard" />
       <div className="flex items-center justify-between">
         <div>
-          <p className="paragraf text-sm text-gray-600 flex items-center mt-1">
-            <FontAwesomeIcon icon={faLocationDot} className="mr-1" />
-            {aplikanti.lokacioni || "N/A"}
-          </p>
+          <p className="paragraf text-sm text-gray-600 flex items-center mt-1"></p>
         </div>
         <button
           className="relative group bg-transparent cursor-pointer"

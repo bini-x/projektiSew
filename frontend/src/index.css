@@ -95,10 +95,10 @@
     @apply absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400;
   }
   .shpalljaCard {
-    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-[repeat(3,430px)] gap-10 justify-center auto-rows-[220px] m-10 md:m-15 lg:m-30;
+    @apply grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-[repeat(3,430px)] gap-6 justify-center mx-4 my-6 md:mx-10 md:my-10 lg:mx-16;
   }
   .hrCard {
-    @apply border-0 h-px bg-linear-to-r from-transparent via-gray-300 to-transparent mt-8 mb-3;
+    @apply border-0 h-px bg-linear-to-r from-transparent via-gray-300 to-transparent mt-2 mb-3;
   }
 
   .ballinaMysafir {

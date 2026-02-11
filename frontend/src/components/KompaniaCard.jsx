@@ -54,7 +54,6 @@ function KompaniaCard({ kompania }) {
             </span>
           )}
         </div>
-        <FontAwesomeIcon icon={faBookmark} className="text-l" />
       </div>
       <p className="grid mt-6 font-bold text-xl">{kompania.kompania}</p>
       <div>
@@ -67,11 +66,7 @@ function KompaniaCard({ kompania }) {
       <hr className="hrCard" />
       <div className="flex items-center justify-between">
         <div>
-          <p className="paragraf text-sm text-gray-600 flex items-center mt-1">
-            {}
-            <FontAwesomeIcon icon={faLocationDot} className="mr-1" />
-            {kompania.lokacioni || "N/A"}
-          </p>
+          <p className="paragraf text-sm text-gray-600 flex items-center mt-1"></p>
         </div>
         <button
           className="relative group bg-transparent cursor-pointer"

@@ -927,7 +927,7 @@ function MenaxhoShpalljet() {
                 </div>
               </div>
               {aplikimiKlikuar.status === "Ne_Pritje" &&
-                shpalljaSkaduar(shpalljaZgjedhurPerAplikante.dataKrijimit)(
+                shpalljaSkaduar(shpalljaZgjedhurPerAplikante.dataKrijimit) && (
                   <select
                     id="status"
                     onChange={(e) =>
@@ -942,7 +942,7 @@ function MenaxhoShpalljet() {
                     </option>
                     <option value="Pranuar">Prano</option>
                     <option value="Refuzuar">Refuzo</option>
-                  </select>,
+                  </select>
                 )}
             </div>
 

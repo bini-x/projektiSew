@@ -102,6 +102,10 @@ const shpalljaSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  fotoProfili: {
+    type: String,
+    required: false,
+  },
 });
 
 shpalljaSchema.virtual("aplikimet", {
