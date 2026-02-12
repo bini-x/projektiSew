@@ -118,7 +118,7 @@ function Shpallja() {
     !fotoError;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-linear-to-br from-[#F7FBFC] via-[#D6E6F2] to-[#B9D7EA] ">
       <Header />
 
       <div className="max-w-6xl mx-auto px-4 py-8 md:px-8">
@@ -134,189 +134,187 @@ function Shpallja() {
           Kthehu tek punët
         </button>
 
-        {/* Hero Card */}
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-8 mb-6">
-          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-            {/* Logo + Company + Title */}
-            <div className="flex items-start gap-4">
-              {hasPhoto ? (
-                <img
-                  src={shpallja.fotoProfili}
-                  alt="Company Logo"
-                  className="w-16 h-16 rounded-xl object-cover border border-gray-200 flex-shrink-0"
-                  onError={handlePhotoError}
-                />
-              ) : (
-                <div className="w-16 h-16 rounded-xl bg-blue-600 flex items-center justify-center border border-gray-200 flex-shrink-0">
-                  <span className="text-white font-bold text-xl">
-                    {getCompanyName().substring(0, 2)}
-                  </span>
-                </div>
-              )}
-              <div>
-                <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1">
-                  {getCompanyName()}
-                </p>
-                <h1 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight">
-                  {shpallja.pozitaPunes}
-                </h1>
-              </div>
-            </div>
-
-            {/* Bookmark - no border, just icon + label */}
-            {perdoruesiData?.tipiPerdoruesit !== "punedhenes" && (
-              <button
-                onClick={ndryshoRuajtjen}
-                disabled={duke_ngarkuar}
-                className={`self-start flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200 text-sm font-medium bg-transparent hover:bg-gray-100 ${
-                  eshteRuajtur
-                    ? "text-blue-600"
-                    : "text-gray-500 hover:text-gray-700"
-                } ${duke_ngarkuar ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
-              >
-                <FontAwesomeIcon
-                  icon={eshteRuajtur ? faBookmarkSolid : faBookmarkRegular}
-                />
-                {eshteRuajtur ? "Ruajtur" : "Ruaj"}
-              </button>
-            )}
-          </div>
-
-          {/* Tag pills - all neutral gray */}
-          <div className="flex flex-wrap gap-2 mt-5">
-            {shpallja.lokacioniPunes && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
-                <FontAwesomeIcon
-                  icon={faLocationDot}
-                  className="text-gray-500"
-                />
-                {shpallja.lokacioniPunes}
-              </span>
-            )}
-            {shpallja.orari && shpallja.orari.length > 0 && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
-                <FontAwesomeIcon icon={faClock} className="text-gray-500" />
-                {Array.isArray(shpallja.orari)
-                  ? shpallja.orari[0]
-                  : shpallja.orari}
-              </span>
-            )}
-            {shpallja.niveliPunes && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
-                <FontAwesomeIcon
-                  icon={faLayerGroup}
-                  className="text-gray-500"
-                />
-                {shpallja.niveliPunes}
-              </span>
-            )}
-            {shpallja.eksperienca && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
-                <FontAwesomeIcon icon={faBriefcase} className="text-gray-500" />
-                {shpallja.eksperienca}
-              </span>
-            )}
-            {shpallja.pagaPrej > 0 && shpallja.pagaDeri > 0 && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
-                <FontAwesomeIcon
-                  icon={faDollarSign}
-                  className="text-gray-500"
-                />
-                ${shpallja.pagaPrej} – ${shpallja.pagaDeri}
-              </span>
-            )}
-          </div>
-        </div>
-
-        {/* Main Content + Sidebar */}
+        {/* Main Content + Sidebar - Two Column Layout */}
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* ── Left: Content ── */}
-          <div className="flex-1 space-y-6">
-            {/* Job Description */}
-            {shpallja.pershkrimiPunes && (
-              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-8">
-                <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                  <span className="w-1 h-5 bg-primary rounded-full inline-block"></span>
-                  Pershkrimi i Punës
-                </h2>
-                <p className="text-gray-600 leading-relaxed whitespace-pre-line">
-                  {shpallja.pershkrimiPunes}
-                </p>
+          {/* ── Left Column: ONE BIG Card with Header + All Sections ── */}
+          <div className="flex-1">
+            <div className="bg-white/70 border border-[#F7FBFC] rounded-2xl shadow-lg overflow-hidden">
+              {/* Job Header Inside Card */}
+              <div className="p-6 md:p-8 border-b border-gray-200">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
+                  {/* Logo + Company + Title */}
+                  <div className="flex items-start gap-4">
+                    {hasPhoto ? (
+                      <img
+                        src={shpallja.fotoProfili}
+                        alt="Company Logo"
+                        className="w-16 h-16 rounded-xl object-cover border border-[#D6E6F2] shrink-0"
+                        onError={handlePhotoError}
+                      />
+                    ) : (
+                      <div className="w-16 h-16 rounded-xl bg-primary flex items-center justify-center border border-[#D6E6F2] shrink-0">
+                        <span className="text-white font-bold text-xl">
+                          {getCompanyName().substring(0, 2)}
+                        </span>
+                      </div>
+                    )}
+                    <div>
+                      <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1">
+                        {getCompanyName()}
+                      </p>
+                      <h1 className="text-xl md:text-2xl font-bold text-gray-900 leading-tight">
+                        {shpallja.pozitaPunes}
+                      </h1>
+                    </div>
+                  </div>
+
+                  {/* Bookmark */}
+                  {perdoruesiData?.tipiPerdoruesit !== "punedhenes" && (
+                    <button
+                      onClick={ndryshoRuajtjen}
+                      disabled={duke_ngarkuar}
+                      className={`self-start flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200 text-sm font-medium bg-transparent hover:bg-gray-100 ${
+                        eshteRuajtur
+                          ? "text-blue-600"
+                          : "text-gray-500 hover:text-gray-700"
+                      } ${duke_ngarkuar ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+                    >
+                      <FontAwesomeIcon
+                        icon={
+                          eshteRuajtur ? faBookmarkSolid : faBookmarkRegular
+                        }
+                      />
+                      {eshteRuajtur ? "Ruajtur" : "Ruaj"}
+                    </button>
+                  )}
+                </div>
+
+                {/* Tag pills */}
+                <div className="flex flex-wrap gap-2">
+                  {shpallja.lokacioniPunes && (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
+                      <FontAwesomeIcon
+                        icon={faLocationDot}
+                        className="text-gray-500"
+                      />
+                      {shpallja.lokacioniPunes}
+                    </span>
+                  )}
+                  {shpallja.orari && shpallja.orari.length > 0 && (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
+                      <FontAwesomeIcon
+                        icon={faClock}
+                        className="text-gray-500"
+                      />
+                      {Array.isArray(shpallja.orari)
+                        ? shpallja.orari[0]
+                        : shpallja.orari}
+                    </span>
+                  )}
+                  {shpallja.niveliPunes && (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
+                      <FontAwesomeIcon
+                        icon={faLayerGroup}
+                        className="text-gray-500"
+                      />
+                      {shpallja.niveliPunes}
+                    </span>
+                  )}
+                  {shpallja.eksperienca && (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
+                      <FontAwesomeIcon
+                        icon={faBriefcase}
+                        className="text-gray-500"
+                      />
+                      {shpallja.eksperienca}
+                    </span>
+                  )}
+                  {shpallja.pagaPrej > 0 && shpallja.pagaDeri > 0 && (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
+                      <FontAwesomeIcon
+                        icon={faDollarSign}
+                        className="text-gray-500"
+                      />
+                      ${shpallja.pagaPrej} – ${shpallja.pagaDeri}
+                    </span>
+                  )}
+                </div>
               </div>
-            )}
 
-            {/* Responsibilities */}
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-8">
-              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <span className="w-1 h-5 bg-primary rounded-full inline-block"></span>
-                Përgjegjësitë
-              </h2>
-              {shpallja.pyetjet && shpallja.pyetjet.length > 0 ? (
-                <ul className="space-y-3">
-                  {shpallja.pyetjet.map((pyetja, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <span className="mt-2 w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>
-                      <span className="text-gray-600 leading-relaxed">
-                        {pyetja}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-gray-400 italic text-sm">
-                  Nuk ka përgjegjësi të specifikuara.
-                </p>
-              )}
-            </div>
+              {/* Content Sections Inside Same Card */}
+              <div className="p-6 md:p-8">
+                {/* Job Description Section */}
+                <div className="mb-8">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">
+                    Pershkrimi i Punës
+                  </h2>
+                  {shpallja.pershkrimiPunes ? (
+                    <p className="text-gray-600 leading-relaxed whitespace-pre-line">
+                      {shpallja.pershkrimiPunes}
+                    </p>
+                  ) : (
+                    <p className="text-gray-400 italic text-sm">
+                      Nuk ka pershkrim të shtuar.
+                    </p>
+                  )}
+                </div>
 
-            {/* Requirements */}
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-8">
-              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <span className="w-1 h-5 bg-primary rounded-full inline-block"></span>
-                Kualifikimet e kërkuara
-              </h2>
-              {shpallja.kualifikimet && shpallja.kualifikimet.length > 0 ? (
-                <ul className="space-y-3">
-                  {shpallja.kualifikimet.map((kerkesa, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <span className="mt-2 w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>
-                      <span className="text-gray-600 leading-relaxed">
-                        {kerkesa}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-gray-400 italic text-sm">
-                  Nuk ka kualifikime të specifikuara.
-                </p>
-              )}
+                {/* Responsibilities Section */}
+                <div className="mb-8">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">
+                    Aftesite
+                  </h2>
+                  {shpallja.pyetjet && shpallja.pyetjet.length > 0 ? (
+                    <ul className="space-y-3">
+                      {shpallja.pyetjet.map((pyetja, index) => (
+                        <li key={index} className="flex items-start gap-3">
+                          <span className="mt-2 w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0"></span>
+                          <span className="text-gray-600 leading-relaxed">
+                            {pyetja}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-gray-400 italic text-sm">
+                      Nuk ka përgjegjësi të specifikuara.
+                    </p>
+                  )}
+                </div>
+
+                {/* Requirements Section */}
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">
+                    Kualifikimet e kërkuara
+                  </h2>
+                  {shpallja.kualifikimet && shpallja.kualifikimet.length > 0 ? (
+                    <ul className="space-y-3">
+                      {shpallja.kualifikimet.map((kerkesa, index) => (
+                        <li key={index} className="flex items-start gap-3">
+                          <span className="mt-2 w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0"></span>
+                          <span className="text-gray-600 leading-relaxed">
+                            {kerkesa}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-gray-400 italic text-sm">
+                      Nuk ka kualifikime të specifikuara.
+                    </p>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* ── Right: Sidebar ── */}
+          {/* ── Right Sidebar: Apply & Company Info ── */}
           <div className="lg:w-80 space-y-4">
             {/* Apply Card */}
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sticky top-6">
-              <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">
+            <div className="bg-white/70 border border-[#F7FBFC] rounded-2xl  shadow-lg p-6 ">
+              <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">
                 Apliko tani
               </h3>
-
-              {perdoruesiData?.tipiPerdoruesit !== "punedhenes" && (
-                <button
-                  onClick={() => {
-                    if (!perdoruesiData) {
-                      navigate("/kycja");
-                    } else {
-                      navigate(`/${id}/aplikimi`);
-                    }
-                  }}
-                  className="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold py-3 px-4 rounded-xl transition-colors duration-200 flex items-center justify-center gap-2 mb-5"
-                >
-                  Apliko
-                  <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
-                </button>
-              )}
 
               {/* Job detail rows */}
               <div className="divide-y divide-gray-100">
@@ -386,24 +384,39 @@ function Shpallja() {
                     </span>
                   </div>
                 )}
+                {perdoruesiData?.tipiPerdoruesit !== "punedhenes" && (
+                  <button
+                    onClick={() => {
+                      if (!perdoruesiData) {
+                        navigate("/kycja");
+                      } else {
+                        navigate(`/${id}/aplikimi`);
+                      }
+                    }}
+                    className="publikoPune w-full mt-3"
+                  >
+                    Apliko
+                    <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
+                  </button>
+                )}
               </div>
             </div>
 
             {/* About Company Card */}
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-              <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">
+            <div className="bg-white/70 border border-[#F7FBFC] rounded-2xl shadow-lg p-6">
+              <h3 className="text-xs font-bold text-gray-600 uppercase tracking-wider mb-4">
                 Rreth kompanisë
               </h3>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 mb-4">
                 {hasPhoto ? (
                   <img
                     src={shpallja.fotoProfili}
                     alt="Company Logo"
-                    className="w-10 h-10 rounded-lg object-cover border border-gray-200 flex-shrink-0"
+                    className="w-10 h-10 rounded-lg object-cover border border-[#D6E6F2] shrink-0"
                     onError={handlePhotoError}
                   />
                 ) : (
-                  <div className="w-10 h-10 rounded-lg bg-blue-600 flex items-center justify-center flex-shrink-0">
+                  <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center shrink-0">
                     <span className="text-white font-bold text-sm">
                       {getCompanyName().substring(0, 2)}
                     </span>
@@ -418,6 +431,16 @@ function Shpallja() {
                   </p>
                 </div>
               </div>
+
+              {/* View Company Button */}
+              {shpallja.perdoruesiId && (
+                <button
+                  onClick={() => navigate(`/kompania/${shpallja.perdoruesiId}`)}
+                  className="w-full px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                >
+                  Shiko Kompaninë
+                </button>
+              )}
             </div>
           </div>
         </div>

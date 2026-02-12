@@ -134,23 +134,19 @@ function PublikoPune() {
 
   return (
     <div className="min-h-screen">
-      <Header />
+      <div className="bg-linear-to-br from-[#F7FBFC] via-[#D6E6F2] to-[#B9D7EA] pb-32 relative overflow-hidden">
+        <Header />
 
-      <div className="bg-linear-to-br from-[#F7FBFC] via-[#D6E6F2] to-[#B9D7EA] backdrop-blur-2xl pt-24 pb-32 relative overflow-hidden">
         <div className="text-center relative z-10">
-          <h1 className="text-5xl font-bold text-primary mb-4">
-            Publiko Punë të Re
-          </h1>
-          <p className="text-lg text-[#6D94C5] max-w-2xl mx-auto px-4">
+          <h1 className="text-5xl font-bold mb-4">Publiko Punë të Re</h1>
+          <p className="text-lg text-primary font-extralight max-w-2xl mx-auto px-4">
             Plotësoni formularin për të publikuar shpalljen tuaj
           </p>
         </div>
-
-        <div className="absolute bottom-0 left-0 w-full h-64 bg-linear-to-br from-[#F7FBFC] via-[#D6E6F2] to-[#B9D7EA] blur-3xl"></div>
       </div>
 
       <div className="max-w-3xl mx-auto px-4 -mt-20 pb-20 relative z-20">
-        <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12">
+        <div className="bg-white rounded-2xl  shadow-2xl p-8 md:p-12">
           <form onSubmit={handleSubmit} className="space-y-8">
             <div>
               <h2 className="text-2xl font-semibold text-gray-900 mb-6">
