@@ -66,19 +66,21 @@ function Ballina() {
           </div>
 
           <Kerkimi />
-          <div className="shpalljaCard">
-            {shpalljaData.map((shpallja) => {
-              return <ShpalljaCard key={shpallja._id} shpallja={shpallja} />;
-            })}
-            {shpalljaData.length === 0 && (
-              <div className="text-center p-10">
-                <p>
-                  {kerkoParams.toString()
-                    ? "Nuk u gjet asnjë punë me këto kërkime"
-                    : "Nuk ka punë të disponueshme"}
-                </p>
-              </div>
-            )}
+          <div className="m-10 md:m-20 lg:m-30">
+            <div className="shpalljaCard">
+              {shpalljaData.map((shpallja) => {
+                return <ShpalljaCard key={shpallja._id} shpallja={shpallja} />;
+              })}
+              {shpalljaData.length === 0 && (
+                <div className="text-center p-10">
+                  <p>
+                    {kerkoParams.toString()
+                      ? "Nuk u gjet asnjë punë me këto kërkime"
+                      : "Nuk ka punë të disponueshme"}
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </>
       )}
