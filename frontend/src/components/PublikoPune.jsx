@@ -1,17 +1,15 @@
 import axios from "axios";
 import "../index.css";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faTrashCan, faPlus } from "@fortawesome/free-solid-svg-icons";
 import Header from "./Header";
 
 function PublikoPune() {
   const navigate = useNavigate();
-  const [pyetjet, setPyetjet] = useState([]);
-  const [pyetjaTanishme, setPyetjaTanishme] = useState("");
-  const [kualifikimet, setKerkesatDheAftesite] = useState([]);
-  const [kerkesaTanishme, setKerkesaTanishme] = useState("");
+  const [aftesite, setAftesite] = useState([]);
+  const [aftesiaTanishme, setAftesiaTanishme] = useState("");
 
   const [formData, setFormData] = useState({
     emailKompanise: "",
@@ -24,34 +22,24 @@ function PublikoPune() {
     eksperienca: "",
     pagaPrej: 0,
     pagaDeri: 0,
+    perdoruesiId: "",
   });
 
   const employmentTypes = [
-    { value: "Full-time", label: "Full-Time" },
-    { value: "Part-time", label: "Part-Time" },
+    { value: "Full-time", label: "Full-time" },
+    { value: "Part-time", label: "Part-time" },
   ];
 
-  const shtoPyetjen = () => {
-    if (pyetjaTanishme.trim()) {
-      setPyetjet([...pyetjet, pyetjaTanishme]);
-      setPyetjaTanishme("");
+  const shtoAftesine = () => {
+    if (aftesiaTanishme.trim()) {
+      setAftesite([...aftesite, aftesiaTanishme]);
+      setAftesiaTanishme("");
     }
   };
 
-  const fshijPyetjen = (index) => {
-    const pyetjetReja = pyetjet.filter((_, i) => i !== index);
-    setPyetjet(pyetjetReja);
-  };
-  const shtoKerkesen = () => {
-    if (kerkesaTanishme.trim()) {
-      setKerkesatDheAftesite([...kualifikimet, kerkesaTanishme]);
-      setKerkesaTanishme("");
-    }
-  };
-
-  const fshijKerkesen = (index) => {
-    const kerkesatReja = kualifikimet.filter((_, i) => i !== index);
-    setKerkesatDheAftesite(kerkesatReja);
+  const fshijAftesine = (index) => {
+    const aftesiteReja = aftesite.filter((_, i) => i !== index);
+    setAftesite(aftesiteReja);
   };
 
   const handleEmploymentTypeChange = (typeValue) => {
@@ -81,6 +69,7 @@ function PublikoPune() {
           setFormData({
             ...formData,
             emailKompanise: response.data.perdoruesiObj.email,
+            perdoruesiId: response.data.perdoruesiObj._id,
           });
         }
       } catch (error) {
@@ -91,10 +80,6 @@ function PublikoPune() {
     fetchPerdoruesiData();
   }, []);
 
-  useEffect(() => {
-    console.log(formData);
-  }, [formData]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -104,17 +89,19 @@ function PublikoPune() {
       kategoriaPunes: formData.kategoriaPunes,
       lokacioniPunes: formData.lokacioniPunes,
       pershkrimiPunes: formData.pershkrimiPunes,
-      pyetjet: pyetjet,
-      kualifikimet: kualifikimet,
+      pyetjet: [],
+      kualifikimet: aftesite,
       niveliPunes: formData.niveliPunes,
       orari: formData.orari,
       eksperienca: formData.eksperienca,
       pagaPrej: formData.pagaPrej,
       pagaDeri: formData.pagaDeri,
+      perdoruesiId: formData.perdoruesiId,
     };
 
     if (dataToSend.pagaDeri < dataToSend.pagaPrej) {
       alert("Rangu i pages eshte gabim!");
+      return;
     }
 
     const response = await axios.post(
@@ -136,273 +123,152 @@ function PublikoPune() {
         eksperienca: "",
         pagaPrej: 0,
         pagaDeri: 0,
+        perdoruesiId: "",
       });
-      setPyetjet([]);
-      setPyetjaTanishme("");
-      setKerkesatDheAftesite([]);
-      setKerkesaTanishme("");
+      setAftesite([]);
+      setAftesiaTanishme("");
     }
 
     navigate("/");
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen">
+    <div className="min-h-screen">
       <Header />
-      <div className="min-h-screen grid place-items-center my-20">
-        <div className="grid rounded-xl border-2 border-gray-300 w-full max-w-xl py-10 sm:max-w-2xl md:max-w-4xl">
-          <div className="px-10">
-            <h1 className="text-3xl md:text-4xl">Publiko Punë të Re</h1>
-            <p className="text-xl text-gray-600 py-3">
-              Plotësoni formularin për të publikuar shpalljen tuaj
-            </p>
-          </div>
 
-          <hr className="border-gray-400" />
+      <div className="bg-linear-to-br from-blue-50 via-blue-100 to-blue-50 pt-24 pb-32 relative overflow-hidden">
+        <div className="text-center relative z-10">
+          <h1 className="text-5xl font-bold text-gray-900 mb-4">
+            Publiko Punë të Re
+          </h1>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto px-4">
+            Plotësoni formularin për të publikuar shpalljen tuaj
+          </p>
+        </div>
 
-          <form onSubmit={handleSubmit} className="grid gap-4">
-            <div className="px-10 mt-6">
-              <h1 className="text-xl md:text-2xl mb-4">Informacione Bazike</h1>
+        <div className="absolute bottom-0 left-0 w-full h-64 bg-linear-to-br from-blue-100/50 via-purple-100/50 to-pink-100/50 blur-3xl"></div>
+      </div>
 
-              <div className="grid gap-4">
-                <div>
-                  <label htmlFor="pozitaPunes" className="label">
-                    Emri <span className="text-red-400">*</span>
-                  </label>
-                  <input
-                    className="input"
-                    type="text"
-                    id="pozitaPunes"
-                    placeholder="Pozita e Punës"
-                    onChange={(e) =>
-                      setFormData({ ...formData, pozitaPunes: e.target.value })
-                    }
-                  />
-                </div>
+      <div className="max-w-3xl mx-auto px-4 -mt-20 pb-20 relative z-20">
+        <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12">
+          <form onSubmit={handleSubmit} className="space-y-8">
+            <div>
+              <h2 className="text-2xl font-semibold text-gray-900 mb-6">
+                Informacioni i Punës
+              </h2>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="col-span-1">
-                    <label htmlFor="kategoriaPunes" className="label">
-                      Kategoria <span className="text-red-400">*</span>
-                    </label>
-                    <select
-                      id="kategoriaPunes"
-                      className="input"
-                      value={formData.kategoriaPunes}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          kategoriaPunes: e.target.value,
-                        })
-                      }
-                    >
-                      <option value="" hidden disabled>
-                        Kategoria
-                      </option>
-                      <option value="industria">Industria</option>
-                      <option value="administrate">Administratë</option>
-                      <option value="agrikulture-industri-ushqimore">
-                        Agrikulturë dhe Industri Ushqimore
-                      </option>
-                      <option value="arkitekture">Arkitekturë</option>
-                      <option value="banka">Banka</option>
-                      <option value="retail-distribuim">
-                        Retail dhe Distribuim
-                      </option>
-                      <option value="ndertimtari-patundshmeri">
-                        Ndërtimtari & Patundshmëri
-                      </option>
-                      <option value="mbeshtetje-konsumatoreve-call-center">
-                        Mbështetje e Konsumatorëve, Call Center
-                      </option>
-                      <option value="ekonomi-finance-kontabilitet">
-                        Ekonomi, Financë, Kontabilitet
-                      </option>
-                      <option value="edukim-shkence-hulumtim">
-                        Edukim, Shkencë & Hulumtim
-                      </option>
-                      <option value="pune-te-pergjithshme">
-                        Punë të Përgjithshme
-                      </option>
-                      <option value="burime-njerezore">Burime Njerëzore</option>
-                      <option value="teknologji-informacioni">
-                        Teknologji e Informacionit
-                      </option>
-                      <option value="sigurim">Sigurim</option>
-                      <option value="gazetari-shtyp-media">
-                        Gazetari, Shtyp & Media
-                      </option>
-                      <option value="ligj-legjislacion">
-                        Ligj & Legjislacion
-                      </option>
-                      <option value="menaxhment">Menaxhment</option>
-                      <option value="marketing-reklamim-pr">
-                        Marketing, Reklamim & PR
-                      </option>
-                      <option value="inxhinieri">Inxhinieri</option>
-                      <option value="shendetesi-medicine">
-                        Shëndetësi, Medicinë
-                      </option>
-                      <option value="Prodhim">Prodhim</option>
-                      <option value="Siguri$Mbrojtje">Siguri&Mbrojtje</option>
-                      <option value="Industri te sherbimit">
-                        Industri te sherbimit
-                      </option>
-                      <option value="Telekomunikim">Telekomunikim</option>
-                      <option value="Tekstil, Lekure, Industri Veshembathje">
-                        Tekstil, Lekure, Industri Veshembathje
-                      </option>
-                      <option value="Gastronomi, Hoteleri, Turizem">
-                        Gastronomi, Hoteleri, Turizem
-                      </option>
-                      <option value="Transport, Logjistike">
-                        Transport, Logjistike
-                      </option>
-                      <option value="IT">IT</option>
-                    </select>
-                  </div>
-
-                  <div className="col-span-1">
-                    <label htmlFor="niveliPunes" className="label">
-                      Niveli Punes
-                    </label>
-                    <select
-                      id="niveliPunes"
-                      className="input"
-                      value={formData.niveliPunes}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          niveliPunes: e.target.value,
-                        })
-                      }
-                    >
-                      <option value="" disabled hidden>
-                        Zgjedh Nivelin
-                      </option>
-                      <option value="Praktike">Praktikë</option>
-                      <option value="Fillestar">Fillestar</option>
-                      <option value="Junior">Junior</option>
-                      <option value="Mid-level">Mid-Level</option>
-                      <option value="Senior">Senior</option>
-                      <option value="Lider">Lider</option>
-                      <option value="Menaxher">Menaxher</option>
-                      <option value="Drejtor">Drejtor</option>
-                    </select>
-                  </div>
-                </div>
+              <div className="mb-6">
+                <label
+                  htmlFor="pozitaPunes"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Titulli i Punës<span className="text-red-500">*</span>
+                </label>
+                <input
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  type="text"
+                  id="pozitaPunes"
+                  placeholder="Sheno titullin e punës"
+                  value={formData.pozitaPunes}
+                  onChange={(e) =>
+                    setFormData({ ...formData, pozitaPunes: e.target.value })
+                  }
+                  required
+                />
               </div>
-            </div>
 
-            <hr className="border-gray-400 mt-10" />
-
-            <div className="px-10 mt-6">
-              <h1 className="text-xl md:text-2xl mb-4">Informacione Shtese</h1>
-
-              <div className="grid grid-cols-2 gap-6">
-                <div className="mt-4">
-                  <label className="label block mb-2">
-                    Orari <span className="text-red-400">*</span>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label
+                    htmlFor="kategoriaPunes"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Kategoria e Punës<span className="text-red-500">*</span>
                   </label>
-                  <div className="flex flex-wrap gap-3">
+                  <select
+                    id="kategoriaPunes"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    value={formData.kategoriaPunes}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        kategoriaPunes: e.target.value,
+                      })
+                    }
+                    required
+                  >
+                    <option value="" hidden disabled>
+                      Zgjedh kategorinë
+                    </option>
+                    <option value="IT">IT</option>
+                    <option value="teknologji-informacioni">
+                      Teknologji e Informacionit
+                    </option>
+                    <option value="marketing-reklamim-pr">
+                      Marketing, Reklamim & PR
+                    </option>
+                    <option value="administrate">Administratë</option>
+                    <option value="ekonomi-finance-kontabilitet">
+                      Ekonomi, Financë, Kontabilitet
+                    </option>
+                    <option value="burime-njerezore">Burime Njerëzore</option>
+                    <option value="inxhinieri">Inxhinieri</option>
+                    <option value="shendetesi-medicine">
+                      Shëndetësi, Medicinë
+                    </option>
+                    <option value="edukim-shkence-hulumtim">
+                      Edukim, Shkencë & Hulumtim
+                    </option>
+                    <option value="retail-distribuim">
+                      Retail dhe Distribuim
+                    </option>
+                    <option value="Gastronomi, Hoteleri, Turizem">
+                      Gastronomi, Hoteleri, Turizem
+                    </option>
+                    <option value="Transport, Logjistike">
+                      Transport, Logjistike
+                    </option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Lloji i Punës<span className="text-red-500">*</span>
+                  </label>
+                  <div className="flex gap-3">
                     {employmentTypes.map((type) => (
                       <button
                         key={type.value}
                         type="button"
                         onClick={() => handleEmploymentTypeChange(type.value)}
                         className={`
-                      px-4 py-2.5 rounded-md border text-sm font-medium
-                      transition-all duration-200 ease-in-out
-                      ${
-                        (formData.orari || []).includes(type.value)
-                          ? "bg-blue-500 text-white border-blue-500 shadow-sm"
-                          : "bg-white text-gray-700 border-gray-400 hover:border-gray-400"
-                      }
-                    `}
+                          flex-1 px-4 py-3 rounded-lg border-2 text-sm font-medium
+                          transition-all duration-200
+                          ${
+                            (formData.orari || []).includes(type.value)
+                              ? "bg-blue-500 text-white border-blue-500"
+                              : "bg-white text-gray-700 border-gray-300 hover:border-blue-400"
+                          }
+                        `}
                       >
                         {type.label}
                       </button>
                     ))}
                   </div>
                 </div>
-
-                <div className="mt-4">
-                  <label htmlFor="paga" className="label block mb-2">
-                    Paga
-                  </label>
-                  <div className="flex items-center space-x-2">
-                    <div className="flex-1">
-                      <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                          <span className="text-gray-500 sm:text-sm">€</span>
-                        </div>
-                        <input
-                          type="number"
-                          value={formData.pagaPrej || ""}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              pagaPrej: Number(e.target.value),
-                            })
-                          }
-                          className="input !pl-7 !pr-3"
-                          placeholder="Prej"
-                          min="0"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="text-gray-500">-</div>
-
-                    <div className="flex-1">
-                      <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                          <span className="text-gray-500 sm:text-sm">€</span>
-                        </div>
-                        <input
-                          type="number"
-                          value={formData.pagaDeri || ""}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              pagaDeri: Number(e.target.value),
-                            })
-                          }
-                          className="input !pl-7 !pr-3 "
-                          placeholder="Deri"
-                          min="0"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {formData.pagaPrej > 0 && formData.pagaDeri > 0 && (
-                    <div className="mt-2 text-sm text-gray-600">
-                      Rangu aktual:{" "}
-                      <span className="font-semibold">
-                        €{formData.pagaPrej}-€{formData.pagaDeri}
-                      </span>
-                    </div>
-                  )}
-
-                  {formData.pagaDeri > 0 &&
-                    formData.pagaPrej > 0 &&
-                    formData.pagaDeri < formData.pagaPrej && (
-                      <div className="mt-2 text-sm text-red-500">
-                        Vlera "Deri" duhet të jetë më e madhe se "Prej"
-                      </div>
-                    )}
-                </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 mt-4">
-                <div className="col-span-1">
-                  <label htmlFor="lokacioniPunes" className="label">
-                    Lokacioni <span className="text-red-400">*</span>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label
+                    htmlFor="lokacioniPunes"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Lokacioni<span className="text-red-500">*</span>
                   </label>
                   <select
                     id="lokacioniPunes"
-                    className="input"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     value={formData.lokacioniPunes}
                     onChange={(e) =>
                       setFormData({
@@ -410,9 +276,10 @@ function PublikoPune() {
                         lokacioniPunes: e.target.value,
                       })
                     }
+                    required
                   >
                     <option value="" hidden disabled>
-                      Lokacioni
+                      Zgjedh lokacionin
                     </option>
                     <option value="Prishtine">Prishtinë</option>
                     <option value="Prizren">Prizren</option>
@@ -423,43 +290,112 @@ function PublikoPune() {
                     <option value="Gjilan">Gjilan</option>
                     <option value="Vushtrri">Vushtrri</option>
                     <option value="Podujeve">Podujevë</option>
-                    <option value="Suhareke">Suharekë</option>
-                    <option value="Rahovec">Rahovec</option>
-                    <option value="Drenas">Drenas</option>
-                    <option value="Lipjan">Lipjan</option>
-                    <option value="Malisheve">Malishevë</option>
-                    <option value="Kamenice">Kamenicë</option>
-                    <option value="Viti">Viti</option>
-                    <option value="Skenderaj">Skenderaj</option>
-                    <option value="Istog">Istog</option>
-                    <option value="Kline">Klinë</option>
-                    <option value="Decan">Deçan</option>
-                    <option value="Junik">Junik</option>
-                    <option value="Dragash">Dragash</option>
-                    <option value="Kaçanik">Kaçanik</option>
-                    <option value="Hani_i_Elezit">Hani i Elezit</option>
-                    <option value="Shtime">Shtime</option>
-                    <option value="Obiliq">Obiliq</option>
-                    <option value="Fushe_Kosove">Fushë Kosovë</option>
-                    <option value="Kllokot">Kllokot</option>
                   </select>
                 </div>
 
-                <div className="col-span-1">
-                  <label htmlFor="eksperienca" className="label">
+                <div>
+                  <label
+                    htmlFor="paga"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Paga
+                  </label>
+                  <div className="flex items-center gap-3">
+                    <div className="flex-1 relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+                        €
+                      </span>
+                      <input
+                        type="number"
+                        value={formData.pagaPrej || ""}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            pagaPrej: Number(e.target.value),
+                          })
+                        }
+                        className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                        placeholder="Prej"
+                        min="0"
+                      />
+                    </div>
+                    <span className="text-gray-500">-</span>
+                    <div className="flex-1 relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+                        €
+                      </span>
+                      <input
+                        type="number"
+                        value={formData.pagaDeri || ""}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            pagaDeri: Number(e.target.value),
+                          })
+                        }
+                        className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                        placeholder="Deri"
+                        min="0"
+                      />
+                    </div>
+                  </div>
+                  {formData.pagaDeri > 0 &&
+                    formData.pagaPrej > 0 &&
+                    formData.pagaDeri < formData.pagaPrej && (
+                      <p className="mt-2 text-sm text-red-500">
+                        Vlera "Deri" duhet të jetë më e madhe se "Prej"
+                      </p>
+                    )}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label
+                    htmlFor="niveliPunes"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Niveli i Punës
+                  </label>
+                  <select
+                    id="niveliPunes"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    value={formData.niveliPunes}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        niveliPunes: e.target.value,
+                      })
+                    }
+                  >
+                    <option value="">Zgjedh nivelin</option>
+                    <option value="Praktike">Praktikë</option>
+                    <option value="Fillestar">Fillestar</option>
+                    <option value="Junior">Junior</option>
+                    <option value="Mid-level">Mid-Level</option>
+                    <option value="Senior">Senior</option>
+                    <option value="Lider">Lider</option>
+                    <option value="Menaxher">Menaxher</option>
+                    <option value="Drejtor">Drejtor</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="eksperienca"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
                     Eksperienca
                   </label>
                   <select
                     id="eksperienca"
-                    className="input"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     value={formData.eksperienca}
                     onChange={(e) =>
                       setFormData({ ...formData, eksperienca: e.target.value })
                     }
                   >
-                    <option value="" hidden disabled>
-                      Eksperienca
-                    </option>
+                    <option value="">Zgjedh eksperiencën</option>
                     <option value="0-6 muaj">0-6 muaj</option>
                     <option value="1 vjet">1 vjet</option>
                     <option value="1-2 vite">1-2 vite</option>
@@ -468,24 +404,20 @@ function PublikoPune() {
                   </select>
                 </div>
               </div>
-            </div>
 
-            <hr className="border-gray-400 mt-10" />
-
-            <div className="px-10 mt-6">
-              <h1 className="text-xl md:text-2xl mb-4">
-                Pershkrimi dhe Pergjegjesite e punes
-              </h1>
-
-              <div className="w-full">
-                <label htmlFor="pershkrimiPunes" className="label">
-                  Pershkrimi i Punës <span className="text-red-400">*</span>
+              {/* Job Description */}
+              <div className="mb-6">
+                <label
+                  htmlFor="pershkrimiPunes"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Përshkrimi i Punës<span className="text-red-500">*</span>
                 </label>
                 <textarea
                   id="pershkrimiPunes"
-                  rows="5"
-                  className="input w-full"
-                  placeholder="Shkruaj pershkrimin e detajuar te punes ketu..."
+                  rows="6"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
+                  placeholder="Shkruaj përshkrimin e punës këtu..."
                   value={formData.pershkrimiPunes}
                   onChange={(e) =>
                     setFormData({
@@ -493,114 +425,75 @@ function PublikoPune() {
                       pershkrimiPunes: e.target.value,
                     })
                   }
+                  required
                 ></textarea>
               </div>
 
-              {pyetjet.length > 0 && (
-                <>
-                  <h1 className="label !text-l mt-4">Pergjegjesite</h1>
-                  <div className="grid rounded-sm border-2 border-gray-200">
-                    {pyetjet.map((pyetja, i) => {
-                      return (
-                        <div
-                          key={i}
-                          className="p-4 sm:p-5 rounded-xl flex justify-between items-center"
-                        >
-                          <span>{pyetja}</span>
-                          <button
-                            type="button"
-                            className="cursor-pointer rounded-2xl text-red-400 hover:text-red-600 p-0"
-                            onClick={() => fshijPyetjen(i)}
-                          >
-                            <FontAwesomeIcon
-                              icon={faTrashCan}
-                              className="w-4 h-4"
-                              style={{ display: "block" }}
-                            />
-                          </button>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </>
-              )}
+              {/* Aftësitë Section - List Style */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Aftësitë
+                </label>
 
-              <div className="border border-gray-400 rounded-sm flex justify-between gap-5 py-10 px-4 mt-4">
-                <input
-                  type="text"
-                  placeholder="Sheno kerkesen"
-                  className="w-full border-0 border-b-2 border-gray-400 focus:border-blue-500 focus:ring-0 px-1 py-2 transition-colors"
-                  value={pyetjaTanishme}
-                  onChange={(e) => setPyetjaTanishme(e.target.value)}
-                />
-                <button
-                  type="button"
-                  className="cursor-pointer publikoPune !bg-green-400 w-fit py-2"
-                  onClick={() => shtoPyetjen()}
-                >
-                  Shto
-                </button>
+                {/* Display existing skills as list */}
+                {aftesite.length > 0 && (
+                  <div className="mb-4 border border-gray-200 rounded-lg divide-y divide-gray-200">
+                    {aftesite.map((aftesi, i) => (
+                      <div
+                        key={i}
+                        className="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
+                      >
+                        <span className="text-gray-700">{aftesi}</span>
+                        <button
+                          type="button"
+                          onClick={() => fshijAftesine(i)}
+                          className="text-red-500 hover:text-red-700 transition-colors"
+                        >
+                          <FontAwesomeIcon
+                            icon={faTrashCan}
+                            className="w-4 h-4"
+                          />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Add skill input */}
+                <div className="flex gap-3">
+                  <input
+                    type="text"
+                    placeholder="Shto aftësi (p.sh. Aftësi komunikuese të shkëlqyera)"
+                    className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    value={aftesiaTanishme}
+                    onChange={(e) => setAftesiaTanishme(e.target.value)}
+                    onKeyPress={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        shtoAftesine();
+                      }
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={shtoAftesine}
+                    className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-medium flex items-center gap-2"
+                  >
+                    <FontAwesomeIcon icon={faPlus} className="w-4 h-4" />
+                    Shto
+                  </button>
+                </div>
               </div>
             </div>
 
-            <hr className="border-gray-400 mt-10" />
-
-            <div className="px-10 mt-6">
-              <h1 className="text-xl md:text-2xl mb-4">
-                Kualifikimet e kërkuara
-              </h1>
-
-              {kualifikimet.length > 0 && (
-                <>
-                  <h1 className="label !text-l">Lista e Kerkesave</h1>
-                  <div className="grid rounded-sm border-2 border-gray-200">
-                    {kualifikimet.map((kerkesa, i) => {
-                      return (
-                        <div
-                          key={i}
-                          className="p-4 sm:p-5 rounded-xl flex justify-between items-center"
-                        >
-                          <span>{kerkesa}</span>
-                          <button
-                            type="button"
-                            className="cursor-pointer rounded-2xl text-red-400 hover:text-red-600 p-0"
-                            onClick={() => fshijKerkesen(i)}
-                          >
-                            <FontAwesomeIcon
-                              icon={faTrashCan}
-                              className="w-4 h-4"
-                              style={{ display: "block" }}
-                            />
-                          </button>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </>
-              )}
-
-              <div className="border border-gray-400 rounded-sm flex justify-between gap-5 py-10 px-4 mt-4">
-                <input
-                  type="text"
-                  placeholder="Sheno kerkesen ose aftesine"
-                  className="w-full border-0 border-b-2 border-gray-400 focus:border-blue-500 focus:ring-0 px-1 py-2 transition-colors"
-                  value={kerkesaTanishme}
-                  onChange={(e) => setKerkesaTanishme(e.target.value)}
-                />
-                <button
-                  type="button"
-                  className="cursor-pointer publikoPune !bg-green-400 w-fit py-2"
-                  onClick={() => shtoKerkesen()}
-                >
-                  Shto
-                </button>
-              </div>
-
-              <div className="flex justify-end mt-6">
-                <button type="submit" className="publikoPune w-fit">
-                  Publiko
-                </button>
-              </div>
+            {/* Submit Button */}
+            <div className="pt-6">
+              <button
+                type="submit"
+                className="w-full py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold text-lg"
+              >
+                Publiko Punën
+              </button>
             </div>
           </form>
         </div>

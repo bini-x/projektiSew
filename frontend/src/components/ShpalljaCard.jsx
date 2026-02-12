@@ -17,6 +17,7 @@ function ShpalljaCard({ shpallja }) {
   const { perdoruesiData } = Perdoruesi.usePerdoruesi();
   const [eshteRuajtur, setEshteRuajtur] = useState(false);
   const [duke_ngarkuar, setDuke_ngarkuar] = useState(false);
+  const [fotoError, setFotoError] = useState(false);
 
   useEffect(() => {
     const kontrolloStatusin = async () => {
@@ -65,7 +66,6 @@ function ShpalljaCard({ shpallja }) {
           setEshteRuajtur(false);
         }
       } else {
-        // Ruaj shpalljen
         const response = await axios.post(
           `http://localhost:3000/api/punetRuajtura/ruaj/${shpallja._id}`,
           {
@@ -85,15 +85,60 @@ function ShpalljaCard({ shpallja }) {
     }
   };
 
+  const handlePhotoError = () => {
+    setFotoError(true);
+  };
+
+  const isPhotoUrl =
+    shpallja.fotoProfili && shpallja.fotoProfili.startsWith("http");
+  const isPhotoBase64 =
+    shpallja.fotoProfili && shpallja.fotoProfili.startsWith("data:");
+
+  // Extract company name from email (before @)
+  const getCompanyName = () => {
+    if (!shpallja.emailKompanise) return "COMPANY";
+    const name = shpallja.emailKompanise.split("@")[0];
+    return name.toUpperCase();
+  };
+
   return (
-    <div className="border border-gray-200 hover:bg-gray-200 shadow-xl rounded-xl w-full p-3">
-      <div className="flex justify-between">
-        <FontAwesomeIcon icon={faUser} className="text-3xl" />
+    <div className="border border-gray-200 hover:bg-gray-50 shadow-sm rounded-xl w-full p-6 transition-colors duration-200">
+      {/* Header with Logo, Company Name, and Bookmark */}
+      <div className="flex items-start gap-3 mb-2">
+        {/* Company Logo */}
+        <div className="flex-shrink-0">
+          {(isPhotoUrl || isPhotoBase64) && !fotoError ? (
+            <img
+              src={shpallja.fotoProfili}
+              alt="Company Logo"
+              className="w-14 h-14 rounded-lg object-cover border border-gray-200"
+              onError={handlePhotoError}
+            />
+          ) : (
+            <div className="w-14 h-14 rounded-lg bg-blue-600 flex items-center justify-center border border-gray-200">
+              <span className="text-white font-bold text-lg">
+                {getCompanyName().substring(0, 2)}
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* Company Name and Title */}
+        <div className="flex-1 min-w-0">
+          <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+            {getCompanyName()}
+          </p>
+          <h3 className="font-semibold text-gray-900 text-base leading-tight mb-0">
+            {shpallja.pozitaPunes}
+          </h3>
+        </div>
+
+        {/* Bookmark Button */}
         {perdoruesiData?.tipiPerdoruesit !== "punedhenes" && (
           <button
             onClick={ndryshoRuajtjen}
             disabled={duke_ngarkuar}
-            className={`transition-all duration-200 ${
+            className={`flex shrink-0 transition-all duration-200 ${
               duke_ngarkuar
                 ? "opacity-50 cursor-not-allowed"
                 : "hover:scale-110 cursor-pointer"
@@ -101,36 +146,59 @@ function ShpalljaCard({ shpallja }) {
           >
             <FontAwesomeIcon
               icon={eshteRuajtur ? faBookmarkSolid : faBookmarkRegular}
-              className={`text-xl ${eshteRuajtur ? "text-primary" : "text-gray-600"}`}
+              className={`text-l ${eshteRuajtur ? "text-primary" : "text-gray-400"}`}
             />
           </button>
         )}
       </div>
-      <p className="grid mt-6 font-semibold ">{shpallja.pozitaPunes}</p>
-      <div className="flex gap-5 mt-2">
-        <p className="paragraf font-light">
-          {" "}
-          <FontAwesomeIcon icon={faClock} className="mr-1" />
-          {shpallja.orari}
-          {shpallja.status}
+
+      {/* Job Details */}
+      <div className="mb-2 h-10 overflow-hidden">
+        <p className="text-sm text-gray-600 mb-3 line-clamp-2 min-h-[2.5rem]">
+          {shpallja.pershkrimiPunes
+            ? shpallja.pershkrimiPunes.substring(0, 100) +
+              (shpallja.pershkrimiPunes.length > 100 ? "..." : "")
+            : "No description available"}
         </p>
-        <p className="paragraf font-light">{shpallja.niveliPunes}</p>
       </div>
+
+      {/* HR Line */}
       <hr className="hrCard" />
-      <div className="flex items-center justify-between">
+
+      {/* Footer - Tags and Location */}
+      <div className="flex items-center gap-3 mb-3 flex-wrap">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
+          <FontAwesomeIcon icon={faLocationDot} className="text-gray-500" />
+          {shpallja.lokacioniPunes || "Remote"}
+        </span>
+
+        {shpallja.niveliPunes && (
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
+            {shpallja.niveliPunes}
+          </span>
+        )}
+
+        {shpallja.orari && shpallja.orari.length > 0 && (
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
+            {shpallja.orari[0]}
+          </span>
+        )}
+      </div>
+
+      {/* Apply Button */}
+      <div className="flex items-center justify-between flex-wrap gap-2">
         <div>
-          <p className="paragraf font-medium">
-            <FontAwesomeIcon icon={faDollarSign} className="mr-1" />
-            {shpallja.pagaPrej}-{shpallja.pagaDeri}
-          </p>
-          <p className="paragraf text-sm font-medium mt-1">
-            <FontAwesomeIcon
-              icon={faLocationDot}
-              className="mr-1 text-gray-600"
-            />
-            {shpallja.lokacioniPunes}
-          </p>
+          {shpallja.pagaPrej > 0 && shpallja.pagaDeri > 0 && (
+            <p className="text-sm font-medium text-gray-900">
+              <FontAwesomeIcon
+                icon={faDollarSign}
+                className="mr-1 text-gray-500"
+              />
+              {shpallja.pagaPrej}-{shpallja.pagaDeri}
+            </p>
+          )}
         </div>
+
         <button
           className="relative group bg-transparent cursor-pointer"
           onClick={handleClick}
@@ -138,7 +206,7 @@ function ShpalljaCard({ shpallja }) {
           <div
             className={`${perdoruesiData?.tipiPerdoruesit === "punedhenes" ? "hidden" : "block"}`}
           >
-            <span className="relative z-10 bg-linear-to-r from-slate-700 via-gray-800 to-black bg-clip-text text-transparent font-semibold text-l group-hover:from-slate-800 group-hover:via-gray-900 group-hover:to-black transition-all duration-300">
+            <span className="relative z-10 bg-linear-to-r from-slate-700 via-gray-800 to-black bg-clip-text text-transparent font-semibold text-sm group-hover:from-slate-800 group-hover:via-gray-900 group-hover:to-black transition-all duration-300">
               Apliko tani
             </span>
             <FontAwesomeIcon
