@@ -1,11 +1,15 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { faBookmark as faBookmarkRegular } from "@fortawesome/free-regular-svg-icons";
 import { faBookmark as faBookmarkSolid } from "@fortawesome/free-solid-svg-icons";
 import {
   faDollarSign,
   faLocationDot,
   faClock,
+  faBriefcase,
+  faChevronLeft,
+  faArrowRight,
+  faUsers,
+  faLayerGroup,
 } from "@fortawesome/free-solid-svg-icons";
 import Header from "./Header";
 import axios from "axios";
@@ -19,10 +23,17 @@ function Shpallja() {
   const { perdoruesiData } = Perdoruesi.usePerdoruesi();
   const [eshteRuajtur, setEshteRuajtur] = useState(false);
   const [duke_ngarkuar, setDuke_ngarkuar] = useState(false);
+  const [fotoError, setFotoError] = useState(false);
+
+  const handlePhotoError = () => setFotoError(true);
+
+  const getCompanyName = () => {
+    if (!shpallja?.emailKompanise) return "COMPANY";
+    return shpallja.emailKompanise.split("@")[0].toUpperCase();
+  };
 
   const { id } = useParams();
 
-  // Fetch shpallja data
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -35,13 +46,9 @@ function Shpallja() {
         setShpallja(null);
       }
     };
-
-    if (id) {
-      fetchData();
-    }
+    if (id) fetchData();
   }, [id]);
 
-  // Check if job is saved
   useEffect(() => {
     const kontrolloStatusin = async () => {
       if (
@@ -59,48 +66,32 @@ function Shpallja() {
         }
       }
     };
-
     kontrolloStatusin();
   }, [id, perdoruesiData]);
 
-  // Toggle save/unsave
   const ndryshoRuajtjen = async () => {
     if (!perdoruesiData) {
       alert("Ju lutem kyçuni për të ruajtur punë");
       return;
     }
-
     if (perdoruesiData.tipiPerdoruesit === "punedhenes") {
       alert("Punëdhënësit nuk mund të ruajnë punë");
       return;
     }
-
     setDuke_ngarkuar(true);
     try {
       if (eshteRuajtur) {
-        // Hiq nga të ruajturat
         const response = await axios.delete(
           `http://localhost:3000/api/punetRuajtura/hiq/${id}`,
-          {
-            data: { perdoruesiId: perdoruesiData._id },
-          },
+          { data: { perdoruesiId: perdoruesiData._id } },
         );
-
-        if (response.data.success) {
-          setEshteRuajtur(false);
-        }
+        if (response.data.success) setEshteRuajtur(false);
       } else {
-        // Ruaj shpalljen
         const response = await axios.post(
           `http://localhost:3000/api/punetRuajtura/ruaj/${id}`,
-          {
-            perdoruesiId: perdoruesiData._id,
-          },
+          { perdoruesiId: perdoruesiData._id },
         );
-
-        if (response.data.success) {
-          setEshteRuajtur(true);
-        }
+        if (response.data.success) setEshteRuajtur(true);
       }
     } catch (error) {
       console.error("Gabim gjatë ndryshimit të ruajtjes:", error);
@@ -112,194 +103,321 @@ function Shpallja() {
 
   if (!shpallja) {
     return (
-      <div>
+      <div className="min-h-screen bg-gray-50">
         <Header />
-        <div className="text-center p-10">
-          <p>Diqka shkoi keq!</p>
+        <div className="flex items-center justify-center h-64">
+          <p className="text-gray-500 text-lg">Diqka shkoi keq!</p>
         </div>
       </div>
     );
   }
 
+  const hasPhoto =
+    (shpallja.fotoProfili?.startsWith("http") ||
+      shpallja.fotoProfili?.startsWith("data:")) &&
+    !fotoError;
+
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-50">
       <Header />
 
-      <h1>{shpallja.emailKompanise}</h1>
-      <div className="max-w-6xl mx-auto p-4 md:p-8">
-        <div className="flex flex-col lg:flex-row gap-8">
-          <div className="lg:w-1/4">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 top-10">
-              <nav className="space-y-2">
-                <a
-                  href="#info-bazike"
-                  className="flex items-center p-2 rounded-lg hover:bg-blue-50 text-gray-700 hover:text-blue-600 transition-colors"
-                >
-                  <span>Informacione Bazike</span>
-                </a>
-                <a
-                  href="#pershkrimi"
-                  className="flex items-center p-2 rounded-lg hover:bg-blue-50 text-gray-700 hover:text-blue-600 transition-colors"
-                >
-                  <span>Pershkrimi i Punës</span>
-                </a>
-                <a
-                  href="#pergjegjesite"
-                  className="flex items-center p-2 rounded-lg hover:bg-blue-50 text-gray-700 hover:text-blue-600 transition-colors"
-                >
-                  <span>Përgjegjësitë</span>
-                </a>
-                <a
-                  href="#kerkesat"
-                  className="flex items-center p-2 rounded-lg hover:bg-blue-50 text-gray-700 hover:text-blue-600 transition-colors"
-                >
-                  <span>Kualifikimet e kërkuara</span>
-                </a>
-              </nav>
+      <div className="max-w-6xl mx-auto px-4 py-8 md:px-8">
+        {/* Back link */}
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-800 transition-colors mb-6 group"
+        >
+          <FontAwesomeIcon
+            icon={faChevronLeft}
+            className="text-xs group-hover:-translate-x-0.5 transition-transform"
+          />
+          Kthehu tek punët
+        </button>
+
+        {/* Hero Card */}
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-8 mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+            {/* Logo + Company + Title */}
+            <div className="flex items-start gap-4">
+              {hasPhoto ? (
+                <img
+                  src={shpallja.fotoProfili}
+                  alt="Company Logo"
+                  className="w-16 h-16 rounded-xl object-cover border border-gray-200 flex-shrink-0"
+                  onError={handlePhotoError}
+                />
+              ) : (
+                <div className="w-16 h-16 rounded-xl bg-blue-600 flex items-center justify-center border border-gray-200 flex-shrink-0">
+                  <span className="text-white font-bold text-xl">
+                    {getCompanyName().substring(0, 2)}
+                  </span>
+                </div>
+              )}
+              <div>
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1">
+                  {getCompanyName()}
+                </p>
+                <h1 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight">
+                  {shpallja.pozitaPunes}
+                </h1>
+              </div>
+            </div>
+
+            {/* Bookmark - no border, just icon + label */}
+            {perdoruesiData?.tipiPerdoruesit !== "punedhenes" && (
+              <button
+                onClick={ndryshoRuajtjen}
+                disabled={duke_ngarkuar}
+                className={`self-start flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200 text-sm font-medium bg-transparent hover:bg-gray-100 ${
+                  eshteRuajtur
+                    ? "text-blue-600"
+                    : "text-gray-500 hover:text-gray-700"
+                } ${duke_ngarkuar ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+              >
+                <FontAwesomeIcon
+                  icon={eshteRuajtur ? faBookmarkSolid : faBookmarkRegular}
+                />
+                {eshteRuajtur ? "Ruajtur" : "Ruaj"}
+              </button>
+            )}
+          </div>
+
+          {/* Tag pills - all neutral gray */}
+          <div className="flex flex-wrap gap-2 mt-5">
+            {shpallja.lokacioniPunes && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
+                <FontAwesomeIcon
+                  icon={faLocationDot}
+                  className="text-gray-500"
+                />
+                {shpallja.lokacioniPunes}
+              </span>
+            )}
+            {shpallja.orari && shpallja.orari.length > 0 && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
+                <FontAwesomeIcon icon={faClock} className="text-gray-500" />
+                {Array.isArray(shpallja.orari)
+                  ? shpallja.orari[0]
+                  : shpallja.orari}
+              </span>
+            )}
+            {shpallja.niveliPunes && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
+                <FontAwesomeIcon
+                  icon={faLayerGroup}
+                  className="text-gray-500"
+                />
+                {shpallja.niveliPunes}
+              </span>
+            )}
+            {shpallja.eksperienca && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
+                <FontAwesomeIcon icon={faBriefcase} className="text-gray-500" />
+                {shpallja.eksperienca}
+              </span>
+            )}
+            {shpallja.pagaPrej > 0 && shpallja.pagaDeri > 0 && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
+                <FontAwesomeIcon
+                  icon={faDollarSign}
+                  className="text-gray-500"
+                />
+                ${shpallja.pagaPrej} – ${shpallja.pagaDeri}
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Main Content + Sidebar */}
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* ── Left: Content ── */}
+          <div className="flex-1 space-y-6">
+            {/* Job Description */}
+            {shpallja.pershkrimiPunes && (
+              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-8">
+                <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <span className="w-1 h-5 bg-primary rounded-full inline-block"></span>
+                  Pershkrimi i Punës
+                </h2>
+                <p className="text-gray-600 leading-relaxed whitespace-pre-line">
+                  {shpallja.pershkrimiPunes}
+                </p>
+              </div>
+            )}
+
+            {/* Responsibilities */}
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-8">
+              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <span className="w-1 h-5 bg-primary rounded-full inline-block"></span>
+                Përgjegjësitë
+              </h2>
+              {shpallja.pyetjet && shpallja.pyetjet.length > 0 ? (
+                <ul className="space-y-3">
+                  {shpallja.pyetjet.map((pyetja, index) => (
+                    <li key={index} className="flex items-start gap-3">
+                      <span className="mt-2 w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>
+                      <span className="text-gray-600 leading-relaxed">
+                        {pyetja}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-gray-400 italic text-sm">
+                  Nuk ka përgjegjësi të specifikuara.
+                </p>
+              )}
+            </div>
+
+            {/* Requirements */}
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-8">
+              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <span className="w-1 h-5 bg-primary rounded-full inline-block"></span>
+                Kualifikimet e kërkuara
+              </h2>
+              {shpallja.kualifikimet && shpallja.kualifikimet.length > 0 ? (
+                <ul className="space-y-3">
+                  {shpallja.kualifikimet.map((kerkesa, index) => (
+                    <li key={index} className="flex items-start gap-3">
+                      <span className="mt-2 w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>
+                      <span className="text-gray-600 leading-relaxed">
+                        {kerkesa}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-gray-400 italic text-sm">
+                  Nuk ka kualifikime të specifikuara.
+                </p>
+              )}
             </div>
           </div>
 
-          <div className="lg:w-3/4">
-            <div className="bg-white rounded-2xl shadow-sm p-6">
-              <section id="info-bazike" className="mb-8">
-                <div className="flex justify-between">
-                  <div className="flex items-center gap-2">
-                    <FontAwesomeIcon icon={faUser} className="text-4xl" />
-                    <p className="font-bold text-2xl">{shpallja.pozitaPunes}</p>
+          {/* ── Right: Sidebar ── */}
+          <div className="lg:w-80 space-y-4">
+            {/* Apply Card */}
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sticky top-6">
+              <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">
+                Apliko tani
+              </h3>
+
+              {perdoruesiData?.tipiPerdoruesit !== "punedhenes" && (
+                <button
+                  onClick={() => {
+                    if (!perdoruesiData) {
+                      navigate("/kycja");
+                    } else {
+                      navigate(`/${id}/aplikimi`);
+                    }
+                  }}
+                  className="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold py-3 px-4 rounded-xl transition-colors duration-200 flex items-center justify-center gap-2 mb-5"
+                >
+                  Apliko
+                  <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
+                </button>
+              )}
+
+              {/* Job detail rows */}
+              <div className="divide-y divide-gray-100">
+                {shpallja.pagaPrej > 0 && shpallja.pagaDeri > 0 && (
+                  <div className="flex items-center justify-between py-3">
+                    <span className="text-xs text-gray-400 uppercase tracking-wide font-medium">
+                      Paga
+                    </span>
+                    <span className="text-sm font-semibold text-gray-800">
+                      ${shpallja.pagaPrej}–${shpallja.pagaDeri}
+                    </span>
                   </div>
-
-                  {perdoruesiData?.tipiPerdoruesit !== "punedhenes" && (
-                    <button
-                      onClick={ndryshoRuajtjen}
-                      disabled={duke_ngarkuar}
-                      className={`transition-all duration-200 ${
-                        duke_ngarkuar
-                          ? "opacity-50 cursor-not-allowed"
-                          : "hover:scale-110 cursor-pointer"
-                      }`}
-                    >
-                      <FontAwesomeIcon
-                        icon={
-                          eshteRuajtur ? faBookmarkSolid : faBookmarkRegular
-                        }
-                        className={`text-2xl ${eshteRuajtur ? "text-[#0F4C75]" : "text-gray-600"}`}
-                      />
-                    </button>
-                  )}
-                </div>
-
-                <div className="mt-5"></div>
-
-                <div className="grid grid-cols-3 w-fit gap-4">
-                  <p className="info">
-                    <FontAwesomeIcon icon={faClock} className="mr-2" />
-                    {shpallja.orari}
-                  </p>
-                  <p className="info">
-                    <FontAwesomeIcon icon={faLocationDot} className="mr-2" />
-                    {shpallja.lokacioniPunes}
-                  </p>
-                  <p className="info">
-                    <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
-                    {shpallja.pagaPrej}-{shpallja.pagaDeri}
-                  </p>
-                </div>
-
-                <div className="grid w-fit mb-8 mt-8">
-                  <button
-                    type="button"
-                    className="publikoPune"
-                    onClick={() => {
-                      if (!perdoruesiData) {
-                        navigate("/kycja");
-                      } else {
-                        navigate(`/${id}/aplikimi`);
-                      }
-                    }}
-                  >
-                    Apliko
-                  </button>
-                </div>
-
-                <div className="border border-gray-300 rounded-lg p-3 grid grid-cols-5 gap-2 items-center mt-4 mb-4">
-                  <div className="text-center">
-                    <p className="font-medium text-gray-700">Eksperienca</p>
-                    <p className="text-lg font-bold mt-1">
-                      {shpallja.eksperienca}
-                    </p>
+                )}
+                {shpallja.lokacioniPunes && (
+                  <div className="flex items-center justify-between py-3">
+                    <span className="text-xs text-gray-400 uppercase tracking-wide font-medium">
+                      Lokacioni
+                    </span>
+                    <span className="text-sm font-semibold text-gray-800">
+                      {shpallja.lokacioniPunes}
+                    </span>
                   </div>
-
-                  <div className="h-8 w-px bg-gray-400 mx-auto"></div>
-
-                  <div className="text-center">
-                    <p className="font-medium text-gray-700">Aplikante</p>
-                    <p className="text-lg font-bold mt-1">
-                      {shpallja.numriAplikimeve}
-                    </p>
-                  </div>
-                  <div className="h-8 w-px bg-gray-400 mx-auto"></div>
-
-                  <div className="text-center">
-                    <p className="font-medium text-gray-700">Niveli</p>
-                    <p className="text-lg font-bold mt-1">
+                )}
+                {shpallja.niveliPunes && (
+                  <div className="flex items-center justify-between py-3">
+                    <span className="text-xs text-gray-400 uppercase tracking-wide font-medium">
+                      Niveli
+                    </span>
+                    <span className="text-sm font-semibold text-gray-800">
                       {shpallja.niveliPunes}
-                    </p>
+                    </span>
                   </div>
+                )}
+                {shpallja.orari && (
+                  <div className="flex items-center justify-between py-3">
+                    <span className="text-xs text-gray-400 uppercase tracking-wide font-medium">
+                      Orari
+                    </span>
+                    <span className="text-sm font-semibold text-gray-800">
+                      {Array.isArray(shpallja.orari)
+                        ? shpallja.orari[0]
+                        : shpallja.orari}
+                    </span>
+                  </div>
+                )}
+                {shpallja.eksperienca && (
+                  <div className="flex items-center justify-between py-3">
+                    <span className="text-xs text-gray-400 uppercase tracking-wide font-medium">
+                      Eksperienca
+                    </span>
+                    <span className="text-sm font-semibold text-gray-800">
+                      {shpallja.eksperienca}
+                    </span>
+                  </div>
+                )}
+                {shpallja.numriAplikimeve !== undefined && (
+                  <div className="flex items-center justify-between py-3">
+                    <span className="text-xs text-gray-400 uppercase tracking-wide font-medium">
+                      Aplikante
+                    </span>
+                    <span className="text-sm font-semibold text-gray-800 flex items-center gap-1.5">
+                      <FontAwesomeIcon
+                        icon={faUsers}
+                        className="text-gray-400 text-xs"
+                      />
+                      {shpallja.numriAplikimeve}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* About Company Card */}
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+              <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">
+                Rreth kompanisë
+              </h3>
+              <div className="flex items-center gap-3">
+                {hasPhoto ? (
+                  <img
+                    src={shpallja.fotoProfili}
+                    alt="Company Logo"
+                    className="w-10 h-10 rounded-lg object-cover border border-gray-200 flex-shrink-0"
+                    onError={handlePhotoError}
+                  />
+                ) : (
+                  <div className="w-10 h-10 rounded-lg bg-blue-600 flex items-center justify-center flex-shrink-0">
+                    <span className="text-white font-bold text-sm">
+                      {getCompanyName().substring(0, 2)}
+                    </span>
+                  </div>
+                )}
+                <div>
+                  <p className="font-semibold text-gray-800 text-sm">
+                    {getCompanyName()}
+                  </p>
+                  <p className="text-xs text-gray-400 mt-0.5">
+                    {shpallja.emailKompanise}
+                  </p>
                 </div>
-              </section>
-
-              <section
-                id="pershkrimi"
-                className="mb-8 pt-8 border-t border-gray-200"
-              >
-                <h1 className="text-xl font-bold mb-3">Pershkrimi i Punës</h1>
-                <p className="text-gray-700 leading-relaxed">
-                  {shpallja.pershkrimiPunes}
-                </p>
-              </section>
-
-              <section
-                id="pergjegjesite"
-                className="mb-8 pt-8 border-t border-gray-200"
-              >
-                <h1 className="text-xl font-bold mb-3">Përgjegjësitë</h1>
-                {shpallja.pyetjet && shpallja.pyetjet.length > 0 ? (
-                  <ul className="space-y-2">
-                    {shpallja.pyetjet.map((pyetja, index) => (
-                      <li key={index} className="flex items-start">
-                        <span className="text-gray-700 mr-3">•</span>
-                        <span className="text-gray-700">{pyetja}</span>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="text-gray-500 italic">
-                    Nuk ka përgjegjësi të specifikuara.
-                  </p>
-                )}
-              </section>
-              <section
-                id="kerkesat"
-                className="mb-8 pt-8 border-t border-gray-200"
-              >
-                <h1 className="text-xl font-bold mb-3">
-                  Kualifikimet e kërkuara
-                </h1>
-                {shpallja.kualifikimet && shpallja.kualifikimet.length > 0 ? (
-                  <ul className="space-y-2">
-                    {shpallja.kualifikimet.map((kerkesa, index) => (
-                      <li key={index} className="flex items-start">
-                        <span className="text-gray-700 mr-3">•</span>
-                        <span className="text-gray-700">{kerkesa}</span>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="text-gray-500 italic">
-                    Nuk ka kualifikme të specifikuara.
-                  </p>
-                )}
-              </section>
+              </div>
             </div>
           </div>
         </div>
@@ -307,4 +425,5 @@ function Shpallja() {
     </div>
   );
 }
+
 export default Shpallja;
