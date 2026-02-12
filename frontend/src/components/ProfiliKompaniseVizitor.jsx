@@ -4,6 +4,8 @@ import {
   FaPhone,
   FaCalendarAlt,
   FaMapMarkerAlt,
+  FaBriefcase,
+  FaBuilding,
   FaFacebook,
   FaInstagram,
   FaGlobe,
@@ -42,7 +44,7 @@ const ProfiliKompaniseVizitor = () => {
     if (profileData?.emri && profileData?.mbiemri) {
       return `${profileData.emri[0]}${profileData.mbiemri[0]}`.toUpperCase();
     } else if (profileData?.kompania) {
-      return profileData.profileData.substring(0, 2).toUpperCase();
+      return profileData.kompania.substring(0, 2).toUpperCase();
     }
     return "?";
   };
@@ -111,6 +113,7 @@ const ProfiliKompaniseVizitor = () => {
 
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-4 md:p-8 w-full">
         <div className="max-w-6xl mx-auto">
+          {/* Header/Profile Section */}
           <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-6 mt-10">
             <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-6">
               <div className="flex flex-col md:flex-row md:items-center justify-between">
@@ -124,13 +127,13 @@ const ProfiliKompaniseVizitor = () => {
                           className="w-full h-full object-cover"
                         />
                       ) : (
-                        <span>{}</span>
+                        <span>{merreShkronjatFillestare()}</span>
                       )}
                     </div>
                   </div>
                   <div>
                     <h1 className="text-2xl md:text-3xl font-bold text-white">
-                      {profileData?.kompania}
+                      {profileData?.kompania || "Kompania"}
                     </h1>
                   </div>
                 </div>
@@ -138,177 +141,146 @@ const ProfiliKompaniseVizitor = () => {
             </div>
           </div>
 
-          {/* Main Content */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Left Column - Main sections */}
-            <div className="lg:col-span-2 space-y-6">
-              {/* Experience Section */}
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <h3 className="text-xl font-bold text-gray-800 mb-6 pb-2 border-b flex items-center gap-2">
-                  {/* <FaBriefcase /> Përvoja Profesionale */}
-                </h3>
-                {!profileData.eksperiencat ||
-                profileData.eksperiencat.length === 0 ? (
-                  <p className="text-gray-500 text-center py-8">
-                    Nuk ka përvoja të shtuara
-                  </p>
-                ) : (
-                  <div className="space-y-6">
-                    {profileData?.eksperiencat.map((exp, index) => (
-                      <div
-                        key={index}
-                        className="border-l-4 border-blue-500 pl-4 py-3 hover:bg-gray-50 rounded-r-lg transition-colors"
-                      >
-                        <h4 className="font-semibold text-lg text-gray-900">
-                          {exp.titulli}
-                        </h4>
-                        <p className="text-gray-700">{exp.profileData}</p>
-                        <p className="text-sm text-gray-500">
-                          {formatDateDDMMYYYY(exp.dataFillimit)} -{" "}
-                          {exp.aktuale
-                            ? "Aktuale"
-                            : formatDateDDMMYYYY(exp.dataMbarimit)}
-                        </p>
-                        {exp.pershkrimi && (
-                          <p className="text-gray-600 mt-3">{exp.pershkrimi}</p>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <h3 className="text-xl font-bold text-gray-800 mb-6 pb-2 border-b flex items-center gap-2">
-                  {/* <FaGraduationCap /> Edukimi */}
-                </h3>
-                {!profileData.edukimi || profileData.edukimi.length === 0 ? (
-                  <p className="text-gray-500 text-center py-8">
-                    Nuk ka arsimim të shtuar
-                  </p>
-                ) : (
-                  <div className="space-y-6">
-                    {profileData.edukimi.map((edu, index) => (
-                      <div
-                        key={index}
-                        className="border-l-4 border-purple-500 pl-4 py-3 hover:bg-gray-50 rounded-r-lg transition-colors"
-                      >
-                        <h4 className="font-semibold text-lg text-gray-900">
-                          {edu.titulli}
-                        </h4>
-                        <p className="text-gray-700">{edu.institucioni}</p>
-                        <p className="text-sm text-gray-500">
-                          {formatDateDDMMYYYY(edu.dataFillimit)} -{" "}
-                          {edu.aktualet
-                            ? "Aktuale"
-                            : formatDateDDMMYYYY(edu.dataMbarimit)}
-                        </p>
-                        {edu.pershkrimi && (
-                          <p className="text-gray-600 mt-3">{edu.pershkrimi}</p>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <h3 className="text-xl font-bold text-gray-800 mb-6 pb-2 border-b">
-                  Projektet
-                </h3>
-                {!profileData.projektet ||
-                profileData.projektet.length === 0 ? (
-                  <p className="text-gray-500 text-center py-8">
-                    Nuk ka projekte të shtuara
-                  </p>
-                ) : (
-                  <div className="space-y-6">
-                    {profileData.projektet.map((proj, index) => (
-                      <div
-                        key={index}
-                        className="border-l-4 border-green-500 pl-4 py-3 hover:bg-gray-50 rounded-r-lg transition-colors"
-                      >
-                        <h4 className="font-semibold text-lg text-gray-900">
-                          {proj.emriProjektit}
-                        </h4>
-                        {proj.pershkrimi && (
-                          <p className="text-gray-600 mt-2">
-                            {proj.pershkrimi}
-                          </p>
-                        )}
-                        {proj.teknologjite && (
-                          <div className="mt-3">
-                            <span className="font-medium text-sm text-gray-700">
-                              Teknologjitë:
-                            </span>
-                            <p className="text-gray-600 text-sm mt-1">
-                              {proj.teknologjite}
-                            </p>
-                          </div>
-                        )}
-                        {proj.linku && (
-                          <a
-                            href={proj.linku}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-block mt-3 text-blue-600 hover:text-blue-800 font-medium text-sm"
-                          >
-                            Shiko projektin →
-                          </a>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Right Column - Contact and Additional Info */}
-            <div className="space-y-6">
-              {/* Contact Information */}
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <h3 className="text-xl font-bold text-gray-800 mb-4 pb-2 border-b">
-                  Informacione Kontaktuese
-                </h3>
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3">
-                    <FaEnvelope className="text-blue-500 flex-shrink-0" />
-                    <div>
-                      <p className="text-sm text-gray-500">Email</p>
-                      <p className="text-gray-700 font-medium">
-                        {/* {profileData.email} */}
-                      </p>
-                    </div>
-                  </div>
-
-                  {profileData.nrTelefonit && (
-                    <div className="flex items-center gap-3">
-                      <FaPhone className="text-blue-500 flex-shrink-0" />
-                      <div>
-                        <p className="text-sm text-gray-500">Telefon</p>
-                        <p className="text-gray-700 font-medium">
-                          {profileData.nrTelefonit}
-                        </p>
-                      </div>
-                    </div>
+          {/* Main Content - Grid Layout */}
+          <div className="grid lg:grid-cols-3 gap-6">
+            {/* Left Column - ONE DIV that contains all three sections */}
+            <div className="lg:col-span-2">
+              <div className="bg-white rounded-xl shadow-lg p-6 space-y-8">
+                {/* Rreth Nesh Section */}
+                <div>
+                  <h3 className="text-xl font-bold text-gray-800 mb-4 pb-2 border-b">
+                    Rreth Nesh
+                  </h3>
+                  {profileData?.rrethKompanise ? (
+                    <p className="text-gray-700 leading-relaxed">
+                      {profileData.rrethKompanise}
+                    </p>
+                  ) : (
+                    <p className="text-gray-500 text-center py-8">
+                      Nuk ka informacione të shtuar akoma.
+                    </p>
                   )}
+                </div>
 
-                  <div className="flex items-center gap-3">
-                    <FaMapMarkerAlt className="text-blue-500 flex-shrink-0" />
-                    <div>
-                      <p className="text-sm text-gray-500">Anëtar që nga</p>
-                      <p className="text-gray-700 font-medium">
-                        {profileData.createdAt
-                          ? formatDateDDMMYYYY(profileData.createdAt)
-                          : "N/A"}
-                      </p>
-                    </div>
+                {/* Pune te Hapura Section */}
+                <div>
+                  <h3 className="text-xl font-bold text-gray-800 mb-4 pb-2 border-b flex items-center gap-2">
+                    <FaBriefcase className="text-blue-500" />
+                    Punë të Hapura
+                  </h3>
+                  <p className="text-gray-500 text-center py-8">
+                    Nuk ka pozicione të hapura aktualisht
+                  </p>
+                </div>
+
+                {/* Permbledhje Section */}
+                <div>
+                  <h3 className="text-xl font-bold text-gray-800 mb-6 pb-2 border-b">
+                    Përmbledhje
+                  </h3>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {profileData?.kategorite && (
+                      <div className="flex items-start gap-3">
+                        <FaBriefcase className="text-blue-500 flex-shrink-0 mt-1" />
+                        <div>
+                          <p className="text-sm text-gray-500">Kategoritë</p>
+                          <p className="text-gray-700 font-medium">
+                            {profileData.kategorite}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    {profileData?.dataThemelimit && (
+                      <div className="flex items-start gap-3">
+                        <FaCalendarAlt className="text-blue-500 flex-shrink-0 mt-1" />
+                        <div>
+                          <p className="text-sm text-gray-500">Data e themelimit</p>
+                          <p className="text-gray-700 font-medium">
+                            {formatDateDDMMYYYY(profileData.dataThemelimit)}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    {profileData?.vendodhja && (
+                      <div className="flex items-start gap-3">
+                        <FaMapMarkerAlt className="text-blue-500 flex-shrink-0 mt-1" />
+                        <div>
+                          <p className="text-sm text-gray-500">Vendodhja</p>
+                          <p className="text-gray-700 font-medium">
+                            {profileData.vendodhja}
+                          </p>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
+            </div>
 
-              {profileData.linqet && profileData.linqet.length > 0 && (
+            {/* Right Column - Informacione të Kompanisë (standalone) */}
+            <div className="lg:col-span-1">
+              {profileData?.tipiPerdoruesit === "punedhenes" && profileData?.kompania && (
                 <div className="bg-white rounded-xl shadow-lg p-6">
+                  <h3 className="text-xl font-bold text-gray-800 mb-4 pb-2 border-b">
+                    Informacione të Kompanisë
+                  </h3>
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <FaBuilding className="text-blue-500 flex-shrink-0" />
+                      <div>
+                        <p className="text-sm text-gray-500">
+                          Emri i Kompanisë
+                        </p>
+                        <p className="text-gray-700 font-medium">
+                          {profileData.kompania}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    {profileData?.email && (
+                      <div className="flex items-center gap-3">
+                        <FaEnvelope className="text-blue-500 flex-shrink-0" />
+                        <div>
+                          <p className="text-sm text-gray-500">Email</p>
+                          <p className="text-gray-700 font-medium">
+                            {profileData.email}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    {profileData?.nrTelefonit && (
+                      <div className="flex items-center gap-3">
+                        <FaPhone className="text-blue-500 flex-shrink-0" />
+                        <div>
+                          <p className="text-sm text-gray-500">Telefon</p>
+                          <p className="text-gray-700 font-medium">
+                            {profileData.nrTelefonit}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="flex items-center gap-3">
+                      <FaCalendarAlt className="text-blue-500 flex-shrink-0" />
+                      <div>
+                        <p className="text-sm text-gray-500">Anëtar që nga</p>
+                        <p className="text-gray-700 font-medium">
+                          {profileData?.createdAt
+                            ? formatDateDDMMYYYY(profileData.createdAt)
+                            : "N/A"}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Linqet Sociale - mbetet në kolonën e djathtë */}
+              {profileData?.linqet && profileData.linqet.length > 0 && (
+                <div className="bg-white rounded-xl shadow-lg p-6 mt-6">
                   <h3 className="text-xl font-bold text-gray-800 mb-4 pb-2 border-b">
                     Linqet Sociale
                   </h3>
@@ -321,7 +293,6 @@ const ProfiliKompaniseVizitor = () => {
                         rel="noopener noreferrer"
                         className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-200 transition-colors"
                       >
-                        {/* <FaLink className="text-blue-500" /> */}
                         <div>
                           <p className="font-medium text-gray-800">
                             {link.platforma}
@@ -335,51 +306,6 @@ const ProfiliKompaniseVizitor = () => {
                   </div>
                 </div>
               )}
-
-              {profileData.tipiPerdoruesit === "aplikant" &&
-                profileData.punetRuajtura &&
-                profileData.punetRuajtura.length > 0 && (
-                  <div className="bg-white rounded-xl shadow-lg p-6">
-                    <h3 className="text-xl font-bold text-gray-800 mb-4 pb-2 border-b">
-                      Punët e Ruajtura
-                    </h3>
-                    <div className="space-y-3">
-                      <p className="text-gray-600">
-                        Ka ruajtur {profileData.punetRuajtura.length} punë
-                      </p>
-                      You could fetch and display job details here if needed
-                    </div>
-                  </div>
-                )}
-
-              {profileData.tipiPerdoruesit === "punedhenes" &&
-                profileData.kompania && (
-                  <div className="bg-white rounded-xl shadow-lg p-6">
-                    <h3 className="text-xl font-bold text-gray-800 mb-4 pb-2 border-b">
-                      Informacione të Kompanisë
-                    </h3>
-                    <div className="space-y-3">
-                      <div>
-                        <p className="text-sm text-gray-500">
-                          Emri i Kompanisë
-                        </p>
-                        <p className="text-gray-700 font-medium">
-                          {profileData.kompania}
-                        </p>
-                      </div>
-                      {profileData.email && (
-                        <div>
-                          <p className="text-sm text-gray-500">
-                            Email i Kompanisë
-                          </p>
-                          <p className="text-gray-700 font-medium">
-                            {profileData.email}
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
             </div>
           </div>
         </div>
