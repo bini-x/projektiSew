@@ -2,7 +2,7 @@ import Header from "./Header";
 
 function RrethNesh() {
   return (
-    <div className="min-h-screen bg-linear-to-br from-indigo-100 via-white to-blue-100">
+    <div className="min-h-screen bg-linear-to-br from-[#F7FBFC] via-[#D6E6F2] to-[#B9D7EA]">
       <Header />
 
       <section className="py-20 px-6">
@@ -30,7 +30,7 @@ function RrethNesh() {
         </div>
 
         <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
-          <div className="backdrop-blur bg-white/70 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition">
+          <div className="backdrop-blur bg-white/60 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition">
             <h3 className="text-xl font-semibold mb-3"> Kush jemi ne?</h3>
             <p className="text-gray-600">
               Jemi një platformë moderne për punësim që lidh talentin me

@@ -24,6 +24,12 @@ function ProfiliAplikantit() {
   const [shfaqFormenProjektet, setShfaqFormenProjektet] = useState(false);
   const [shfaqFormenAftesite, setShfaqFormenAftesite] = useState(false);
   const [aftesiRe, setAftesiRe] = useState("");
+  const [newData, setNewData] = useState({
+    emri: "",
+    mbiemri: "",
+    nrTelefonit: 0,
+  });
+  const [shfaqEditData, setShfaqEditData] = useState(false);
 
   const [fotoProfile, setFotoProfile] = useState(null);
   const [poNgarkohetFoto, setPoNgarkohetFoto] = useState(false);
@@ -63,6 +69,30 @@ function ProfiliAplikantit() {
       fetchData();
     }
   }, [id]);
+
+  const modifikoProfilin = async (e) => {
+    e.preventDefault();
+    try {
+      let dataToSend = {
+        emri: newData.emri,
+        mbiemri: newData.mbiemri,
+        nrTelefonit: newData.nrTelefonit,
+      };
+
+      const response = await axios.put(
+        `http://localhost:3000/api/profili/${id}`,
+        dataToSend,
+      );
+
+      if (response.data.success) {
+        alert("U modifikua me sukses");
+        setPerdoruesiData(response.data.data);
+        setShfaqEditData(false);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const merreShkronjatFillestare = () => {
     if (perdoruesiData?.emri && perdoruesiData?.mbiemri) {
@@ -568,20 +598,12 @@ function ProfiliAplikantit() {
     <div className="max-w-4xl mx-auto mb-2 mt-10">
       {/* Profile Header */}
       <div className="bg-white rounded-2xl shadow-lg overflow-hidden mb-2">
-        <div className="h-32 bg-white/30">
-          <div className="flex justify-end p-10 gap-2">
-            <button className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-200">
-              <Edit2 size={20} className="text-gray-600" />
-            </button>
-            <button className="publikoPune flex items-center gap-2 px-4 py-2 ">
-              <Upload size={18} />
-              Ngarko CV
-            </button>
-          </div>
+        <div className="h-12 bg-white/30">
+          <div className="flex justify-end  gap-2"></div>
         </div>
 
         <div className="px-8 pb-8">
-          <div className="flex flex-col sm:flex-row items-center sm:items-end -mt-16 mb-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-start mb-6">
             {/* Profile Photo */}
             <div className="relative group">
               <div className="w-32 h-32 rounded-full bg-blue-100 flex items-center justify-center text-black text-4xl font-bold shadow-xl border-4 border-blue-100 overflow-hidden">
@@ -630,21 +652,100 @@ function ProfiliAplikantit() {
               />
             </div>
 
-            <div className="mt-4 sm:mt-0 sm:ml-6 text-center sm:text-left flex-1 relative">
-              <h1 className="text-left text-3xl mb-1">
-                {perdoruesiData?.emri || perdoruesiData?.kompania}{" "}
-                {perdoruesiData?.mbiemri}
-              </h1>
-              <div className="space-y-2 mt-4">
-                <p className="paragrafProfili">
-                  <Mail size={16} />
-                  {perdoruesiData?.email}
-                </p>
-                <p className="paragrafProfili">
-                  <Phone size={16} />
-                  {perdoruesiData?.nrTelefonit}
-                </p>
+            <div className="mt-4 sm:mt-0 sm:ml-6 text-center sm:text-left flex-1 relative w-full">
+              {shfaqEditData ? (
+                <div className="w-full space-y-4">
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <input
+                      type="text"
+                      value={newData.emri}
+                      onChange={(e) =>
+                        setNewData({ ...newData, emri: e.target.value })
+                      }
+                      placeholder="Emri"
+                      className="w-full sm:flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#3282B8] focus:border-transparent transition"
+                    />
+                    <input
+                      type="text"
+                      value={newData.mbiemri}
+                      onChange={(e) =>
+                        setNewData({ ...newData, mbiemri: e.target.value })
+                      }
+                      placeholder="Mbiemri"
+                      className="w-full sm:flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#3282B8] focus:border-transparent transition"
+                    />
+                  </div>
 
+                  <p className="paragrafProfili !mt-2 w-full !justify-start">
+                    <Mail size={16} />
+                    {perdoruesiData?.email}
+                  </p>
+
+                  {/* Numri i Telefonit – full width */}
+                  <input
+                    type="text"
+                    value={newData.nrTelefonit}
+                    onChange={(e) =>
+                      setNewData({ ...newData, nrTelefonit: e.target.value })
+                    }
+                    placeholder="Numri i Telefonit"
+                    className="w-full sm:flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#3282B8] focus:border-transparent transition "
+                  />
+
+                  <div className="flex flex-col sm:flex-row justify-end pt-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setShfaqEditData(false)}
+                      className="w-full sm:w-auto bg-[#0F4C75] hover:bg-[#3282B8] text-white font-medium py-2.5 px-6 rounded-lg transition duration-200 focus:outline-none focus:ring-2 focus:ring-[#3282B8] focus:ring-offset-2"
+                    >
+                      Mbyll
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={modifikoProfilin}
+                      className="w-full sm:w-auto bg-[#0F4C75] hover:bg-[#3282B8] text-white font-medium py-2.5 px-6 rounded-lg transition duration-200 focus:outline-none focus:ring-2 focus:ring-[#3282B8] focus:ring-offset-2"
+                    >
+                      Ruaj
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center justify-between w-full">
+                  <h1 className="text-left text-3xl mb-1">
+                    {perdoruesiData?.emri || perdoruesiData?.kompania}{" "}
+                    {perdoruesiData?.mbiemri}
+                  </h1>
+                  <button
+                    onClick={() => {
+                      setShfaqEditData(!shfaqEditData);
+                      setNewData({
+                        emri: perdoruesiData?.emri || "",
+                        mbiemri: perdoruesiData?.mbiemri || "",
+                        nrTelefonit:
+                          perdoruesiData?.nrTelefonit?.toString() || "",
+                      });
+                    }}
+                    className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-200"
+                  >
+                    <Edit2 size={20} className="text-gray-600" />
+                  </button>
+                </div>
+              )}
+              <div className="space-y-2 mt-4">
+                {shfaqEditData === false && (
+                  <div>
+                    <p className="paragrafProfili !mt-2 w-full !justify-start">
+                      <Mail size={16} />
+                      {perdoruesiData?.email}
+                    </p>
+
+                    <p className="paragrafProfili !mt-2 w-full !justify-start">
+                      <Phone size={16} />
+                      {perdoruesiData?.nrTelefonit}
+                    </p>
+                  </div>
+                )}
                 {/* Links Section */}
                 <div className="mt-4">
                   <div className="flex flex-wrap gap-2">

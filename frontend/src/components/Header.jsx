@@ -90,6 +90,7 @@ function Header() {
       <div className="flex items-center justify-between w-full bg-white shadow-md py-7 px-6 mx-auto text-l ">
         <Link to="/" className="flex items-center mr-8">
           <FontAwesomeIcon icon={faAtlassian} className="text-2xl" />
+          <h1 className="text-2xl text-primary">𝗣𝘂𝗻𝗲𝘀𝗼𝗵𝘂</h1>
         </Link>
 
         <nav className="hidden md:flex space-x-8 ">

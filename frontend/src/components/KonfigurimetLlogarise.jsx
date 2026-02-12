@@ -11,6 +11,7 @@ function KonfigurimetLlogarise() {
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
 
@@ -58,26 +59,26 @@ function KonfigurimetLlogarise() {
     }
 
     // Validimi i kërkesave për fjalëkalimin
-    if (newPassword) {
-      const hasLowerCase = /[a-z]/.test(newPassword);
-      const hasUpperCase = /[A-Z]/.test(newPassword);
-      const hasNumberOrSymbol = /[0-9!@#$%^&*(),.?":{}|<>]/.test(newPassword);
-      const hasMinLength = newPassword.length >= 8;
-      const hasNoSpaces = !/\s/.test(newPassword);
-      const hasNoPipe = !/\|/.test(newPassword);
-
-      if (
-        !hasLowerCase ||
-        !hasUpperCase ||
-        !hasNumberOrSymbol ||
-        !hasMinLength ||
-        !hasNoSpaces ||
-        !hasNoPipe
-      ) {
-        alert("Fjalëkalimi i ri nuk plotëson të gjitha kërkesat!");
-        return;
-      }
-    }
+    // if (newPassword) {
+    //   const hasLowerCase = /[a-z]/.test(newPassword);
+    //   const hasUpperCase = /[A-Z]/.test(newPassword);
+    //   const hasNumberOrSymbol = /[0-9!@#$%^&*(),.?":{}|<>]/.test(newPassword);
+    //   const hasMinLength = newPassword.length >= 8;
+    //   const hasNoSpaces = !/\s/.test(newPassword);
+    //   const hasNoPipe = !/\|/.test(newPassword);
+    //
+    //   if (
+    //     !hasLowerCase ||
+    //     !hasUpperCase ||
+    //     !hasNumberOrSymbol ||
+    //     !hasMinLength ||
+    //     !hasNoSpaces ||
+    //     !hasNoPipe
+    //   ) {
+    //     alert("Fjalëkalimi i ri nuk plotëson të gjitha kërkesat!");
+    //     return;
+    //   }
+    // }
 
     try {
       let dataToSend;
@@ -88,7 +89,7 @@ function KonfigurimetLlogarise() {
           emri: perdoruesiData.emri,
           mbiemri: perdoruesiData.mbiemri,
           email: perdoruesiData.email,
-          fjalekalimi: newPassword || perdoruesiData.fjalekalimi,
+          fjalekalimi: perdoruesiData.fjalekalimi,
           nrTelefonit: perdoruesiData.nrTelefonit,
         };
       } else if (perdoruesiData.tipiPerdoruesit === "punedhenes") {
@@ -96,9 +97,18 @@ function KonfigurimetLlogarise() {
           tipiPerdoruesit: "punedhenes",
           kompania: perdoruesiData.kompania,
           email: perdoruesiData.email,
-          fjalekalimi: newPassword || perdoruesiData.fjalekalimi,
+          fjalekalimi: perdoruesiData.fjalekalimi,
           nrTelefonit: perdoruesiData.nrTelefonit,
         };
+      }
+
+      if (currentPassword !== perdoruesiData.fjalekalimi) {
+        alert("Fjalekalimi aktual nuk eshte i sakte");
+        return;
+      }
+
+      if (newPassword) {
+        dataToSend.fjalekalimi = newPassword;
       }
 
       const response = await axios.put(
@@ -108,9 +118,14 @@ function KonfigurimetLlogarise() {
 
       if (response.data.success) {
         alert(response.data.message);
-        // Reset password fields after successful update
         setNewPassword("");
         setRepeatPassword("");
+      } else if (
+        response.data.data.message.includes(
+          "Fjalëkalimi aktual nuk është i saktë",
+        )
+      ) {
+        alert("Fjalekalimi aktual nuk eshte i sakte");
       }
     } catch (err) {
       console.log("err: ", err);
@@ -118,15 +133,11 @@ function KonfigurimetLlogarise() {
   };
 
   const modifikoProfilin = (e) => {
-    const newValue = e.target.value;
-
-    setPerdoruesiData((prev) => {
-      if (prev.tipiPerdoruesit === "aplikant") {
-        return { ...prev, emri: newValue };
-      } else {
-        return { ...prev, kompania: newValue };
-      }
-    });
+    const { id, value } = e.target;
+    setPerdoruesiData((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
   };
 
   return (
@@ -159,38 +170,57 @@ function KonfigurimetLlogarise() {
 
           <div className="p-8">
             <form onSubmit={handleSubmit} className="space-y-6 max-w-lg ">
-              <div className="space-y-2">
-                <label htmlFor="emri" className="block text-sm font-medium ">
-                  Emri
-                </label>
-                <input
-                  id="emri"
-                  type="text"
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#3282B8] focus:border-transparent transition"
-                  onChange={modifikoProfilin}
-                  value={
-                    perdoruesiData.tipiPerdoruesit === "aplikant"
-                      ? perdoruesiData.emri
-                      : perdoruesiData.kompania
-                  }
-                  placeholder="Shkruani emrin"
-                />
-              </div>
+              {perdoruesiData.tipiPerdoruesit === "aplikant" ? (
+                <div className="space-y-2">
+                  <label htmlFor="emri" className="block text-sm font-medium ">
+                    Emri
+                  </label>
+                  <input
+                    id="emri"
+                    type="text"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#3282B8] focus:border-transparent transition"
+                    onChange={modifikoProfilin}
+                    value={perdoruesiData.emri}
+                    placeholder="Shkruani emrin e ri"
+                  />
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <label
+                    htmlFor="kompania"
+                    className="block text-sm font-medium "
+                  >
+                    Kompania
+                  </label>
+                  <input
+                    id="kompania"
+                    type="text"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#3282B8] focus:border-transparent transition"
+                    onChange={modifikoProfilin}
+                    value={perdoruesiData.kompania}
+                    placeholder="Shkruani emrin e ri te kompanise"
+                  />
+                </div>
+              )}
 
-              <div className="space-y-2">
-                <label htmlFor="mbiemri" className="block text-sm font-medium">
-                  Mbiemri
-                </label>
-                <input
-                  id="mbiemri"
-                  type="text"
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#3282B8] focus:border-transparent transition"
-                  onChange={modifikoProfilin}
-                  value={perdoruesiData.mbiemri || ""}
-                  placeholder="Shkruani mbiemrin"
-                />
-              </div>
-
+              {perdoruesiData.tipiPerdoruesit === "aplikant" && (
+                <div className="space-y-2">
+                  <label
+                    htmlFor="mbiemri"
+                    className="block text-sm font-medium"
+                  >
+                    Mbiemri
+                  </label>
+                  <input
+                    id="mbiemri"
+                    type="text"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#3282B8] focus:border-transparent transition"
+                    onChange={modifikoProfilin}
+                    value={perdoruesiData.mbiemri || ""}
+                    placeholder="Shkruani mbiemrin"
+                  />
+                </div>
+              )}
               <div className="space-y-2">
                 <label htmlFor="email" className="block text-sm font-medium">
                   Email
@@ -219,8 +249,8 @@ function KonfigurimetLlogarise() {
                       id="fjalekalimi"
                       type={showPassword ? "text" : "password"}
                       className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#3282B8] focus:border-transparent transition"
-                      onChange={modifikoProfilin}
-                      // value={perdoruesiData.fjalekalimi || ""}
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+                      value={currentPassword}
                       placeholder="Fjalëkalimi aktual"
                     />
                     <div className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer">

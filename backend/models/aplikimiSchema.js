@@ -47,7 +47,7 @@ const aplikimiSchema = new mongoose.Schema({
     required: false,
   },
   nrTelefonit: {
-    type: Number,
+    type: String,
     required: false,
   },
   letraMotivuese: {

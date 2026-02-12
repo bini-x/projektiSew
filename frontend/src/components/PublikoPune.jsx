@@ -136,17 +136,17 @@ function PublikoPune() {
     <div className="min-h-screen">
       <Header />
 
-      <div className="bg-linear-to-br from-blue-50 via-blue-100 to-blue-50 pt-24 pb-32 relative overflow-hidden">
+      <div className="bg-linear-to-br from-[#F7FBFC] via-[#D6E6F2] to-[#B9D7EA] backdrop-blur-2xl pt-24 pb-32 relative overflow-hidden">
         <div className="text-center relative z-10">
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-5xl font-bold text-primary mb-4">
             Publiko Punë të Re
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto px-4">
+          <p className="text-lg text-[#6D94C5] max-w-2xl mx-auto px-4">
             Plotësoni formularin për të publikuar shpalljen tuaj
           </p>
         </div>
 
-        <div className="absolute bottom-0 left-0 w-full h-64 bg-linear-to-br from-blue-100/50 via-purple-100/50 to-pink-100/50 blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-full h-64 bg-linear-to-br from-[#F7FBFC] via-[#D6E6F2] to-[#B9D7EA] blur-3xl"></div>
       </div>
 
       <div className="max-w-3xl mx-auto px-4 -mt-20 pb-20 relative z-20">
@@ -487,11 +487,8 @@ function PublikoPune() {
             </div>
 
             {/* Submit Button */}
-            <div className="pt-6">
-              <button
-                type="submit"
-                className="w-full py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold text-lg"
-              >
+            <div className="pt-6 flex justify-end">
+              <button type="submit" className="publikoPune ">
                 Publiko Punën
               </button>
             </div>

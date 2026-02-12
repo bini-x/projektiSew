@@ -38,7 +38,7 @@ const perdoruesSchema = new mongoose.Schema(
       required: true,
     },
     nrTelefonit: {
-      type: Number,
+      type: String,
       required: false,
     },
     punetRuajtura: [
