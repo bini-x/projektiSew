@@ -162,7 +162,9 @@ function PublikoPune() {
 
         <div className="text-center relative z-10">
           <h1 className="text-5xl font-bold mb-4">Publiko Punë të Re</h1>
-          <p className="text-lg text-primary font-extralight max-w-2xl mx-auto px-4"></p>
+          <p className="text-lg text-primary font-extralight max-w-2xl mx-auto px-4">
+            Plotësoni formularin për të publikuar shpalljen tuaj
+          </p>
         </div>
       </div>
 
