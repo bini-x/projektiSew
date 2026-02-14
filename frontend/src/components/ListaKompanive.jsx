@@ -26,14 +26,15 @@ function ListaKompanive() {
   }, []);
 
   return (
-    <div>
+      <div className="bg-linear-to-br from-[#F7FBFC] to-[#B9D7EA] pb-10  shadow-[#0F4C75] ">
       <Header />
-      <div className="kompaniaCard">
+      <div className="kompaniaCard" > 
         {kompanite.map((k) => {
           return <KompaniaCard key={k._id} kompania={k} />;
         })}
       </div>
-    </div>
+      </div>
+    
   );
 }
 

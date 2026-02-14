@@ -19,6 +19,25 @@ function ShpalljaCard({ shpallja }) {
   const [duke_ngarkuar, setDuke_ngarkuar] = useState(false);
   const [fotoError, setFotoError] = useState(false);
 
+  const getRemainingTime = () => {
+    if (!shpallja.dataKrijimit) return null;
+    const created = new Date(shpallja.dataKrijimit);
+    const expires = new Date(created.getTime() + 30 * 24 * 60 * 60 * 1000); // +30 days
+    const now = new Date();
+    const diffMs = expires - now;
+
+    if (diffMs <= 1) return "AlmostExpired";
+
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    if (diffDays === 0) {
+      const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+      return `${diffHours} hour${diffHours !== 1 ? "s" : ""} left`;
+    }
+    return `${diffDays} dite`;
+  };
+
+  const timeRemaining = getRemainingTime();
+
   useEffect(() => {
     const kontrolloStatusin = async () => {
       if (perdoruesiData && perdoruesiData.tipiPerdoruesit !== "punedhenes") {
@@ -102,11 +121,11 @@ function ShpalljaCard({ shpallja }) {
   };
 
   return (
-    <div className="bg-white/60 border border-[#D6E6F2] backdrop-blur-sm shadow-sm rounded-xl w-full p-6 transition-colors duration-200">
+    <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-gray-200 shadow-lg w-full p-6 transition-colors duration-200">
       {/* Header with Logo, Company Name, and Bookmark */}
       <div className="flex items-start gap-3 mb-2">
         {/* Company Logo */}
-        <div className="flex-shrink-0">
+        <div className="shrink-o">
           {(isPhotoUrl || isPhotoBase64) && !fotoError ? (
             <img
               src={shpallja.fotoProfili}
@@ -115,7 +134,7 @@ function ShpalljaCard({ shpallja }) {
               onError={handlePhotoError}
             />
           ) : (
-            <div className="w-14 h-14 rounded-lg bg-blue-600 flex items-center justify-center border border-gray-200">
+            <div className="w-14 h-14 rounded-lg bg-primary flex items-center justify-center border border-gray-200">
               <span className="text-white font-bold text-lg">
                 {getCompanyName().substring(0, 2)}
               </span>
@@ -181,6 +200,25 @@ function ShpalljaCard({ shpallja }) {
         {shpallja.orari && shpallja.orari.length > 0 && (
           <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
             {shpallja.orari[0]}
+          </span>
+        )}
+        {timeRemaining && (
+          <span
+            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium ${
+              timeRemaining === "AlmostExpired"
+                ? "bg-red-100 text-red-700"
+                : "bg-yellow-100 text-yellow-800"
+            }`}
+          >
+            <FontAwesomeIcon
+              icon={faClock}
+              className={
+                timeRemaining === "AlmostExpired"
+                  ? "text-red-600"
+                  : "text-yellow-600"
+              }
+            />
+            {timeRemaining}
           </span>
         )}
       </div>

@@ -2,8 +2,10 @@ import { Link, useNavigate } from "react-router-dom";
 import "../index.css";
 import { useState } from "react";
 import axios from "axios";
+import { useAlert } from "../contexts/AlertContext";
 
 function Regjistrimi() {
+  const { showAlert } = useAlert();
   const navigate = useNavigate();
   const [tipiPerdoruesit, setTipiPerdoruesit] = useState("");
 
@@ -29,11 +31,28 @@ function Regjistrimi() {
       let dataToSend;
 
       if (!tipiPerdoruesit) {
-        alert("Zgjedh tipin");
+        showAlert("Zgjedh tipin", "info");
         return;
       }
 
       if (tipiPerdoruesit === "aplikant") {
+        if (
+          dataAplikant.emri === "" ||
+          dataAplikant.mbiemri === "" ||
+          dataAplikant.email === "" ||
+          dataAplikant.fjalekalimi === "" ||
+          dataAplikant.konfirmoFjalekalimin === ""
+        ) {
+          showAlert("Plotesoni te gjitha fushat", "info");
+          return;
+        }
+        if (dataAplikant.fjalekalimi !== dataAplikant.konfirmoFjalekalimin) {
+          showAlert(
+            "Fushat fjalekalimi dhe konfirmo fjalekalimin nuk jane te njejta!",
+            "info",
+          );
+          return;
+        }
         dataToSend = {
           tipiPerdoruesit: "aplikant",
           emri: dataAplikant.emri,
@@ -42,6 +61,15 @@ function Regjistrimi() {
           fjalekalimi: dataAplikant.fjalekalimi,
         };
       } else if (tipiPerdoruesit === "punedhenes") {
+        if (
+          dataPunedhenesi.fjalekalimi !== dataPunedhenesi.konfirmoFjalekalimin
+        ) {
+          showAlert(
+            "Fushat fjalekalimi dhe konfirmo fjalekalimin nuk jane te njejta!",
+          );
+          return;
+        }
+
         dataToSend = {
           tipiPerdoruesit: "punedhenes",
           kompania: dataPunedhenesi.kompania,
@@ -56,7 +84,7 @@ function Regjistrimi() {
       );
 
       if (response.data.success) {
-        alert(response.data.message);
+        showAlert(response.data.message, "success");
 
         if (tipiPerdoruesit === "aplikant") {
           localStorage.setItem("emailForVerification", dataAplikant.email);
@@ -67,7 +95,7 @@ function Regjistrimi() {
       }
     } catch (err) {
       if (err.response.data.error.includes("ekziston")) {
-        alert("Perdoruesi ekziston!");
+        showAlert("Perdoruesi ekziston!", "error");
       }
       console.log("err: ", err);
     }
@@ -131,6 +159,7 @@ function Regjistrimi() {
             <form
               onSubmit={handleSubmit}
               className="grid grid-cols-1 gap-3 sm:gap-4"
+              autoComplete="off"
             >
               {[
                 {
