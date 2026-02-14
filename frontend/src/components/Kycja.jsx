@@ -6,8 +6,10 @@ import { faEye } from "@fortawesome/free-regular-svg-icons";
 import { faEyeSlash } from "@fortawesome/free-regular-svg-icons/faEyeSlash";
 import Perdoruesi from "../PerdoruesiContext";
 import axios from "axios";
+import { useAlert } from "../contexts/AlertContext";
 
 function Kycja() {
+  const { showAlert } = useAlert();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const { setPerdoruesiData } = Perdoruesi.usePerdoruesi();
@@ -24,6 +26,11 @@ function Kycja() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (data.email === "" || data.fjalekalimi === "") {
+      showAlert("Plotesoni te gjitha fushat", "info");
+      return;
+    }
+
     try {
       const response = await axios.post(
         "http://localhost:3000/api/kycja/perdoruesi",
@@ -36,7 +43,8 @@ function Kycja() {
       navigate("/");
     } catch (err) {
       if (err.response.data.error.includes("nuk ekziston")) {
-        alert("Perdoruesi nuk ekziston");
+        showAlert("Perdoruesi nuk ekziston", "error");
+        return;
       }
       console.log(err);
     }
@@ -55,7 +63,11 @@ function Kycja() {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="grid gap-4 sm:gap-5">
+          <form
+            onSubmit={handleSubmit}
+            className="grid gap-4 sm:gap-5"
+            autoComplete="off"
+          >
             {/* Email Field */}
             <div className="grid gap-1">
               <label htmlFor="email" className="text-sm sm:text-base">
@@ -86,6 +98,7 @@ function Kycja() {
                   onChange={(e) =>
                     setData({ ...data, fjalekalimi: e.target.value })
                   }
+                  autoComplete="new-password"
                 />
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer">
                   <FontAwesomeIcon
