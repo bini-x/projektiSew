@@ -93,35 +93,71 @@ function ListaAplikanteve() {
   const currentItems = aplikantet.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F7FBFC] via-[#E3F2FD] to-[#B9D7EA]">
-      <div className="pb-24 shadow-[#0F4C75]">
+    <div className="min-h-screen bg-white">
+      {/* Gradient Hero Section - Same as ListaPuneve */}
+      <div className="bg-gradient-to-br from-[#F7FBFC] to-[#B9D7EA] pb-16 backdrop-blur-sm">
         <Header />
-      </div>
 
-      <div className="max-w-7xl mx-auto px-6 pb-24">
-        {/* Hero Section */}
-        <div className="text-center mb-25">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-            Aplikantët
-          </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Zbulo kandidatët më të mirë që kërkojnë mundësi pune në platformën
-            tonë
-          </p>
+        <div className="max-w-6xl mx-auto px-4 mt-20 mb-12">
+          {/* Hero Section */}
+          <div className="text-center mb-8">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-4">
+              Aplikantët
+            </h1>
+            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Zbulo kandidatët më të mirë që kërkojnë mundësi pune në platformën
+              tonë
+            </p>
+          </div>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-10 max-w-4xl mx-auto">
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-md">
-              <p className="text-3xl font-bold text-gray-800 mb-2">
-                {aplikantetPaKerkim.length}+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10 max-w-4xl mx-auto">
+            <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-[#0f4c75] rounded-full flex items-center justify-center mb-4 mx-auto">
+                <svg
+                  className="w-6 h-6 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-gray-800 font-semibold text-center mb-2">
+                {aplikantetPaKerkim.length}+ Aplikantë
+              </h3>
+              <p className="text-gray-600 text-sm text-center">
+                Aplikantë të regjistruar në platformë
               </p>
-              <p className="text-gray-600 text-sm">Aplikantë të Regjistruar</p>
             </div>
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-md">
-              <p className="text-3xl font-bold text-gray-800 mb-2">
-                {aplikimet.length}+
+
+            <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-[#6d94c5] rounded-full flex items-center justify-center mb-4 mx-auto">
+                <svg
+                  className="w-6 h-6 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-gray-800 font-semibold text-center mb-2">
+                {aplikimet.length}+ Aplikime
+              </h3>
+              <p className="text-gray-600 text-sm text-center">
+                Aplikime aktive në platform
               </p>
-              <p className="text-gray-600 text-sm">Aplikime Aktive</p>
             </div>
           </div>
           <div className="mt-20">
@@ -130,20 +166,26 @@ function ListaAplikanteve() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+        {/* Search Section */}
+        <Kerkimi />
+      </div>
+
+      {/* Content Section */}
+      <div className="max-w-7xl mx-auto px-6 py-16">
+        {/* Section Title */}
+        <div className="text-center mb-12 -mt-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-700 mb-3">
+            Gjen talentin që kërkon
+          </h2>
+          <p className="text-lg text-gray-500 max-w-3xl mx-auto">
+            Shfle kandidatët dhe gjej aplikantin perfekt për pozicionin që po
+            rekruton
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
           {currentItems.map((a) => (
-            <div
-              key={a._id}
-              className="
-                bg-white rounded-3xl
-                shadow-lg hover:shadow-2xl
-                hover:-translate-y-2
-                transition-all duration-300
-                border border-gray-100
-                overflow-hidden
-              "
-            >
-              <AplikantiCard aplikanti={a} />
-            </div>
+            <AplikantiCard key={a._id} aplikanti={a} />
           ))}
         </div>
 

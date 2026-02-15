@@ -58,7 +58,7 @@ function PunetRuajtura() {
 
   return (
     <div className="min-h-screen bg-[#F5F7F8]">
-      <Header />
+      <Header withGradient={true} />
 
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 opacity-40 bg-[radial-linear(circle_at_top,_rgba(0,0,0,0.04),_transparent_60%)]"></div>

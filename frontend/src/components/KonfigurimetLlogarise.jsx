@@ -189,7 +189,7 @@ function KonfigurimetLlogarise() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#F7FBFC] to-[E0F4FF">
-      <Header />
+      <Header withGradient={true} />
       <div className="container mx-auto px-4 py-8 max-w-3xl">
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           {/* Header with icon and title */}

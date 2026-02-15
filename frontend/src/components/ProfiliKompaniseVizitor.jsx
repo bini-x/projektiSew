@@ -103,7 +103,7 @@ const ProfiliKompaniseVizitor = () => {
           background: "linear-gradient(135deg, #F7FBFC 0%, #D6E6F2 100%)",
         }}
       >
-        <Header />
+        <Header withGradient={true} />
         <div className="flex justify-center items-center h-64">
           <div className="text-center">
             <div
@@ -127,7 +127,7 @@ const ProfiliKompaniseVizitor = () => {
           background: "linear-gradient(135deg, #F7FBFC 0%, #D6E6F2 100%)",
         }}
       >
-        <Header />
+        <Header withGradient={true} />
         <div className="max-w-6xl mx-auto p-8">
           <div className="bg-white border border-red-200 rounded-lg p-4 text-red-700">
             <p>{error || "Diqka shkoi keq. Profili nuk u gjet."}</p>
@@ -138,8 +138,8 @@ const ProfiliKompaniseVizitor = () => {
   }
 
   return (
-    <div className="flex flex-col items-center min-h-screen relative bg-linear-to-br from-[#F7FBFC] via-[#D6E6F2] to-[#B9D7EA]">
-      <Header />
+    <div className="min-h-screen bg-[#F5F7F8]">
+      <Header withGradient={true} />
 
       <div className="w-full max-w-4xl mx-auto px-4 py-8">
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden">

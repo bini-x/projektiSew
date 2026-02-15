@@ -40,6 +40,7 @@ function Kerkimi() {
 
     navigate(`${location.pathname}?${params.toString()}`);
   };
+
   return (
     <div className="w-full max-w-6xl mx-auto px-4 my-8">
       <div className="bg-white border border-gray-100 rounded-2xl shadow-xl ">

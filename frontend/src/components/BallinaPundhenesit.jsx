@@ -79,7 +79,7 @@ function BallinaPundhenesit() {
   return (
     <div className="bg-[#F5F7F8] min-h-screen font-sans">
       <div className="relative overflow-hidden bg-linear-to-br from-[#F7FBFC] via-[#D6E6F2] to-[#B9D7EA] backdrop-blur-2xl">
-        <Header />
+        <Header forceNonHomePage={true} />
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#769FCD]/10 rounded-full blur-3xl pointer-events-none"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#0F4C75]/5 rounded-full blur-3xl pointer-events-none"></div>
 

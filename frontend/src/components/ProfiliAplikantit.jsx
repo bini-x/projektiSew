@@ -14,10 +14,12 @@ import {
   Trash2,
 } from "lucide-react";
 import Perdoruesi from "../PerdoruesiContext";
+import { useAlert } from "../contexts/AlertContext";
 
 function ProfiliAplikantit() {
   const { perdoruesiData, setPerdoruesiData } = Perdoruesi.usePerdoruesi();
   const { id } = useParams();
+  const { showAlert } = useAlert();
 
   const [shfaqLinkeForm, setShfaqLinkeForm] = useState(false);
   const [shfaqFormenEksperienca, setShfaqFormenEksperienca] = useState(false);
@@ -28,6 +30,7 @@ function ProfiliAplikantit() {
   const [newData, setNewData] = useState({
     emri: "",
     mbiemri: "",
+    profesioni: "",
     nrTelefonit: 0,
     profesioni: "",
   });
@@ -106,6 +109,9 @@ function ProfiliAplikantit() {
     return "?";
   };
 
+  // Complete fixed handleNgarkoFoto for ProfiliAplikantit.jsx
+  // Replace your existing function (around line 77)
+
   const handleNgarkoFoto = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -143,9 +149,15 @@ function ProfiliAplikantit() {
       );
 
       if (response.data.success) {
-        setFotoProfile(
-          `http://localhost:3000/api/profili/${id}/foto?t=${Date.now()}`,
-        );
+        const newPhotoUrl = `http://localhost:3000/api/profili/${id}/foto?t=${Date.now()}`;
+        setFotoProfile(newPhotoUrl);
+
+        // Update perdoruesiData to include foto property
+        setPerdoruesiData((prev) => ({
+          ...prev,
+          foto: { data: true }, // Signal that photo exists
+        }));
+
         alert("Fotoja u ngarkua me sukses!");
       }
     } catch (error) {
@@ -168,6 +180,12 @@ function ProfiliAplikantit() {
 
       if (response.data.success) {
         setFotoProfile(null);
+        // Update perdoruesiData to remove foto property
+        setPerdoruesiData((prev) => {
+          const updated = { ...prev };
+          delete updated.foto;
+          return updated;
+        });
         alert("Fotoja u fshi me sukses!");
       }
     } catch (error) {

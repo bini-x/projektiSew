@@ -77,7 +77,7 @@ const ProfiliAplikantitVizitor = () => {
           background: "linear-gradient(135deg, #F7FBFC 0%, #D6E6F2 100%)",
         }}
       >
-        <Header />
+        <Header withGradient={true} />
         <div className="flex justify-center items-center h-64">
           <div className="text-center">
             <div
@@ -101,7 +101,7 @@ const ProfiliAplikantitVizitor = () => {
           background: "linear-gradient(135deg, #F7FBFC 0%, #D6E6F2 100%)",
         }}
       >
-        <Header />
+        <Header withGradient={true} />
         <div className="max-w-6xl mx-auto p-8">
           <div className="bg-white border border-red-200 rounded-lg p-4 text-red-700">
             <p>{error || "Diqka shkoi keq. Profili nuk u gjet."}</p>
@@ -121,12 +121,13 @@ const ProfiliAplikantitVizitor = () => {
     { key: "experience", label: "Pervoja" },
     { key: "education", label: "Edukimi" },
     { key: "projects", label: "Projektet" },
+    { key: "skills", label: "Aftesite" },
     { key: "info", label: "Informacione" },
   ];
 
   return (
-    <div className="flex flex-col items-center min-h-screen relative bg-linear-to-br from-[#F7FBFC] via-[#D6E6F2] to-[#B9D7EA]">
-      <Header />
+    <div className="min-h-screen bg-[#F5F7F8]">
+      <Header withGradient={true} />
 
       <div className="w-full max-w-4xl mx-auto px-4 py-8">
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
@@ -218,6 +219,14 @@ const ProfiliAplikantitVizitor = () => {
                 {profileData.mbiemri || ""}
               </h1>
               <div className="flex flex-wrap items-center gap-6 text-sm text-gray-600">
+                {profileData.profesioni && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-[#769FCD] text-lg font-medium mt-1">
+                      {profileData.profesioni}
+                    </span>
+                  </div>
+                )}
+
                 {profileData.email && (
                   <div className="flex items-center gap-2">
                     <FaEnvelope size={14} style={{ color: "#5A7A99" }} />
@@ -439,6 +448,35 @@ const ProfiliAplikantitVizitor = () => {
               </div>
             )}
 
+            {activeTab === "skills" && (
+              <div>
+                <h2 className="text-lg font-bold text-gray-900 mb-6">
+                  Aftesite
+                </h2>
+                {!profileData.aftesite || profileData.aftesite.length === 0 ? (
+                  <p className="text-gray-500 text-center py-12">
+                    Nuk ka aftesi te shtuara
+                  </p>
+                ) : (
+                  <div className="flex flex-wrap gap-3">
+                    {profileData.aftesite.map((aftesi, index) => (
+                      <span
+                        key={index}
+                        className="px-4 py-2 rounded-full text-sm font-medium border border-gray-200 hover:shadow-md transition-shadow"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, #F7FBFC 0%, #D6E6F2 100%)",
+                          color: "#5A7A99",
+                        }}
+                      >
+                        {aftesi}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
             {activeTab === "info" && (
               <div>
                 <h2 className="text-lg font-bold text-gray-900 mb-6">
@@ -534,4 +572,3 @@ const ProfiliAplikantitVizitor = () => {
 };
 
 export default ProfiliAplikantitVizitor;
-
