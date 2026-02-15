@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Header from "./Header";
 import axios from "axios";
 import KompaniaCard from "./KompaniaCard";
+import Kerkimi from "./Kerkimi"
 
 function ListaKompanive() {
   const [kompanite, setKompanite] = useState([]);
@@ -70,7 +71,11 @@ function ListaKompanive() {
               <p className="text-gray-600 text-sm">Aplikantë të Regjistruar</p>
             </div>
           </div>
+          <div className="mt-20">
+          <Kerkimi/>
+          </div>
         </div>
+        
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
 

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Header from "./Header";
 import AplikantiCard from "./AplikantiCard";
 import "../index.css";
+import Kerkimi from "./Kerkimi"
 
 function ListaAplikanteve() {
   const [aplikantet, setAplikantet] = useState([]);
@@ -70,7 +71,11 @@ function ListaAplikanteve() {
               <p className="text-gray-600 text-sm">Aplikime Aktive</p>
             </div>
           </div>
+          <div className="mt-20">
+          <Kerkimi/>
+          </div>
         </div>
+        
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
 
