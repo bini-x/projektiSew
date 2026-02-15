@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan, faPlus } from "@fortawesome/free-solid-svg-icons";
 import Header from "./Header";
 import { useAlert } from "../contexts/AlertContext";
+import Perdoruesi from "../PerdoruesiContext";
 
 function PublikoPune() {
   const navigate = useNavigate();
@@ -14,9 +15,11 @@ function PublikoPune() {
   const [aftesiaPrimareTanishme, setAftesiaPrimareTanishme] = useState("");
   const [aftesiteSekondare, setAftesiteSekondare] = useState([]);
   const [aftesiaSekondareTanishme, setAftesiaSekondareTanishme] = useState("");
+  const { perdoruesiData } = Perdoruesi.usePerdoruesi();
 
   const [formData, setFormData] = useState({
     emailKompanise: "",
+    emriKompanise: perdoruesiData.kompania,
     pozitaPunes: "",
     kategoriaPunes: "",
     lokacioniPunes: "",
@@ -158,6 +161,7 @@ function PublikoPune() {
 
     let dataToSend = {
       emailKompanise: formData.emailKompanise,
+      emriKompanise: formData.emriKompanise,
       pozitaPunes: formData.pozitaPunes,
       kategoriaPunes: formData.kategoriaPunes,
       lokacioniPunes: formData.lokacioniPunes,
@@ -173,45 +177,39 @@ function PublikoPune() {
       perdoruesiId: formData.perdoruesiId,
     };
 
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/api/shpallja/kompania",
-        dataToSend,
-      );
+    if (dataToSend.pagaDeri < dataToSend.pagaPrej) {
+      showAlert("Rangu i pages eshte gabim!", "info");
+      return;
+    }
 
-      if (response.data.success) {
-        showAlert("Puna u shpall me sukses!", "success");
+    const response = await axios.post(
+      "http://localhost:3000/api/shpallja/kompania",
+      dataToSend,
+    );
 
-        setFormData({
-          emailKompanise: formData.emailKompanise,
-          pozitaPunes: "",
-          kategoriaPunes: "",
-          lokacioniPunes: "",
-          pershkrimiPunes: "",
-          niveliPunes: "",
-          orari: [],
-          eksperienca: "",
-          aftesitePrimare: [],
-          aftesiteSekondare: [],
-          pagaPrej: 0,
-          pagaDeri: 0,
-          perdoruesiId: formData.perdoruesiId,
-        });
-        setAftesitePrimare([]);
-        setAftesiteSekondare([]);
-        setAftesiaPrimareTanishme("");
-        setAftesiaSekondareTanishme("");
+    if (response.data.success) {
+      showAlert("Puna u shpall", "success");
 
-        setTimeout(() => {
-          navigate("/");
-        }, 1500);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      showAlert(
-        "Gabim gjatë publikimit të punës. Ju lutem provoni përsëri.",
-        "error",
-      );
+      setFormData({
+        emailKompanise: "",
+        emriKompanise: "",
+        pozitaPunes: "",
+        kategoriaPunes: "",
+        lokacioniPunes: "",
+        pershkrimiPunes: "",
+        niveliPunes: "",
+        orari: [],
+        eksperienca: "",
+        aftesitePrimare: [],
+        aftesiteSekondare: [],
+        pagaPrej: 0,
+        pagaDeri: 0,
+        perdoruesiId: "",
+      });
+      setAftesitePrimare([]);
+      setAftesiteSekondare([]);
+      setAftesiaPrimareTanishme("");
+      setAftesiaSekondareTanishme("");
     }
   };
 
