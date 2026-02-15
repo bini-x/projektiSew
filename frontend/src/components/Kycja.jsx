@@ -51,7 +51,7 @@ function Kycja() {
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center p-4">
+    <div className="bg-linear-to-br from-[#F7FBFC] to-[#B9D7EA] pb-10  shadow-[#0F4C75] min-h-screen flex justify-center items-center p-4">
       <div
         className="w-full max-w-125
                 bg-white rounded-lg shadow-2xl 
@@ -130,23 +130,23 @@ function Kycja() {
               </button>
             </div>
 
-            <div className="text-center text-sm sm:text-base">
-              <p className="inline">Nuk keni llogari? </p>
-              <Link
-                to="/regjistrimi"
-                className="text-blue-600 underline hover:text-blue-800"
-              >
-                Regjistrohuni
-              </Link>
-            </div>
-
-            <div className="text-center">
+            <div className="grid grid-cols-2 gap-3 items-end">
               <Link
                 to="/"
-                className="text-primary text-sm sm:text-base underline"
+                className="h-10 sm:h-12 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-all flex items-center justify-center"
               >
-                Kthehu Tek Ballina
+                ← Ballina
               </Link>
+              
+              <div className="grid gap-1 grid-cols-1 items-center">
+                <p className="text-center text-sm text-gray-600">Nuk jeni te regjistruar?</p>
+                <Link
+                  to="/regjistrimi"
+                  className="h-10 sm:h-12 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-all flex items-center justify-center"
+                >
+                  Regjistrohu
+                </Link>
+              </div>
             </div>
           </form>
         </div>

@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import ShpalljaCard from "../components/ShpalljaCard";
 import Perdoruesi from "../PerdoruesiContext";
-import { Heart } from "lucide-react";
 import Header from "./Header";
 
 function PunetRuajtura() {
@@ -66,7 +65,6 @@ function PunetRuajtura() {
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
-            <Heart size={32} />
             <h1 className="text-4xl font-bold text-gray-800">
               Punët e Ruajtura
             </h1>
@@ -78,7 +76,6 @@ function PunetRuajtura() {
 
         {shpalljetRuajtura.length === 0 ? (
           <div className="text-center py-16 bg-gray-50 rounded-xl">
-            <Heart size={64} className="mx-auto text-gray-300 mb-4" />
             <h2 className="text-2xl font-semibold text-gray-700 mb-2">
               Nuk keni punë të ruajtura
             </h2>

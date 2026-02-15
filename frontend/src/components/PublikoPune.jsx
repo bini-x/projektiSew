@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan, faPlus } from "@fortawesome/free-solid-svg-icons";
 import Header from "./Header";
 import { useAlert } from "../contexts/AlertContext";
+import Perdoruesi from "../PerdoruesiContext";
 
 function PublikoPune() {
   const navigate = useNavigate();
@@ -14,9 +15,11 @@ function PublikoPune() {
   const [aftesiaPrimareTanishme, setAftesiaPrimareTanishme] = useState("");
   const [aftesiteSekondare, setAftesiteSekondare] = useState([]);
   const [aftesiaSekondareTanishme, setAftesiaSekondareTanishme] = useState("");
+  const { perdoruesiData } = Perdoruesi.usePerdoruesi();
 
   const [formData, setFormData] = useState({
     emailKompanise: "",
+    emriKompanise: perdoruesiData.kompania,
     pozitaPunes: "",
     kategoriaPunes: "",
     lokacioniPunes: "",
@@ -40,18 +43,25 @@ function PublikoPune() {
     if (aftesiaPrimareTanishme.trim()) {
       setAftesitePrimare([...aftesitePrimare, aftesiaPrimareTanishme]);
       setAftesiaPrimareTanishme("");
+      showAlert("Aftësia u shtua me sukses", "success");
+    } else {
+      showAlert("Ju lutem shkruani një aftësi", "warning");
     }
   };
 
   const fshijAftesinePrimare = (index) => {
     const aftesitePrimareReja = aftesitePrimare.filter((_, i) => i !== index);
     setAftesitePrimare(aftesitePrimareReja);
+    showAlert("Aftësia u fshi", "info");
   };
 
   const shtoAftesineSekondare = () => {
     if (aftesiaSekondareTanishme.trim()) {
       setAftesiteSekondare([...aftesiteSekondare, aftesiaSekondareTanishme]);
       setAftesiaSekondareTanishme("");
+      showAlert("Aftësia u shtua me sukses", "success");
+    } else {
+      showAlert("Ju lutem shkruani një aftësi", "warning");
     }
   };
 
@@ -60,6 +70,7 @@ function PublikoPune() {
       (_, i) => i !== index,
     );
     setAftesiteSekondare(aftesiteSekondareReja);
+    showAlert("Aftësia u fshi", "info");
   };
 
   const handleEmploymentTypeChange = (typeValue) => {
@@ -94,6 +105,10 @@ function PublikoPune() {
         }
       } catch (error) {
         console.error(error);
+        showAlert(
+          "Gabim gjatë ngarkimit të të dhënave të përdoruesit",
+          "error",
+        );
       }
     };
 
@@ -103,8 +118,50 @@ function PublikoPune() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validation checks
+    if (!formData.pozitaPunes.trim()) {
+      showAlert("Ju lutem shkruani titullin e punës", "warning");
+      return;
+    }
+
+    if (!formData.kategoriaPunes) {
+      showAlert("Ju lutem zgjidhni kategorinë e punës", "warning");
+      return;
+    }
+
+    if (!formData.orari || formData.orari.length === 0) {
+      showAlert("Ju lutem zgjidhni llojin e punës", "warning");
+      return;
+    }
+
+    if (!formData.lokacioniPunes) {
+      showAlert("Ju lutem zgjidhni lokacionin", "warning");
+      return;
+    }
+
+    if (!formData.pershkrimiPunes.trim()) {
+      showAlert("Ju lutem shkruani përshkrimin e punës", "warning");
+      return;
+    }
+
+    if (formData.pagaDeri > 0 && formData.pagaPrej > 0) {
+      if (formData.pagaDeri < formData.pagaPrej) {
+        showAlert(
+          "Rangu i pagës është gabim! Vlera 'Deri' duhet të jetë më e madhe se 'Prej'",
+          "warning",
+        );
+        return;
+      }
+    }
+
+    if (aftesitePrimare.length === 0) {
+      showAlert("Ju lutem shtoni të paktën një aftësi primare", "warning");
+      return;
+    }
+
     let dataToSend = {
       emailKompanise: formData.emailKompanise,
+      emriKompanise: formData.emriKompanise,
       pozitaPunes: formData.pozitaPunes,
       kategoriaPunes: formData.kategoriaPunes,
       lokacioniPunes: formData.lokacioniPunes,
@@ -135,6 +192,7 @@ function PublikoPune() {
 
       setFormData({
         emailKompanise: "",
+        emriKompanise: "",
         pozitaPunes: "",
         kategoriaPunes: "",
         lokacioniPunes: "",
@@ -153,8 +211,6 @@ function PublikoPune() {
       setAftesiaPrimareTanishme("");
       setAftesiaSekondareTanishme("");
     }
-
-    navigate("/");
   };
 
   return (
@@ -450,13 +506,12 @@ function PublikoPune() {
                 ></textarea>
               </div>
 
-              {/* Aftësitë Section - List Style */}
+              {/* Primary Skills */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Aftësitë Primare
+                  Aftësitë Primare<span className="text-red-500">*</span>
                 </label>
 
-                {/* Display existing skills as list */}
                 {aftesitePrimare.length > 0 && (
                   <div className="mb-4 border border-gray-200 rounded-lg divide-y divide-gray-200">
                     {aftesitePrimare.map((aftesi, i) => (
@@ -480,7 +535,6 @@ function PublikoPune() {
                   </div>
                 )}
 
-                {/* Add skill input */}
                 <div className="flex gap-3">
                   <input
                     type="text"
@@ -505,12 +559,13 @@ function PublikoPune() {
                   </button>
                 </div>
               </div>
+
+              {/* Secondary Skills */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2 mt-5">
                   Aftësitë Sekondare
                 </label>
 
-                {/* Display existing skills as list */}
                 {aftesiteSekondare.length > 0 && (
                   <div className="mb-4 border border-gray-200 rounded-lg divide-y divide-gray-200">
                     {aftesiteSekondare.map((aftesi, i) => (
@@ -534,7 +589,6 @@ function PublikoPune() {
                   </div>
                 )}
 
-                {/* Add skill input */}
                 <div className="flex gap-3">
                   <input
                     type="text"

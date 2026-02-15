@@ -1,5 +1,4 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { faDollarSign } from "@fortawesome/free-solid-svg-icons";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark as faBookmarkRegular } from "@fortawesome/free-regular-svg-icons";
@@ -11,10 +10,12 @@ import { useNavigate } from "react-router-dom";
 import Perdoruesi from "../PerdoruesiContext";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useAlert } from "../contexts/AlertContext";
 
 function ShpalljaCard({ shpallja }) {
   const navigate = useNavigate();
   const { perdoruesiData } = Perdoruesi.usePerdoruesi();
+  const { showAlert } = useAlert();
   const [eshteRuajtur, setEshteRuajtur] = useState(false);
   const [duke_ngarkuar, setDuke_ngarkuar] = useState(false);
   const [fotoError, setFotoError] = useState(false);
@@ -63,11 +64,12 @@ function ShpalljaCard({ shpallja }) {
     e.stopPropagation();
 
     if (!perdoruesiData) {
-      alert("Ju lutem kyçuni për të ruajtur punë");
+      showAlert("Ju lutem kyçuni për të ruajtur punë", "warning");
       return;
     }
 
     if (perdoruesiData.tipiPerdoruesit === "punedhenes") {
+      showAlert("Punëdhënësit nuk mund të ruajnë punë", "info");
       return;
     }
 
@@ -83,6 +85,7 @@ function ShpalljaCard({ shpallja }) {
 
         if (response.data.success) {
           setEshteRuajtur(false);
+          showAlert("Puna u hoq nga listat e ruajtura", "info");
         }
       } else {
         const response = await axios.post(
@@ -94,11 +97,12 @@ function ShpalljaCard({ shpallja }) {
 
         if (response.data.success) {
           setEshteRuajtur(true);
+          showAlert("Puna u ruajt me sukses!", "success");
         }
       }
     } catch (error) {
       console.error("Gabim gjatë ndryshimit të ruajtjes:", error);
-      alert("Gabim gjatë ruajtjes së punës");
+      showAlert("Gabim gjatë ruajtjes së punës", "error");
     } finally {
       setDuke_ngarkuar(false);
     }

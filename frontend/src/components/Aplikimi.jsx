@@ -39,6 +39,7 @@ function Aplikimi() {
         setShpallja(response.data.data);
       } catch (error) {
         console.log("Error:", error);
+        showAlert("Gabim gjatë ngarkimit të shpalljes", "error");
         setShpallja(null);
       }
     };
@@ -57,8 +58,9 @@ function Aplikimi() {
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     ) {
       setCvFile(file);
+      showAlert("CV u ngarkua me sukses", "success");
     } else {
-      showAlert("Ju lutem ngarkoni vetëm skedarë PDF", "info");
+      showAlert("Ju lutem ngarkoni vetëm skedarë PDF ose Word", "warning");
     }
   };
 
@@ -71,7 +73,38 @@ function Aplikimi() {
     if (cvFile) {
       formData.append("cvFile", cvFile);
     } else {
-      showAlert("Ju lutem ngarkoni cv-ne", "info");
+      showAlert("Ju lutem ngarkoni CV-në tuaj", "warning");
+      setIsSubmitting(false);
+      return;
+    }
+
+    // Validate required fields
+    if (!aplikimi.emriAplikantit || !aplikimi.mbiemriAplikantit) {
+      showAlert("Ju lutem plotësoni emrin dhe mbiemrin", "warning");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!aplikimi.emailAplikantit) {
+      showAlert("Ju lutem plotësoni email-in", "warning");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!aplikimi.nrTelefonit) {
+      showAlert("Ju lutem plotësoni numrin e telefonit", "warning");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!aplikimi.eksperienca) {
+      showAlert("Ju lutem zgjidhni nivelin e eksperiencës", "warning");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!aplikimi.letraMotivuese) {
+      showAlert("Ju lutem shkruani letrën motivuese", "warning");
       setIsSubmitting(false);
       return;
     }
@@ -96,6 +129,7 @@ function Aplikimi() {
       );
 
       if (response.data.success) {
+        showAlert("Aplikimi u dërgua me sukses!", "success");
         setIsSuccess(true);
         setTimeout(() => {
           setIsSuccess(false);
@@ -104,11 +138,11 @@ function Aplikimi() {
     } catch (error) {
       console.log("Error:", error);
       if (
-        error.response.data.error.includes(
+        error.response?.data?.error?.includes(
           "Ju keni aplikuar tashme per kete pozite",
         )
       ) {
-        showAlert("Ju keni aplikuar tashme per kete pozite", "info");
+        showAlert("Ju keni aplikuar tashmë për këtë pozitë", "info");
         return;
       }
       showAlert("Diçka shkoi keq. Ju lutem provoni përsëri.", "error");
@@ -295,6 +329,7 @@ function Aplikimi() {
                   onChange={(e) =>
                     setAplikimi({ ...aplikimi, eksperienca: e.target.value })
                   }
+                  required
                 >
                   <option value="" disabled>
                     Eksperienca
@@ -321,7 +356,7 @@ function Aplikimi() {
                   <input
                     id="cv"
                     type="file"
-                    accept=".pdf"
+                    accept=".pdf,.doc,.docx"
                     className="hidden"
                     onChange={handleFileChange}
                   />
@@ -345,6 +380,7 @@ function Aplikimi() {
                 onChange={(e) =>
                   setAplikimi({ ...aplikimi, letraMotivuese: e.target.value })
                 }
+                required
               ></textarea>
             </div>
 

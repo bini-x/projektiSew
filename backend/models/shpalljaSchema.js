@@ -14,6 +14,10 @@ const shpalljaSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  emriKompanise: {
+    type: String,
+    required: true,
+  },
   kategoriaPunes: {
     type: String,
     enum: [

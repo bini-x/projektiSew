@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Shpallja = require("../models/shpalljaSchema");
 const Aplikimi = require("../models/aplikimiSchema");
-const dergoMesazhin = require("../emailservice");
+const { dergoNdryshimPune } = require("../emailservice");
 const axios = require("axios");
 
 async function fetchCompanyPhoto(emailKompanise, perdoruesiId) {
@@ -205,6 +205,7 @@ router.post("/kompania", async (req, res) => {
   try {
     const {
       emailKompanise,
+      emriKompanise,
       pozitaPunes,
       kategoriaPunes,
       lokacioniPunes,
@@ -237,6 +238,7 @@ router.post("/kompania", async (req, res) => {
 
     console.log(
       emailKompanise,
+      emriKompanise,
       pozitaPunes,
       kategoriaPunes,
       lokacioniPunes,
@@ -254,6 +256,7 @@ router.post("/kompania", async (req, res) => {
 
     const shpallja = new Shpallja({
       emailKompanise,
+      emriKompanise,
       pozitaPunes,
       kategoriaPunes,
       lokacioniPunes,
@@ -332,45 +335,106 @@ router.put("/:id", async (req, res) => {
   try {
     const shpalljaId = req.params.id;
 
-    const updateData = { ...req.body };
-
-    if (!updateData.fotoProfili) {
-      const shpallja = await Shpallja.findById(shpalljaId);
-      if (shpallja) {
-        const photoUrl = await fetchCompanyPhoto(
-          shpallja.emailKompanise,
-          shpallja.perdoruesiId,
-        );
-
-        if (photoUrl) {
-          updateData.fotoProfili = photoUrl;
-        }
-      }
+    // Fetch the old shpallja
+    const oldShpallja = await Shpallja.findById(shpalljaId);
+    if (!oldShpallja) {
+      return res.status(404).json({
+        success: false,
+        message: "Shpallja nuk u gjet",
+      });
     }
 
+    // Prepare update data
+    const updateData = { ...req.body };
+
+    // If no fotoProfili, fetch from company email
+    if (!updateData.fotoProfili) {
+      const photoUrl = await fetchCompanyPhoto(
+        oldShpallja.emailKompanise,
+        oldShpallja.perdoruesiId,
+      );
+      if (photoUrl) updateData.fotoProfili = photoUrl;
+    }
+
+    // Update shpallja
     const shpallja = await Shpallja.findByIdAndUpdate(shpalljaId, updateData, {
       new: true,
       runValidators: true,
     });
 
-    const aplikantet = await Aplikimi.find({
-      shpalljaId: shpalljaId,
-    });
+    // Compare old and new primary skills
+    const oldSkills = oldShpallja.aftesitePrimare || [];
+    const newSkills = shpallja.aftesitePrimare || [];
+    const skillsChanged =
+      oldSkills.length !== newSkills.length ||
+      oldSkills.some((skill, i) => skill !== newSkills[i]);
 
-    if (aplikantet.length > 0) {
-      const emailPerdoruesit = aplikantet
-        .map((a) => a.emailAplikantit)
-        .filter((email) => email && email.trim() !== "")
-        .map((email) => email.trim().replace(/['"]+/g, ""));
+    let deletedCount = 0;
+    let keptCount = 0;
 
-      console.log("Emails sent to:", emailPerdoruesit);
+    if (skillsChanged) {
+      console.log(
+        "Aftësitë primare kanë ndryshuar. Duke kontrolluar aplikantët...",
+      );
 
-      if (emailPerdoruesit.length > 0) {
-        await dergoMesazhin(
-          emailPerdoruesit,
-          "Shpallja ka nderruar",
-          "Shpallja ka nderruar, rishikoni aplikimin!",
+      const applicants = await Aplikimi.find({ shpalljaId });
+
+      for (const app of applicants) {
+        const applicantSkills = app.aftesite || [];
+        const hasAllSkills = newSkills.every((skill) =>
+          applicantSkills.includes(skill),
         );
+        const email = app.emailAplikantit?.trim();
+
+        if (!hasAllSkills) {
+          // Calculate missing skills
+          const missingSkills = newSkills.filter(
+            (skill) => !applicantSkills.includes(skill),
+          );
+
+          // Delete unqualified applicant
+          await Aplikimi.findByIdAndDelete(app._id);
+          deletedCount++;
+
+          // Send deletion email with only missing skills
+          if (email) {
+            try {
+              await dergoNdryshimPune(
+                email,
+                app.emriAplikantit || "Aplikant",
+                shpallja.pozitaPunes,
+                shpallja.emriKompanise,
+                `Aftësitë primare të këtij vendi pune kanë ndryshuar. ` +
+                  `Aplikimi juaj është fshirë sepse nuk i posedoni këto aftësi: ${missingSkills.join(", ")}.`,
+              );
+            } catch (emailErr) {
+              console.error(
+                `Email dështoi për ${app.emailAplikantit}:`,
+                emailErr,
+              );
+            }
+          }
+        } else {
+          // Applicant kept → send “still active” email
+          keptCount++;
+          if (email) {
+            try {
+              await dergoNdryshimPune(
+                email,
+                app.emriAplikantit || "Aplikant",
+                shpallja.pozitaPunes,
+                shpallja.emriKompanise,
+                `Aftësitë primare të këtij vendi pune kanë ndryshuar. ` +
+                  `Aplikimi juaj mbetet aktiv sepse i posedoni këto aftësi: ${newSkills.join(", ")}.`,
+              );
+            } catch (emailErr) {
+              console.error(
+                `Email dështoi për ${app.emailAplikantit}:`,
+                emailErr,
+              );
+            }
+          }
+        }
       }
     }
 
@@ -378,12 +442,13 @@ router.put("/:id", async (req, res) => {
       success: true,
       message: "U modifikua me sukses",
       data: shpallja,
-      aplikantetNjoftuar: aplikantet.length,
+      aplikantetNjoftuar: deletedCount + keptCount,
+      deletedCount,
+      keptCount,
     });
   } catch (err) {
     console.error(err);
-
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
       message: "Gabim i brendshem i serverit",
     });

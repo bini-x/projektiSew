@@ -16,10 +16,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Perdoruesi from "../PerdoruesiContext";
+import { useAlert } from "../contexts/AlertContext";
 
 function Shpallja() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { showAlert } = useAlert();
   const [shpallja, setShpallja] = useState(null);
   const { perdoruesiData } = Perdoruesi.usePerdoruesi();
   const [eshteRuajtur, setEshteRuajtur] = useState(false);
@@ -43,6 +45,7 @@ function Shpallja() {
         setShpallja(response.data.data);
       } catch (error) {
         console.log("Error:", error);
+        showAlert("Gabim gjatë ngarkimit të shpalljes", "error");
         setShpallja(null);
       }
     };
@@ -95,11 +98,12 @@ function Shpallja() {
 
   const ndryshoRuajtjen = async () => {
     if (!perdoruesiData) {
-      alert("Ju lutem kyçuni për të ruajtur punë");
+      showAlert("Ju lutem kyçuni për të ruajtur punë", "warning");
+      navigate("/kycja");
       return;
     }
     if (perdoruesiData.tipiPerdoruesit === "punedhenes") {
-      alert("Punëdhënësit nuk mund të ruajnë punë");
+      showAlert("Punëdhënësit nuk mund të ruajnë punë", "info");
       return;
     }
     setDuke_ngarkuar(true);
@@ -109,17 +113,23 @@ function Shpallja() {
           `http://localhost:3000/api/punetRuajtura/hiq/${id}`,
           { data: { perdoruesiId: perdoruesiData._id } },
         );
-        if (response.data.success) setEshteRuajtur(false);
+        if (response.data.success) {
+          setEshteRuajtur(false);
+          showAlert("Puna u hoq nga listat e ruajtura", "info");
+        }
       } else {
         const response = await axios.post(
           `http://localhost:3000/api/punetRuajtura/ruaj/${id}`,
           { perdoruesiId: perdoruesiData._id },
         );
-        if (response.data.success) setEshteRuajtur(true);
+        if (response.data.success) {
+          setEshteRuajtur(true);
+          showAlert("Puna u ruajt me sukses!", "success");
+        }
       }
     } catch (error) {
       console.error("Gabim gjatë ndryshimit të ruajtjes:", error);
-      alert("Gabim gjatë ruajtjes së punës");
+      showAlert("Gabim gjatë ruajtjes së punës", "error");
     } finally {
       setDuke_ngarkuar(false);
     }
@@ -130,7 +140,7 @@ function Shpallja() {
       <div className="min-h-screen bg-gray-50">
         <Header />
         <div className="flex items-center justify-center h-64">
-          <p className="text-gray-500 text-lg">Diqka shkoi keq!</p>
+          <p className="text-gray-500 text-lg">Duke ngarkuar...</p>
         </div>
       </div>
     );
@@ -140,6 +150,7 @@ function Shpallja() {
     e.preventDefault();
 
     if (!perdoruesiData) {
+      showAlert("Ju lutem kyçuni për të aplikuar", "warning");
       navigate("/kycja");
       return;
     }
@@ -156,7 +167,10 @@ function Shpallja() {
     );
 
     if (!iGatshem) {
-      alert("Nuk i keni të gjitha aftësitë e kërkuara për këtë pozitë.");
+      showAlert(
+        "Nuk i keni të gjitha aftësitë e kërkuara për këtë pozitë",
+        "warning",
+      );
       return;
     }
 
@@ -185,9 +199,9 @@ function Shpallja() {
           Kthehu tek punët
         </button>
 
-        {/* ✅ FIXED: Two column layout – sidebar is a sibling, not nested */}
+        {/* Two column layout */}
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* ── LEFT COLUMN: Job Details Card ── */}
+          {/* LEFT COLUMN: Job Details Card */}
           <div className="flex-1">
             <div className="bg-white/70 border border-[#F7FBFC] rounded-2xl shadow-lg overflow-hidden">
               {/* Job Header */}
@@ -296,7 +310,7 @@ function Shpallja() {
                 </div>
               </div>
 
-              {/* Content Sections – design from second version */}
+              {/* Content Sections */}
               <div className="p-6 md:p-8 space-y-6">
                 {/* Job Description */}
                 <div>
@@ -314,7 +328,7 @@ function Shpallja() {
                   )}
                 </div>
 
-                {/* Required Skills – White Card */}
+                {/* Required Skills */}
                 <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-8">
                   <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                     <span className="w-1 h-5 bg-primary rounded-full inline-block"></span>
@@ -339,7 +353,7 @@ function Shpallja() {
                   )}
                 </div>
 
-                {/* Optional Skills – White Card */}
+                {/* Optional Skills */}
                 <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-8">
                   <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                     <span className="w-1 h-5 bg-primary rounded-full inline-block"></span>
@@ -367,9 +381,9 @@ function Shpallja() {
             </div>
           </div>
 
-          {/* ── RIGHT COLUMN: Sidebar – SIBLING, NOT NESTED ✅ */}
+          {/* RIGHT COLUMN: Sidebar */}
           <div className="lg:w-80 space-y-4">
-            {/* Apply Card – with the EXACT button from your second version */}
+            {/* Apply Card */}
             <div className="bg-white/70 border border-[#F7FBFC] rounded-2xl shadow-lg p-6">
               <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">
                 Apliko tani
@@ -432,7 +446,7 @@ function Shpallja() {
                 {shpallja.numriAplikimeve !== undefined && (
                   <div className="flex items-center justify-between py-3">
                     <span className="text-xs text-gray-400 uppercase tracking-wide font-medium">
-                      Aplikante
+                      Aplikantë
                     </span>
                     <span className="text-sm font-semibold text-gray-800 flex items-center gap-1.5">
                       <FontAwesomeIcon

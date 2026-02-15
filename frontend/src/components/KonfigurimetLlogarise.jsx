@@ -8,8 +8,10 @@ import {
   faEyeSlash,
   faUserCog,
 } from "@fortawesome/free-solid-svg-icons";
+import { useAlert } from "../contexts/AlertContext";
 
 function KonfigurimetLlogarise() {
+  const { showAlert } = useAlert();
   const [perdoruesiData, setPerdoruesiData] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
@@ -34,6 +36,7 @@ function KonfigurimetLlogarise() {
         setPerdoruesiData(response.data.data);
       } catch (error) {
         console.error(error);
+        showAlert("Gabim gjatë ngarkimit të të dhënave", "error");
       }
     };
 
@@ -42,18 +45,84 @@ function KonfigurimetLlogarise() {
     }
   }, [id]);
 
+  const validatePassword = (password) => {
+    // At least 8 characters
+    if (password.length < 8) {
+      showAlert("Fjalëkalimi duhet të jetë të paktën 8 karaktere", "warning");
+      return false;
+    }
+
+    // Contains uppercase and lowercase
+    if (!/[a-z]/.test(password) || !/[A-Z]/.test(password)) {
+      showAlert(
+        "Fjalëkalimi duhet të përmbajë shkronja të vogla dhe të mëdha",
+        "warning",
+      );
+      return false;
+    }
+
+    // Contains at least one number or symbol
+    if (!/[0-9!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      showAlert(
+        "Fjalëkalimi duhet të përmbajë të paktën 1 numër ose simbol",
+        "warning",
+      );
+      return false;
+    }
+
+    // No spaces
+    if (/\s/.test(password)) {
+      showAlert("Fjalëkalimi nuk duhet të përmbajë hapësira", "warning");
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (newPassword !== repeatPassword) {
-      alert("Fjalëkalimi i ri dhe konfirmimi nuk përputhen!");
-      return;
+    // If user is changing password, validate all password fields
+    if (currentPassword || newPassword || repeatPassword) {
+      if (!currentPassword) {
+        showAlert("Ju lutem shkruani fjalëkalimin aktual", "warning");
+        return;
+      }
+
+      if (!newPassword) {
+        showAlert("Ju lutem shkruani fjalëkalimin e ri", "warning");
+        return;
+      }
+
+      if (!repeatPassword) {
+        showAlert("Ju lutem konfirmoni fjalëkalimin e ri", "warning");
+        return;
+      }
+
+      if (newPassword !== repeatPassword) {
+        showAlert("Fjalëkalimi i ri dhe konfirmimi nuk përputhen!", "warning");
+        return;
+      }
+
+      if (!validatePassword(newPassword)) {
+        return;
+      }
+
+      if (currentPassword !== perdoruesiData.fjalekalimi) {
+        showAlert("Fjalëkalimi aktual nuk është i saktë", "error");
+        return;
+      }
     }
 
     try {
       let dataToSend;
 
       if (perdoruesiData.tipiPerdoruesit === "aplikant") {
+        if (!perdoruesiData.emri || !perdoruesiData.mbiemri) {
+          showAlert("Ju lutem plotësoni emrin dhe mbiemrin", "warning");
+          return;
+        }
+
         dataToSend = {
           tipiPerdoruesit: "aplikant",
           emri: perdoruesiData.emri,
@@ -63,6 +132,11 @@ function KonfigurimetLlogarise() {
           nrTelefonit: perdoruesiData.nrTelefonit,
         };
       } else if (perdoruesiData.tipiPerdoruesit === "punedhenes") {
+        if (!perdoruesiData.kompania) {
+          showAlert("Ju lutem plotësoni emrin e kompanisë", "warning");
+          return;
+        }
+
         dataToSend = {
           tipiPerdoruesit: "punedhenes",
           kompania: perdoruesiData.kompania,
@@ -70,11 +144,6 @@ function KonfigurimetLlogarise() {
           fjalekalimi: perdoruesiData.fjalekalimi,
           nrTelefonit: perdoruesiData.nrTelefonit,
         };
-      }
-
-      if (currentPassword !== perdoruesiData.fjalekalimi) {
-        alert("Fjalekalimi aktual nuk eshte i sakte");
-        return;
       }
 
       if (newPassword) {
@@ -87,18 +156,26 @@ function KonfigurimetLlogarise() {
       );
 
       if (response.data.success) {
-        alert(response.data.message);
+        showAlert("Të dhënat u përditësuan me sukses!", "success");
+        setCurrentPassword("");
         setNewPassword("");
         setRepeatPassword("");
-      } else if (
-        response.data.data.message.includes(
-          "Fjalëkalimi aktual nuk është i saktë",
-        )
-      ) {
-        alert("Fjalekalimi aktual nuk eshte i sakte");
+
+        // Update local state with new password if changed
+        if (newPassword) {
+          setPerdoruesiData((prev) => ({
+            ...prev,
+            fjalekalimi: newPassword,
+          }));
+        }
       }
     } catch (err) {
       console.log("err: ", err);
+      if (err.response?.data?.message) {
+        showAlert(err.response.data.message, "error");
+      } else {
+        showAlert("Gabim gjatë përditësimit të të dhënave", "error");
+      }
     }
   };
 
@@ -111,7 +188,7 @@ function KonfigurimetLlogarise() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100">
       <Header />
       <div className="container mx-auto px-4 py-8 max-w-3xl">
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
@@ -334,7 +411,7 @@ function KonfigurimetLlogarise() {
               <div className="pt-4">
                 <button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-[#0F4C75] to-[#3282B8] hover:from-[#3282B8] hover:to-[#0F4C75] text-white font-medium py-3 px-4 rounded-lg transition duration-200 focus:outline-none focus:ring-2 focus:ring-[#3282B8] focus:ring-offset-2 shadow-md"
+                  className="w-full bg-linear-to-r from-[#0F4C75] to-[#3282B8] hover:from-[#3282B8] hover:to-[#0F4C75] text-white font-medium py-3 px-4 rounded-lg transition duration-200 focus:outline-none focus:ring-2 focus:ring-[#3282B8] focus:ring-offset-2 shadow-md"
                 >
                   Përditëso të dhënat
                 </button>

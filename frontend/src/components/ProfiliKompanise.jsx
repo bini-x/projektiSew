@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import "../index.css";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import {
   Mail,
@@ -11,9 +11,8 @@ import {
   Link,
   X,
   Camera,
-  Calendar,
   MapPin,
-  Building2,
+  Trash2,
   Briefcase,
 } from "lucide-react";
 import Perdoruesi from "../PerdoruesiContext";
@@ -62,7 +61,6 @@ function ProfiliKompanise() {
           setPerdoruesiData(response.data.data);
         }
 
-        // Ngarko foton e profile nese ekziston
         if (response.data.data.foto) {
           setFotoProfile(`http://localhost:3000/api/profili/${id}/foto`);
         }
@@ -82,7 +80,6 @@ function ProfiliKompanise() {
     return "KO";
   };
 
-  // Menaxho ngarkimin e fotos
   const handleNgarkoFoto = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -162,15 +159,7 @@ function ProfiliKompanise() {
     permbledhje: false,
   });
 
-  // Editable data
   const [rrethKompanise, setRrethKompanise] = useState("");
-  const [permbledhje, setPermbledhje] = useState({
-    kategorite: "",
-    numriTelefonit: "",
-    dataThemelimit: "",
-    emailAdresa: "",
-    vendodhja: "",
-  });
 
   const handleSaveKompania = async (e) => {
     e.preventDefault();
@@ -261,6 +250,7 @@ function ProfiliKompanise() {
       showAlert("Gabim në fshirjen e linkut", "error");
     }
   };
+
   const handleRuajRrethKompanise = async () => {
     try {
       const response = await axios.put(
@@ -272,8 +262,8 @@ function ProfiliKompanise() {
       if (response.data.success) {
         setPerdoruesiData((prev) => ({
           ...prev,
-          ...response.data.data, // may contain { rrethKompanise }
-          rrethKompanise, // or just set it directly
+          ...response.data.data,
+          rrethKompanise,
         }));
         setEditMode({ ...editMode, rrethKompanise: false });
         showAlert("Përditësuar me sukses!", "success");
@@ -284,247 +274,378 @@ function ProfiliKompanise() {
     }
   };
 
+  useEffect(() => {
+    if (perdoruesiData?.rrethKompanise) {
+      setRrethKompanise(perdoruesiData.rrethKompanise);
+    }
+  }, [perdoruesiData]);
+
   return (
-    <div className="max-w-4xl mx-auto mb-2 mt-10">
+    <div className="max-w-5xl mx-auto mb-8 mt-10 px-4">
       {/* Header Section */}
-      <div className="bg-white rounded-2xl shadow-lg mb-6 p-8">
-        {/* Top Right Button */}
-        <div className="flex justify-end mb-6">
-          <button
-            onClick={() => navigate("/publikopune")}
-            className="flex items-center gap-2 px-4 py-2 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition-colors shadow-md"
-          >
-            <Upload size={18} />
-            Publiko Punë
-          </button>
+      <div className="bg-white rounded-3xl shadow-sm overflow-hidden mb-6 border border-[#D6E6F2]">
+        {/* Cover Banner with Action Button */}
+        <div className="h-32 bg-gradient-to-r from-[#B9D7EA] to-[#769FCD] relative">
+          <div className="absolute top-6 right-6">
+            <button
+              onClick={() => navigate("/publikopune")}
+              className="flex items-center gap-2 px-5 py-2.5 bg-white text-[#769FCD] rounded-xl hover:shadow-lg transition-all duration-200 font-medium"
+            >
+              <Upload size={18} />
+              Publiko Punë
+            </button>
+          </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row sm:items-start gap-8">
-          {/* Logo / Profile Picture */}
-          <div className="relative group flex-shrink-0 self-center sm:self-start">
-            <div className="w-32 h-32 rounded-full bg-white flex items-center justify-center text-gray-400 text-4xl font-bold shadow-xl border overflow-hidden">
-              {fotoProfile ? (
-                <img
-                  src={fotoProfile}
-                  alt="Logo Kompania"
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                merreShkronjatFillestare()
-              )}
-            </div>
-
-            <div className="absolute bottom-0 right-0 flex gap-1">
-              <button
-                onClick={() => inputFotoRef.current?.click()}
-                disabled={poNgarkohetFoto}
-                className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500 hover:bg-blue-600 text-white shadow-lg transition-all disabled:bg-gray-400"
-                title="Ngarko logo"
-              >
-                {poNgarkohetFoto ? (
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+        <div className="px-8 pb-8 -mt-16">
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+            {/* Logo / Profile Picture */}
+            <div className="relative group">
+              <div className="w-32 h-32 rounded-2xl bg-white flex items-center justify-center text-[#769FCD] text-4xl font-bold shadow-xl border-4 border-white overflow-hidden">
+                {fotoProfile ? (
+                  <img
+                    src={fotoProfile}
+                    alt="Logo Kompania"
+                    className="w-full h-full object-cover"
+                  />
                 ) : (
-                  <Camera size={18} />
+                  merreShkronjatFillestare()
                 )}
-              </button>
+              </div>
 
-              {fotoProfile && (
+              {/* Photo Action Buttons - Compact Design */}
+              <div className="absolute bottom-1 right-1 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                 <button
-                  onClick={handleFshijFoto}
-                  className="flex items-center justify-center w-10 h-10 rounded-full bg-red-500 hover:bg-red-600 text-white shadow-lg"
-                  title="Fshi logo"
+                  onClick={() => inputFotoRef.current?.click()}
+                  disabled={poNgarkohetFoto}
+                  className="flex items-center justify-center w-8 h-8 rounded-lg bg-[#769FCD] hover:bg-[#5a82b3] text-white shadow-md transition-all disabled:bg-gray-400"
+                  title="Ngarko logo"
                 >
-                  <X size={18} />
+                  {poNgarkohetFoto ? (
+                    <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  ) : (
+                    <Camera size={14} />
+                  )}
                 </button>
-              )}
+
+                {fotoProfile && (
+                  <button
+                    onClick={handleFshijFoto}
+                    className="flex items-center justify-center w-8 h-8 rounded-lg bg-red-500 hover:bg-red-600 text-white shadow-md transition-all"
+                    title="Fshi logo"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                )}
+              </div>
+
+              <input
+                ref={inputFotoRef}
+                type="file"
+                accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
+                onChange={handleNgarkoFoto}
+                className="hidden"
+              />
             </div>
 
-            <input
-              ref={inputFotoRef}
-              type="file"
-              accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
-              onChange={handleNgarkoFoto}
-              className="hidden"
-            />
-          </div>
-
-          {/* Company Info */}
-          <div className="flex-1 text-center sm:text-left">
-            {editKompaniaMode ? (
-              <form onSubmit={handleSaveKompania} className="space-y-4">
-                <input
-                  type="text"
-                  value={newKompaniaData.kompania}
-                  onChange={(e) =>
-                    setNewKompaniaData({
-                      ...newKompaniaData,
-                      kompania: e.target.value,
-                    })
-                  }
-                  placeholder="Emri i kompanisë"
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                />
-
-                <p className="paragrafProfili">
-                  <Mail size={16} />
-                  {perdoruesiData?.email || "email@kompania.com"}
-                </p>
-
-                <input
-                  type="text"
-                  value={newKompaniaData.nrTelefonit}
-                  onChange={(e) =>
-                    setNewKompaniaData({
-                      ...newKompaniaData,
-                      nrTelefonit: e.target.value,
-                    })
-                  }
-                  placeholder="Numri i telefonit"
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-
-                <div className="flex gap-2">
-                  <button
-                    type="submit"
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-6 rounded-lg transition"
-                  >
-                    Ruaj
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setEditKompaniaMode(false)}
-                    className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2.5 px-6 rounded-lg transition"
-                  >
-                    Anulo
-                  </button>
-                </div>
-              </form>
-            ) : (
-              <>
-                <div className="flex items-center justify-between flex-wrap gap-4">
-                  <h1 className="text-3xl font-bold text-gray-900">
-                    {perdoruesiData?.kompania || "Emri i Kompanisë"}
-                  </h1>
-
-                  <button
-                    onClick={() => {
+            {/* Company Info */}
+            <div className="flex-1 text-center sm:text-left w-full mt-4 sm:mt-16">
+              {editKompaniaMode ? (
+                <form
+                  onSubmit={handleSaveKompania}
+                  className="space-y-4 bg-[#F7FBFC] p-6 rounded-2xl border border-[#D6E6F2]"
+                >
+                  <input
+                    type="text"
+                    value={newKompaniaData.kompania}
+                    onChange={(e) =>
                       setNewKompaniaData({
-                        kompania: perdoruesiData?.kompania || "",
-                        nrTelefonit:
-                          perdoruesiData?.nrTelefonit?.toString() || "",
-                      });
-                      setEditKompaniaMode(true);
-                    }}
-                    className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
-                  >
-                    <Edit2 size={20} className="text-gray-600" />
-                  </button>
-                </div>
+                        ...newKompaniaData,
+                        kompania: e.target.value,
+                      })
+                    }
+                    placeholder="Emri i kompanisë"
+                    className="w-full px-4 py-3 bg-white border border-[#D6E6F2] rounded-xl text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#769FCD]"
+                    required
+                  />
 
-                <div className="space-y-2 mt-4">
-                  <p className="paragrafProfili">
-                    <Mail size={16} />
-                    {perdoruesiData?.email || "email@kompania.com"}
-                  </p>
+                  <div className="flex items-center gap-2 text-gray-600 bg-white px-4 py-3 rounded-xl border border-[#D6E6F2]">
+                    <Mail size={18} className="text-[#769FCD]" />
+                    <span>{perdoruesiData?.email || "email@kompania.com"}</span>
+                  </div>
 
-                  {perdoruesiData?.nrTelefonit && (
-                    <p className="paragrafProfili">
-                      <Phone size={16} />
-                      {perdoruesiData.nrTelefonit}
-                    </p>
-                  )}
-                </div>
-              </>
-            )}
+                  <input
+                    type="text"
+                    value={newKompaniaData.nrTelefonit}
+                    onChange={(e) =>
+                      setNewKompaniaData({
+                        ...newKompaniaData,
+                        nrTelefonit: e.target.value,
+                      })
+                    }
+                    placeholder="Numri i telefonit"
+                    className="w-full px-4 py-3 bg-white border border-[#D6E6F2] rounded-xl text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#769FCD]"
+                  />
+
+                  <div className="flex gap-3">
+                    <button
+                      type="submit"
+                      className="flex-1 bg-[#769FCD] hover:bg-[#5a82b3] text-white font-medium py-3 px-6 rounded-xl transition-all duration-200"
+                    >
+                      Ruaj Ndryshimet
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setEditKompaniaMode(false)}
+                      className="flex-1 bg-white border-2 border-[#D6E6F2] hover:bg-[#F7FBFC] text-gray-700 font-medium py-3 px-6 rounded-xl transition-all duration-200"
+                    >
+                      Anulo
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <>
+                  <div className="flex items-center justify-between flex-wrap gap-4 mb-4">
+                    <h1 className="text-3xl font-bold text-gray-900">
+                      {perdoruesiData?.kompania || "Emri i Kompanisë"}
+                    </h1>
+
+                    <button
+                      onClick={() => {
+                        setNewKompaniaData({
+                          kompania: perdoruesiData?.kompania || "",
+                          nrTelefonit:
+                            perdoruesiData?.nrTelefonit?.toString() || "",
+                        });
+                        setEditKompaniaMode(true);
+                      }}
+                      className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#F7FBFC] hover:bg-[#D6E6F2] border border-[#D6E6F2] transition-all duration-200"
+                      title="Modifiko profilin"
+                    >
+                      <Edit2 size={18} className="text-[#769FCD]" />
+                    </button>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-gray-600">
+                      <div className="w-8 h-8 rounded-lg bg-[#F7FBFC] flex items-center justify-center">
+                        <Mail size={16} className="text-[#769FCD]" />
+                      </div>
+                      <span>
+                        {perdoruesiData?.email || "email@kompania.com"}
+                      </span>
+                    </div>
+
+                    {perdoruesiData?.nrTelefonit && (
+                      <div className="flex items-center gap-2 text-gray-600">
+                        <div className="w-8 h-8 rounded-lg bg-[#F7FBFC] flex items-center justify-center">
+                          <Phone size={16} className="text-[#769FCD]" />
+                        </div>
+                        <span>{perdoruesiData.nrTelefonit}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Links Section */}
+                  <div className="mt-4">
+                    <div className="flex flex-wrap gap-2">
+                      {perdoruesiData?.linqet?.map((link, index) => (
+                        <div key={index} className="group relative">
+                          <a
+                            href={link.linku}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-[#F7FBFC] text-[#769FCD] rounded-xl text-sm hover:bg-[#D6E6F2] transition-all duration-200 border border-[#D6E6F2]"
+                          >
+                            <Link size={14} />
+                            {link.platforma}
+                          </a>
+                          <button
+                            onClick={() => handleFshijLinkin(index)}
+                            className="absolute -top-1.5 -right-1.5 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-md"
+                          >
+                            <X size={10} />
+                          </button>
+                        </div>
+                      ))}
+                      <button
+                        onClick={() => setShfaqLinkeForm(!shfaqLinkeForm)}
+                        className="inline-flex items-center gap-2 px-4 py-2 border-2 border-dashed border-[#B9D7EA] text-[#769FCD] rounded-xl text-sm hover:border-[#769FCD] hover:bg-[#F7FBFC] transition-all duration-200"
+                      >
+                        <Plus size={14} />
+                        Shto Link
+                      </button>
+                    </div>
+
+                    {shfaqLinkeForm && (
+                      <div className="mt-4 p-4 bg-[#F7FBFC] rounded-xl border border-[#D6E6F2]">
+                        <div className="space-y-3">
+                          <input
+                            type="text"
+                            placeholder="Platforma (p.sh. LinkedIn, Website)"
+                            value={linkRi.platforma}
+                            onChange={(e) =>
+                              setLinkRi({
+                                ...linkRi,
+                                platforma: e.target.value,
+                              })
+                            }
+                            className="w-full px-4 py-2.5 bg-white border border-[#D6E6F2] rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent text-sm"
+                          />
+                          <input
+                            type="url"
+                            placeholder="URL"
+                            value={linkRi.linku}
+                            onChange={(e) =>
+                              setLinkRi({ ...linkRi, linku: e.target.value })
+                            }
+                            className="w-full px-4 py-2.5 bg-white border border-[#D6E6F2] rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent text-sm"
+                          />
+                          <div className="flex gap-2">
+                            <button
+                              onClick={handleShtoLink}
+                              className="px-4 py-2 bg-[#769FCD] text-white rounded-xl hover:bg-[#5a82b3] text-sm font-medium transition-all duration-200"
+                            >
+                              Ruaj
+                            </button>
+                            <button
+                              onClick={() => setShfaqLinkeForm(false)}
+                              className="px-4 py-2 bg-white border border-[#D6E6F2] text-gray-700 rounded-xl hover:bg-[#F7FBFC] text-sm transition-all duration-200"
+                            >
+                              Anulo
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="bg-white rounded-2xl shadow-lg overflow-hidden p-8">
+      <div className="bg-white rounded-3xl shadow-sm overflow-hidden p-8 border border-[#D6E6F2]">
         {/* Punë të Hapura */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-2">
-              <h2 className="text-2xl font-semibold text-gray-900">
-                Punë të Hapura
-              </h2>
-              <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
-                {puneHapura.length} Pozicione
-              </span>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#D6E6F2] to-[#B9D7EA] flex items-center justify-center">
+                <Briefcase size={20} className="text-[#769FCD]" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Punë të Hapura
+                </h2>
+                <p className="text-sm text-gray-500">
+                  {puneHapura.length} pozicione aktive
+                </p>
+              </div>
             </div>
           </div>
 
-          <div className="px-6 py-4">
+          <div className="space-y-4">
             {puneHapura.length === 0 ? (
-              <p className="text-gray-500 text-center py-8">
-                Nuk ka pozicione të hapura aktualisht
-              </p>
+              <div className="text-center py-12 bg-[#F7FBFC] rounded-2xl border border-dashed border-[#B9D7EA]">
+                <Briefcase size={48} className="mx-auto text-[#B9D7EA] mb-4" />
+                <p className="text-gray-500 mb-4">
+                  Nuk ka pozicione të hapura aktualisht
+                </p>
+                <button
+                  onClick={() => navigate("/publikopune")}
+                  className="px-6 py-2.5 bg-[#769FCD] text-white rounded-xl hover:bg-[#5a82b3] font-medium transition-all duration-200"
+                >
+                  Publiko Pozicionin e Parë
+                </button>
+              </div>
             ) : (
-              <div className="space-y-4">
+              <>
                 {puneHapura.slice(0, 2).map((pune) => (
                   <div
                     key={pune.id}
-                    className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow relative group"
                     onClick={() => navigate(`/shpallja/${pune._id}`)}
+                    className="relative p-5 bg-[#F7FBFC] rounded-2xl border border-[#D6E6F2] hover:shadow-md hover:border-[#769FCD] transition-all duration-200 cursor-pointer group"
                   >
-                    <h3 className="font-semibold text-lg text-gray-900 mb-2">
-                      {pune.pozitaPunes}
-                    </h3>
-                    <div className="flex flex-wrap gap-2 mb-3">
-                      <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
-                        {pune.kategoriaPunes}
-                      </span>
-                      {pune.lokacioniPunes && (
-                        <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm flex items-center gap-1">
-                          <MapPin size={14} />
-                          {pune.lokacioniPunes}
-                        </span>
-                      )}
-                    </div>
-                    {(pune.aftesitePrimare || pune.aftesiteSekondare) && (
-                      <div className="mt-2">
-                        <p className="text-sm font-medium text-gray-700 inline">
-                          Aftesite e Kerkuara:{" "}
-                        </p>
-                        {pune.aftesitePrimare.map((ap) => {
-                          return (
-                            <p className="text-sm text-gray-600 inline">
-                              {ap}{" "}
-                            </p>
-                          );
-                        })}
-                        {pune.aftesiteSekondare.map((as) => {
-                          return (
-                            <p className="text-sm text-gray-600 inline">
-                              {as}{" "}
-                            </p>
-                          );
-                        })}
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-lg text-gray-900 mb-2 group-hover:text-[#769FCD] transition-colors">
+                          {pune.pozitaPunes}
+                        </h3>
+                        <div className="flex flex-wrap gap-2 mb-3">
+                          <span className="px-3 py-1 bg-gradient-to-r from-[#D6E6F2] to-[#B9D7EA] text-[#769FCD] rounded-lg text-xs font-medium">
+                            {pune.kategoriaPunes}
+                          </span>
+                          {pune.lokacioniPunes && (
+                            <span className="px-3 py-1 bg-white border border-[#D6E6F2] text-gray-700 rounded-lg text-xs font-medium flex items-center gap-1">
+                              <MapPin size={12} />
+                              {pune.lokacioniPunes}
+                            </span>
+                          )}
+                        </div>
+                        {(pune.aftesitePrimare?.length > 0 ||
+                          pune.aftesiteSekondare?.length > 0) && (
+                          <div className="flex flex-wrap gap-1.5">
+                            <span className="text-xs font-medium text-gray-600">
+                              Aftësi:
+                            </span>
+                            {pune.aftesitePrimare?.map((ap, idx) => (
+                              <span
+                                key={idx}
+                                className="text-xs text-[#769FCD] bg-white px-2 py-0.5 rounded border border-[#D6E6F2]"
+                              >
+                                {ap}
+                              </span>
+                            ))}
+                            {pune.aftesiteSekondare?.map((as, idx) => (
+                              <span
+                                key={idx}
+                                className="text-xs text-gray-600 bg-white px-2 py-0.5 rounded border border-[#D6E6F2]"
+                              >
+                                {as}
+                              </span>
+                            ))}
+                          </div>
+                        )}
                       </div>
-                    )}
+                      <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-white group-hover:bg-[#769FCD] transition-colors">
+                        <svg
+                          className="w-4 h-4 text-[#769FCD] group-hover:text-white transition-colors"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      </div>
+                    </div>
                   </div>
                 ))}
-              </div>
+                <button
+                  onClick={() =>
+                    navigate(`/profili/${perdoruesiData?._id}/menaxhoShpalljet`)
+                  }
+                  className="w-full px-6 py-3 bg-white border-2 border-[#D6E6F2] text-[#769FCD] rounded-xl hover:bg-[#F7FBFC] hover:border-[#769FCD] font-medium transition-all duration-200"
+                >
+                  Menaxho Të Gjitha Shpalljet ({puneHapura.length})
+                </button>
+              </>
             )}
           </div>
-          <button
-            onClick={() =>
-              navigate(`/profili/${perdoruesiData?._id}/menaxhoShpalljet`)
-            }
-            className="mt-4 text-blue-600 hover:text-blue-800 font-medium"
-          >
-            Menaxho Te Gjitha Shpalljet →
-          </button>
         </div>
 
-        <hr className="border-gray-200 my-8" />
+        <div className="h-px bg-gradient-to-r from-transparent via-[#D6E6F2] to-transparent my-8"></div>
 
         {/* Rreth Kompanisë */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-semibold text-gray-900">
+        <div>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-gray-900">
               Rreth Kompanisë
             </h2>
             {!editMode.rrethKompanise ? (
@@ -532,16 +653,16 @@ function ProfiliKompanise() {
                 onClick={() =>
                   setEditMode({ ...editMode, rrethKompanise: true })
                 }
-                className="flex items-center gap-1 text-blue-600 hover:text-blue-700"
+                className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#F7FBFC] hover:bg-[#D6E6F2] border border-[#D6E6F2] transition-all duration-200"
+                title="Modifiko përshkrimin"
               >
-                <Edit2 size={18} />
-                <span className="text-sm">Ndrysho</span>
+                <Edit2 size={18} className="text-[#769FCD]" />
               </button>
             ) : (
               <div className="flex gap-2">
                 <button
                   onClick={handleRuajRrethKompanise}
-                  className="px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm"
+                  className="px-4 py-2 bg-[#769FCD] text-white rounded-xl hover:bg-[#5a82b3] text-sm font-medium transition-all duration-200"
                 >
                   Ruaj
                 </button>
@@ -549,7 +670,7 @@ function ProfiliKompanise() {
                   onClick={() =>
                     setEditMode({ ...editMode, rrethKompanise: false })
                   }
-                  className="px-3 py-1 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 text-sm"
+                  className="px-4 py-2 bg-white border border-[#D6E6F2] text-gray-700 rounded-xl hover:bg-[#F7FBFC] text-sm transition-all duration-200"
                 >
                   Anulo
                 </button>
@@ -560,23 +681,18 @@ function ProfiliKompanise() {
             <textarea
               value={rrethKompanise}
               onChange={(e) => setRrethKompanise(e.target.value)}
-              placeholder="Shkruani rreth kompanisë..."
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-[120px]"
+              placeholder="Shkruani rreth kompanisë suaj, misionin, vizionin dhe vlerë që ofroni..."
+              className="w-full px-4 py-3 bg-[#F7FBFC] border border-[#D6E6F2] rounded-2xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent min-h-[150px] resize-none"
             />
           ) : (
-            <p className="text-gray-600 leading-relaxed">
-              {perdoruesiData?.rrethKompanise ||
-                "Nuk ka informacione të shtuar akoma."}
-            </p>
+            <div className="p-6 bg-[#F7FBFC] rounded-2xl border border-[#D6E6F2]">
+              <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+                {perdoruesiData?.rrethKompanise ||
+                  "Nuk ka informacione të shtuar akoma. Klikoni butonin e modifikimit për të shtuar një përshkrim të kompanisë suaj."}
+              </p>
+            </div>
           )}
         </div>
-      </div>
-
-      {/* Footer */}
-      <div className="bg-white rounded-2xl shadow-lg mt-2 p-6 text-center">
-        <p className="text-gray-600">
-          Përditësuar më: {new Date().toLocaleDateString("sq-AL")}
-        </p>
       </div>
     </div>
   );
