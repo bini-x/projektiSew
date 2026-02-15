@@ -78,12 +78,59 @@ function ListaPuneve() {
 
   return (
     <div>
-      <div className="bg-linear-to-br from-[#F7FBFC] to-[#B9D7EA] pb-10 backdrop-blur-sm shadow-[#0F4C75] ">
+      <div className="bg-gradient-to-br from-[#F7FBFC] to-[#B9D7EA] pb-16 backdrop-blur-sm">
         <Header />
-        <h1 className="mt-20 text-primary">E ardhmja jote fillon këtu</h1>
+        <div className="max-w-6xl mx-auto px-4 mt-20 mb-12">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-4">
+              E ardhmja jote fillon këtu
+            </h1>
+            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Zbulo mundësi të reja karriere dhe gjej punën që të përshtatet më së miri. 
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 max-w-4xl mx-auto">
+            <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-[#0f4c75] rounded-full flex items-center justify-center mb-4 mx-auto">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <h3 className="text-gray-800 font-semibold text-center mb-2">Punë në Të Gjithë Vendin</h3>
+              <p className="text-gray-600 text-sm text-center">Shpallje nga qytete dhe rajone të ndryshme</p>
+            </div>
+            <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-[#6d94c5] rounded-full flex items-center justify-center mb-4 mx-auto">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <h3 className="text-gray-800 font-semibold text-center mb-2">Proces i Thjeshtë</h3>
+              <p className="text-gray-600 text-sm text-center">Krijo profilin, gjej punën, apliko - E gjitha në një platformë</p>
+            </div>
+            <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-[#0f4c75] rounded-full flex items-center justify-center mb-4 mx-auto">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h3 className="text-gray-800 font-semibold text-center mb-2">Për Të Gjitha Nivelet</h3>
+              <p className="text-gray-600 text-sm text-center">Nga praktikantë deri te pozicione senior dhe menaxhuese</p>
+            </div>
+          </div>
+        </div>
         <Kerkimi />
       </div>
       <div className="m-10 md:m-20 lg:m-30">
+        {/* Section before job listings */}
+        <div className="text-center mb-8 -mt-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-700 mb-3">
+            Gjej punën që të përshtatet
+          </h2>
+          <p className="text-lg text-gray-500 max-w-3xl mx-auto">
+            Shfleto qindra shpallje nga kompanitë më të mira dhe apliko për pozicionin që të inspiron</p>
+        </div>
+
         <div className="shpalljaCard">
           {currentItems.map((shpallja) => (
             <ShpalljaCard key={shpallja._id} shpallja={shpallja} />

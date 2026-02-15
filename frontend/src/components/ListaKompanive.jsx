@@ -58,15 +58,15 @@ function ListaKompanive() {
           {/* Stats Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-10 max-w-4xl mx-auto">
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-md">
-              <p className="text-3xl font-bold text-primary mb-2">{kompanite.length}+</p>
+              <p className="text-3xl font-bold text-gray-800 mb-2">{kompanite.length}+</p>
               <p className="text-gray-600 text-sm">Kompani të Regjistruara</p>
             </div>
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-md">
-              <p className="text-3xl font-bold text-primary mb-2">500+</p>
+              <p className="text-3xl font-bold text-gray-800 mb-2">500+</p>
               <p className="text-gray-600 text-sm">Vende Pune Aktive</p>
             </div>
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-md">
-              <p className="text-3xl font-bold text-primary mb-2">1000+</p>
+              <p className="text-3xl font-bold text-gray-800 mb-2">1000+</p>
               <p className="text-gray-600 text-sm">Aplikantë të Regjistruar</p>
             </div>
           </div>

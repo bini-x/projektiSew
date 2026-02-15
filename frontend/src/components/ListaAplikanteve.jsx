@@ -58,15 +58,15 @@ function ListaAplikanteve() {
           {/* Stats Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-10 max-w-4xl mx-auto">
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-md">
-              <p className="text-3xl font-bold text-primary mb-2">{aplikantet.length}+</p>
+              <p className="text-3xl font-bold text-gray-800 mb-2">{aplikantet.length}+</p>
               <p className="text-gray-600 text-sm">Aplikantë të Regjistruar</p>
             </div>
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-md">
-              <p className="text-3xl font-bold text-primary mb-2">300+</p>
+              <p className="text-3xl font-bold text-gray-800 mb-2">300+</p>
               <p className="text-gray-600 text-sm">Profile të Plota</p>
             </div>
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-md">
-              <p className="text-3xl font-bold text-primary mb-2">150+</p>
+              <p className="text-3xl font-bold text-gray-800 mb-2">150+</p>
               <p className="text-gray-600 text-sm">Aplikime Aktive</p>
             </div>
           </div>
