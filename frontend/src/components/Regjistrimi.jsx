@@ -24,6 +24,49 @@ function Regjistrimi() {
     konfirmoFjalekalimin: "",
   });
 
+  const validatePassword = (password) => {
+    // At least 8 characters
+    if (password.length < 8) {
+      showAlert("Fjalëkalimi duhet të jetë të paktën 8 karaktere", "warning");
+      return false;
+    }
+
+    // Contains uppercase and lowercase
+    if (!/[a-z]/.test(password) || !/[A-Z]/.test(password)) {
+      showAlert(
+        "Fjalëkalimi duhet të përmbajë shkronja të vogla dhe të mëdha",
+        "warning",
+      );
+      return false;
+    }
+
+    // Contains at least one number or symbol
+    if (!/[0-9!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      showAlert(
+        "Fjalëkalimi duhet të përmbajë të paktën 1 numër ose simbol",
+        "warning",
+      );
+      return false;
+    }
+
+    // No spaces
+    if (/\s/.test(password)) {
+      showAlert("Fjalëkalimi nuk duhet të përmbajë hapësira", "warning");
+      return false;
+    }
+
+    return true;
+  };
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      showAlert("Ju lutem shkruani një email të vlefshëm", "warning");
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -31,49 +74,80 @@ function Regjistrimi() {
       let dataToSend;
 
       if (!tipiPerdoruesit) {
-        showAlert("Zgjedh tipin", "info");
+        showAlert("Ju lutem zgjidhni tipin e përdoruesit", "warning");
         return;
       }
 
       if (tipiPerdoruesit === "aplikant") {
+        // Validate all fields
         if (
-          dataAplikant.emri === "" ||
-          dataAplikant.mbiemri === "" ||
-          dataAplikant.email === "" ||
-          dataAplikant.fjalekalimi === "" ||
-          dataAplikant.konfirmoFjalekalimin === ""
+          !dataAplikant.emri.trim() ||
+          !dataAplikant.mbiemri.trim() ||
+          !dataAplikant.email.trim() ||
+          !dataAplikant.fjalekalimi ||
+          !dataAplikant.konfirmoFjalekalimin
         ) {
-          showAlert("Plotesoni te gjitha fushat", "info");
+          showAlert("Ju lutem plotësoni të gjitha fushat", "warning");
           return;
         }
+
+        // Validate email
+        if (!validateEmail(dataAplikant.email)) {
+          return;
+        }
+
+        // Validate passwords match
         if (dataAplikant.fjalekalimi !== dataAplikant.konfirmoFjalekalimin) {
-          showAlert(
-            "Fushat fjalekalimi dhe konfirmo fjalekalimin nuk jane te njejta!",
-            "info",
-          );
+          showAlert("Fjalëkalimet nuk përputhen!", "warning");
           return;
         }
+
+        // Validate password strength
+        if (!validatePassword(dataAplikant.fjalekalimi)) {
+          return;
+        }
+
         dataToSend = {
           tipiPerdoruesit: "aplikant",
-          emri: dataAplikant.emri,
-          mbiemri: dataAplikant.mbiemri,
-          email: dataAplikant.email,
+          emri: dataAplikant.emri.trim(),
+          mbiemri: dataAplikant.mbiemri.trim(),
+          email: dataAplikant.email.trim().toLowerCase(),
           fjalekalimi: dataAplikant.fjalekalimi,
         };
       } else if (tipiPerdoruesit === "punedhenes") {
+        // Validate all fields
+        if (
+          !dataPunedhenesi.kompania.trim() ||
+          !dataPunedhenesi.email.trim() ||
+          !dataPunedhenesi.fjalekalimi ||
+          !dataPunedhenesi.konfirmoFjalekalimin
+        ) {
+          showAlert("Ju lutem plotësoni të gjitha fushat", "warning");
+          return;
+        }
+
+        // Validate email
+        if (!validateEmail(dataPunedhenesi.email)) {
+          return;
+        }
+
+        // Validate passwords match
         if (
           dataPunedhenesi.fjalekalimi !== dataPunedhenesi.konfirmoFjalekalimin
         ) {
-          showAlert(
-            "Fushat fjalekalimi dhe konfirmo fjalekalimin nuk jane te njejta!",
-          );
+          showAlert("Fjalëkalimet nuk përputhen!", "warning");
+          return;
+        }
+
+        // Validate password strength
+        if (!validatePassword(dataPunedhenesi.fjalekalimi)) {
           return;
         }
 
         dataToSend = {
           tipiPerdoruesit: "punedhenes",
-          kompania: dataPunedhenesi.kompania,
-          email: dataPunedhenesi.email,
+          kompania: dataPunedhenesi.kompania.trim(),
+          email: dataPunedhenesi.email.trim().toLowerCase(),
           fjalekalimi: dataPunedhenesi.fjalekalimi,
         };
       }
@@ -84,20 +158,33 @@ function Regjistrimi() {
       );
 
       if (response.data.success) {
-        showAlert(response.data.message, "success");
+        showAlert(
+          "Regjistrimi u krye me sukses! Ju lutem verifikoni email-in tuaj.",
+          "success",
+        );
 
         if (tipiPerdoruesit === "aplikant") {
           localStorage.setItem("emailForVerification", dataAplikant.email);
         } else if (tipiPerdoruesit === "punedhenes") {
           localStorage.setItem("emailForVerification", dataPunedhenesi.email);
         }
-        navigate("/verifiko");
+
+        setTimeout(() => {
+          navigate("/verifiko");
+        }, 1500);
       }
     } catch (err) {
-      if (err.response.data.error.includes("ekziston")) {
-        showAlert("Perdoruesi ekziston!", "error");
-      }
       console.log("err: ", err);
+
+      if (err.response?.data?.error) {
+        if (err.response.data.error.includes("ekziston")) {
+          showAlert("Ky përdorues ekziston tashmë!", "error");
+        } else {
+          showAlert(err.response.data.error, "error");
+        }
+      } else {
+        showAlert("Diçka shkoi keq. Ju lutem provoni përsëri.", "error");
+      }
     }
   };
 
@@ -195,7 +282,7 @@ function Regjistrimi() {
               ].map((field) => (
                 <div key={field.id} className="grid grid-cols-1 gap-1">
                   <label htmlFor={field.id} className="text-sm sm:text-base">
-                    {field.label}
+                    {field.label} <span className="text-red-500">*</span>
                   </label>
                   <input
                     id={field.id}
@@ -208,9 +295,24 @@ function Regjistrimi() {
                         [field.id]: e.target.value,
                       })
                     }
+                    required
                   />
                 </div>
               ))}
+
+              {/* Password requirements info */}
+              <div className="bg-blue-50 rounded-lg p-3 border border-blue-100 text-xs">
+                <p className="font-semibold text-blue-900 mb-1">
+                  Kërkesat për fjalëkalimin:
+                </p>
+                <ul className="text-blue-700 space-y-0.5 list-disc list-inside">
+                  <li>Të paktën 8 karaktere</li>
+                  <li>Shkronja të vogla dhe të mëdha</li>
+                  <li>Të paktën 1 numër ose simbol</li>
+                  <li>Pa hapësira</li>
+                </ul>
+              </div>
+
               <div className="pt-2">
                 <button
                   type="submit"
@@ -257,7 +359,7 @@ function Regjistrimi() {
               ].map((field) => (
                 <div key={field.id} className="grid grid-cols-1 gap-1">
                   <label htmlFor={field.id} className="text-sm sm:text-base">
-                    {field.label}
+                    {field.label} <span className="text-red-500">*</span>
                   </label>
                   <input
                     id={field.id}
@@ -270,9 +372,24 @@ function Regjistrimi() {
                         [field.id]: e.target.value,
                       })
                     }
+                    required
                   />
                 </div>
               ))}
+
+              {/* Password requirements info */}
+              <div className="bg-blue-50 rounded-lg p-3 border border-blue-100 text-xs">
+                <p className="font-semibold text-blue-900 mb-1">
+                  Kërkesat për fjalëkalimin:
+                </p>
+                <ul className="text-blue-700 space-y-0.5 list-disc list-inside">
+                  <li>Të paktën 8 karaktere</li>
+                  <li>Shkronja të vogla dhe të mëdha</li>
+                  <li>Të paktën 1 numër ose simbol</li>
+                  <li>Pa hapësira</li>
+                </ul>
+              </div>
+
               <div className="pt-2">
                 <button
                   type="submit"

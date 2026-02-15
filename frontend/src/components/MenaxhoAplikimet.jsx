@@ -16,8 +16,10 @@ import {
   faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import Perdoruesi from "../PerdoruesiContext";
+import { useAlert } from "../contexts/AlertContext";
 
 function MenaxhoAplikimet() {
+  const { showAlert } = useAlert();
   const { perdoruesiData } = Perdoruesi.usePerdoruesi();
   const [shpalljaData, setShpalljaData] = useState([]);
   const [aplikimet, setAplikimet] = useState([]);
@@ -45,6 +47,7 @@ function MenaxhoAplikimet() {
         }
       } catch (error) {
         console.error(error);
+        showAlert("Gabim gjatë ngarkimit të aplikimeve", "error");
       }
     };
 
@@ -83,8 +86,67 @@ function MenaxhoAplikimet() {
     });
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const allowedTypes = [
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ];
+
+    if (!allowedTypes.includes(file.type)) {
+      showAlert("Ju lutem ngarkoni vetëm skedarë PDF ose Word", "warning");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      showAlert(
+        "Madhësia e skedarit është shumë e madhe. Maksimumi 5MB",
+        "warning",
+      );
+      return;
+    }
+
+    setCvFile(file);
+    showAlert("Skedari u zgjodh me sukses", "success");
+  };
+
   const ruajNdryshimet = async (e) => {
     e.preventDefault();
+
+    // Validation
+    if (!aplikimiKlikuar.emriAplikantit?.trim()) {
+      showAlert("Ju lutem shkruani emrin", "warning");
+      return;
+    }
+
+    if (!aplikimiKlikuar.mbiemriAplikantit?.trim()) {
+      showAlert("Ju lutem shkruani mbiemrin", "warning");
+      return;
+    }
+
+    if (!aplikimiKlikuar.emailAplikantit?.trim()) {
+      showAlert("Ju lutem shkruani email-in", "warning");
+      return;
+    }
+
+    if (!aplikimiKlikuar.nrTelefonit?.trim()) {
+      showAlert("Ju lutem shkruani numrin e telefonit", "warning");
+      return;
+    }
+
+    if (!aplikimiKlikuar.eksperienca?.trim()) {
+      showAlert("Ju lutem zgjidhni nivelin e eksperiencës", "warning");
+      return;
+    }
+
+    if (!aplikimiKlikuar.letraMotivuese?.trim()) {
+      showAlert("Ju lutem shkruani letrën motivuese", "warning");
+      return;
+    }
+
     try {
       const formData = new FormData();
       formData.append("emriAplikantit", aplikimiKlikuar.emriAplikantit);
@@ -109,12 +171,13 @@ function MenaxhoAplikimet() {
             a._id === aplikimiKlikuar._id ? response.data.data : a,
           ),
         );
-        alert("Ndryshimet u ruajten");
+        showAlert("Ndryshimet u ruajten me sukses!", "success");
         setAplikimiKlikuar(null);
         setCvFile(null);
       }
     } catch (error) {
       console.error(error);
+      showAlert("Gabim gjatë ruajtjes së ndryshimeve", "error");
     }
   };
 
@@ -363,7 +426,7 @@ function MenaxhoAplikimet() {
             </table>
           </div>
 
-          {/* Pjesa e mobile responsive*/}
+          {/* Mobile responsive section */}
           <div className="lg:hidden divide-y divide-gray-200">
             {filteredData.map((aplikimi) => {
               const shpallja = shpalljaData.find(
@@ -459,7 +522,7 @@ function MenaxhoAplikimet() {
 
       {aplikimiKlikuar && (
         <div className="fixed inset-0 bg-black/20 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg w-fit overflow-y-auto shadow-xl">
+          <div className="bg-white rounded-lg w-fit overflow-y-auto shadow-xl max-h-[90vh]">
             <div className="bg-[#f8f8f9] p-6 flex justify-between items-center">
               <h2 className="text-xl font-bold">Modifiko Aplikimin</h2>
               <button
@@ -481,7 +544,7 @@ function MenaxhoAplikimet() {
                       htmlFor="emriAplikantit"
                       className="block text-sm font-medium text-gray-600 mb-2"
                     >
-                      Emri
+                      Emri <span className="text-red-500">*</span>
                     </label>
                     <input
                       id="emriAplikantit"
@@ -490,6 +553,7 @@ function MenaxhoAplikimet() {
                       onChange={modifikoAplikimin}
                       className="input-ShpalljaProfil"
                       placeholder="Sheno Emrin"
+                      required
                     />
                   </div>
 
@@ -498,7 +562,7 @@ function MenaxhoAplikimet() {
                       htmlFor="mbiemriAplikantit"
                       className="block text-sm font-medium text-gray-600 mb-2"
                     >
-                      Mbiemri
+                      Mbiemri <span className="text-red-500">*</span>
                     </label>
                     <input
                       id="mbiemriAplikantit"
@@ -507,6 +571,7 @@ function MenaxhoAplikimet() {
                       onChange={modifikoAplikimin}
                       className="input-ShpalljaProfil"
                       placeholder="Sheno Mbiemrin"
+                      required
                     />
                   </div>
                 </div>
@@ -516,7 +581,7 @@ function MenaxhoAplikimet() {
                     htmlFor="emailAplikantit"
                     className="block text-sm font-medium text-gray-600 mb-2"
                   >
-                    Email
+                    Email <span className="text-red-500">*</span>
                   </label>
                   <input
                     id="emailAplikantit"
@@ -525,6 +590,7 @@ function MenaxhoAplikimet() {
                     onChange={modifikoAplikimin}
                     className="input-ShpalljaProfil"
                     placeholder="email@shembull.com"
+                    required
                   />
                 </div>
 
@@ -533,7 +599,7 @@ function MenaxhoAplikimet() {
                     htmlFor="nrTelefonit"
                     className="block text-sm font-medium text-gray-600 mb-2"
                   >
-                    Nr. Telefonit
+                    Nr. Telefonit <span className="text-red-500">*</span>
                   </label>
                   <input
                     id="nrTelefonit"
@@ -542,6 +608,7 @@ function MenaxhoAplikimet() {
                     onChange={modifikoAplikimin}
                     className="input-ShpalljaProfil"
                     placeholder="+383 XX XXX XXX"
+                    required
                   />
                 </div>
 
@@ -550,7 +617,7 @@ function MenaxhoAplikimet() {
                     htmlFor="eksperienca"
                     className="block text-sm font-medium text-gray-600 mb-2"
                   >
-                    Eksperienca
+                    Eksperienca <span className="text-red-500">*</span>
                   </label>
                   <input
                     id="eksperienca"
@@ -559,6 +626,7 @@ function MenaxhoAplikimet() {
                     onChange={modifikoAplikimin}
                     className="input-ShpalljaProfil"
                     placeholder="3 vjet"
+                    required
                   />
                 </div>
 
@@ -567,7 +635,7 @@ function MenaxhoAplikimet() {
                     htmlFor="letraMotivuese"
                     className="block text-sm font-medium text-gray-600 mb-2"
                   >
-                    Letra Motivuese
+                    Letra Motivuese <span className="text-red-500">*</span>
                   </label>
                   <textarea
                     id="letraMotivuese"
@@ -576,6 +644,7 @@ function MenaxhoAplikimet() {
                     rows="5"
                     className="input-ShpalljaProfil"
                     placeholder="Shkruaj letrën motivuese..."
+                    required
                   />
                 </div>
                 <div>
@@ -589,9 +658,14 @@ function MenaxhoAplikimet() {
                     id="cvFile"
                     type="file"
                     accept=".pdf,.doc,.docx"
-                    onChange={(e) => setCvFile(e.target.files[0])}
+                    onChange={handleFileChange}
                     className="w-full p-2 border border-gray-300 rounded"
                   />
+                  {cvFile && (
+                    <p className="text-sm text-green-600 mt-2">
+                      ✓ Skedari i zgjedhur: {cvFile.name}
+                    </p>
+                  )}
                   {aplikimiKlikuar.emriFileCv && (
                     <div className="text-sm text-gray-500 mt-1">
                       CV aktuale:{" "}

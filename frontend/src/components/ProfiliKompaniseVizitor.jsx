@@ -227,14 +227,10 @@ const ProfiliKompaniseVizitor = () => {
           </div>
 
           <div className="pt-5 pb-4 px-2">
-            <div className="flex justify-end">
-              <button className="px-4 py-2 bg-white hover:border text-gray-700 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium">
-                Visit website
-              </button>
-            </div>
+            <div className="flex justify-end"></div>
 
             <div className="ml-8">
-              <h1 className="text-3xl text-left font-bold text-gray-900 mb-2">
+              <h1 className="text-3xl text-left font-bold text-gray-900 mt-10">
                 {profileData?.kompania || "Kompania"}
               </h1>
               <p className="text-gray-600 mb-4 max-w-2xl line-clamp-2">
@@ -497,4 +493,3 @@ const ProfiliKompaniseVizitor = () => {
 };
 
 export default ProfiliKompaniseVizitor;
-
