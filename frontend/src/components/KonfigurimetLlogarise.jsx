@@ -409,10 +409,7 @@ function KonfigurimetLlogarise() {
 
               {/* Submit button */}
               <div className="pt-4">
-                <button
-                  type="submit"
-                  className="w-full bg-linear-to-r from-[#0F4C75] to-[#3282B8] hover:from-[#3282B8] hover:to-[#0F4C75] text-white font-medium py-3 px-4 rounded-lg transition duration-200 focus:outline-none focus:ring-2 focus:ring-[#3282B8] focus:ring-offset-2 shadow-md"
-                >
+                <button type="submit" className="publikoPune">
                   Përditëso të dhënat
                 </button>
               </div>

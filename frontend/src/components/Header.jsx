@@ -122,6 +122,9 @@ function Header() {
 
   const isPunedhenes = perdoruesiData?.tipiPerdoruesit === "punedhenes";
 
+  // Check if we're on BallinaMysafir (root path with no user)
+  const isBallinaMysafir = location.pathname === "/" && !perdoruesiData;
+
   // Check if current path matches the link
   const isActive = (path) => {
     return location.pathname === path;
@@ -330,18 +333,37 @@ function Header() {
             </>
           ) : (
             <>
-              <Link
-                to="/kycja"
-                className="px-5 py-2.5 border-2 border-[#0F4C75] rounded-xl text-[#0F4C75] font-semibold hover:bg-[#0F4C75] hover:text-white transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
-              >
-                Kycu/Regjistrohu
-              </Link>
-              <Link
-                to="/kycja"
-                className="px-5 py-2.5 bg-linear-to-r from-[#0F4C75] to-[#3282B8] rounded-xl text-white font-semibold hover:from-[#3282B8] hover:to-[#0F4C75] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
-              >
-                Publiko Pune
-              </Link>
+              {isBallinaMysafir ? (
+                <>
+                  <Link
+                    to="/kycja"
+                    className="px-8 py-3 bg-white border border-white rounded-xl text-[#0F4C75] font-semibold hover:bg-transparent hover:text-white transition-all duration-300"
+                  >
+                    Kycu/Regjistrohu
+                  </Link>
+                  <Link
+                    to="/kycja"
+                    className="px-8 py-3 bg-transparent border border-white rounded-xl text-white font-semibold hover:bg-white hover:text-[#0F4C75] transition-all duration-300"
+                  >
+                    Publiko Pune
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/kycja"
+                    className="px-5 py-2.5 border-2 border-[#0F4C75] rounded-xl text-[#0F4C75] font-semibold hover:bg-[#0F4C75] hover:text-white transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+                  >
+                    Kycu/Regjistrohu
+                  </Link>
+                  <Link
+                    to="/kycja"
+                    className="px-5 py-2.5 bg-gradient-to-r from-[#0F4C75] to-[#3282B8] rounded-xl text-white font-semibold hover:from-[#3282B8] hover:to-[#0F4C75] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                  >
+                    Publiko Pune
+                  </Link>
+                </>
+              )}
             </>
           )}
         </div>
@@ -489,20 +511,41 @@ function Header() {
               </div>
             ) : (
               <div className="mt-4 border-t border-gray-200 pt-4 flex flex-col gap-3">
-                <Link
-                  to="/kycja"
-                  className="px-5 py-3 border-2 border-[#0F4C75] rounded-xl text-[#0F4C75] font-semibold text-center hover:bg-[#0F4C75] hover:text-white transition-all duration-300 transform hover:scale-[1.02]"
-                  onClick={closeMenu}
-                >
-                  Kycu/Regjistrohu
-                </Link>
-                <Link
-                  to="/kycja"
-                  className="px-5 py-3 bg-linear-to-r from-[#0F4C75] to-[#3282B8] rounded-xl text-white font-semibold text-center hover:from-[#3282B8] hover:to-[#0F4C75] transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-xl"
-                  onClick={closeMenu}
-                >
-                  Publiko Pune
-                </Link>
+                {isBallinaMysafir ? (
+                  <>
+                    <Link
+                      to="/kycja"
+                      className="px-5 py-3 bg-white border border-white rounded-xl text-[#0F4C75] font-semibold text-center hover:bg-transparent hover:text-white transition-all duration-300 transform hover:scale-[1.02]"
+                      onClick={closeMenu}
+                    >
+                      Kycu/Regjistrohu
+                    </Link>
+                    <Link
+                      to="/kycja"
+                      className="px-5 py-3 bg-transparent border border-white rounded-xl text-white font-semibold text-center hover:bg-white hover:text-[#0F4C75] transition-all duration-300 transform hover:scale-[1.02]"
+                      onClick={closeMenu}
+                    >
+                      Publiko Pune
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      to="/kycja"
+                      className="px-5 py-3 border-2 border-[#0F4C75] rounded-xl text-[#0F4C75] font-semibold text-center hover:bg-[#0F4C75] hover:text-white transition-all duration-300 transform hover:scale-[1.02]"
+                      onClick={closeMenu}
+                    >
+                      Kycu/Regjistrohu
+                    </Link>
+                    <Link
+                      to="/kycja"
+                      className="px-5 py-3 bg-gradient-to-r from-[#0F4C75] to-[#3282B8] rounded-xl text-white font-semibold text-center hover:from-[#3282B8] hover:to-[#0F4C75] transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-xl"
+                      onClick={closeMenu}
+                    >
+                      Publiko Pune
+                    </Link>
+                  </>
+                )}
               </div>
             )}
           </nav>

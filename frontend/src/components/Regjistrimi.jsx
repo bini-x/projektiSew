@@ -316,7 +316,7 @@ function Regjistrimi() {
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="butoniKycjeRegjistrim w-full h-10 sm:h-12 text-sm sm:text-base"
+                  className="publikoPune w-full h-10 sm:h-12 text-sm sm:text-base"
                 >
                   Regjistrohu
                 </button>
@@ -408,9 +408,11 @@ function Regjistrimi() {
             >
               ← Ballina
             </Link>
-            
+
             <div className="grid gap-1">
-               <p className="text-center text-sm  text-gray-600">Keni Llogari?</p>
+              <p className="text-center text-sm  text-gray-600">
+                Keni Llogari?
+              </p>
               <Link
                 to="/kycja"
                 className="h-10 sm:h-12 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-all flex items-center justify-center"
