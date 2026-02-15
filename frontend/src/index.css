@@ -128,4 +128,134 @@
   .tabela {
     @apply flex flex-col lg:flex-row items-start lg:items-center justify-between mb-6 border-b border-gray-200 gap-4;
   }
+
+  /* Header White Text Styles for Hero Background */
+
+  /* Add spacing to header in hero section */
+  .header-white-text {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  /* Force all text elements to be white */
+  .header-white-text a,
+  .header-white-text button,
+  .header-white-text span {
+    color: white !important;
+  }
+
+  /* Logo text should be white - override gradient */
+  .header-white-text .bg-clip-text {
+    background: white !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+  }
+
+  .header-white-text .text-transparent {
+    color: white !important;
+  }
+
+  /* Make sure logo icon is white */
+  .header-white-text svg {
+    color: white !important;
+  }
+
+  /* Navigation links hover underline - make it white */
+  .header-white-text nav a .absolute {
+    background: white !important;
+  }
+
+  /* Profile button and hover effects */
+  .header-white-text button:hover {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+  }
+
+  /* Login/Signup buttons */
+  .header-white-text a[class*="border-"] {
+    border-color: white !important;
+    color: white !important;
+  }
+
+  .header-white-text a[class*="border-"]:hover {
+    background-color: white !important;
+    color: #0f4c75 !important;
+  }
+
+  /* Gradient button styling */
+  .header-white-text a[class*="bg-linear"] {
+    background: rgba(255, 255, 255, 0.25) !important;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.4) !important;
+    color: white !important;
+  }
+
+  .header-white-text a[class*="bg-linear"]:hover {
+    background: white !important;
+    color: #0f4c75 !important;
+  }
+
+  /* CRITICAL: Dropdown menu - reset styles and allow original hover states */
+  .header-white-text .absolute.right-0 {
+    background-color: white !important;
+  }
+
+  .header-white-text .absolute.right-0 a,
+  .header-white-text .absolute.right-0 button,
+  .header-white-text .absolute.right-0 span,
+  .header-white-text .absolute.right-0 p {
+    color: #374151 !important;
+  }
+
+  /* Allow hover states to work in dropdown - remove !important for hover */
+  .header-white-text .absolute.right-0 a:hover,
+  .header-white-text .absolute.right-0 button:hover {
+    background: linear-gradient(
+      to right,
+      rgba(15, 76, 117, 0.05),
+      rgba(50, 130, 184, 0.05)
+    ) !important;
+    color: #0f4c75 !important;
+  }
+
+  /* Dropdown icons - keep blue color */
+  .header-white-text .absolute.right-0 svg {
+    color: #0f4c75 !important;
+  }
+
+  /* Icon background hover effects */
+  .header-white-text .absolute.right-0 .group:hover .bg-\[\#0F4C75\]\/10 {
+    background-color: rgba(15, 76, 117, 0.2) !important;
+  }
+
+  /* Red logout button hover */
+  .header-white-text .absolute.right-0 .hover\:bg-red-50:hover {
+    background-color: #fef2f2 !important;
+  }
+
+  .header-white-text .absolute.right-0 .hover\:text-red-600:hover {
+    color: #dc2626 !important;
+  }
+
+  .header-white-text .absolute.right-0 .text-red-600 {
+    color: #dc2626 !important;
+  }
+
+  /* Header text colors in dropdown */
+  .header-white-text .absolute.right-0 .text-gray-500 {
+    color: #6b7280 !important;
+  }
+
+  .header-white-text .absolute.right-0 .text-zinc-800 {
+    color: #27272a !important;
+  }
+
+  .header-white-text .absolute.right-0 .text-zinc-700 {
+    color: #3f3f46 !important;
+  }
+
+  /* Mobile menu should stay normal */
+  .header-white-text + div {
+    color: #374151 !important;
+  }
 }

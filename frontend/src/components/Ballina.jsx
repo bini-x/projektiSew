@@ -9,7 +9,6 @@ import Perdoruesi from "../PerdoruesiContext";
 import BallinaPundhenesit from "./BallinaPundhenesit";
 import { useNavigate } from "react-router-dom";
 
-
 function Ballina() {
   const navigate = useNavigate();
   const { perdoruesiData } = Perdoruesi.usePerdoruesi();
@@ -55,112 +54,130 @@ function Ballina() {
   }, [perdoruesiData]);
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-white">
+    <div className="relative min-h-screen overflow-hidden bg-[#F5F7F8]">
       {perdoruesiData?.tipiPerdoruesit === "punedhenes" ? (
         <BallinaPundhenesit />
       ) : (
         <>
-          <Header />
-
-          {/* Hero Section with Background Image */}
-          <div className="relative h-[550px] overflow-hidden">
+          {/* Header with Hero Background - Combined Section */}
+          <div className="relative overflow-hidden">
             {/* Background Image with Overlay */}
-            <div 
+            <div
               className="absolute inset-0 bg-cover bg-center"
               style={{
                 backgroundImage: `url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80')`,
               }}
             >
-              {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-r from-[#0f4c75]/90 via-[#0f4c75]/85 to-[#6d94c5]/80" />
-              
+              {/* linear Overlay */}
+              <div className="absolute inset-0 bg-linear-to-r from-[#0f4c75]/90 via-[#0f4c75]/85 to-[#6d94c5]/80" />
+
               {/* Diagonal Pattern Overlay */}
-              <div 
+              <div
                 className="absolute inset-0 opacity-10"
                 style={{
-                  backgroundImage: `repeating-linear-gradient(
+                  backgroundImage: `repeating-linear-linear(
                     45deg,
                     transparent,
                     transparent 10px,
                     rgba(255, 255, 255, 0.05) 10px,
                     rgba(255, 255, 255, 0.05) 20px
-                  )`
+                  )`,
                 }}
               />
             </div>
 
-            {/* Content Container */}
-            <div className="relative h-full max-w-7xl mx-auto px-6 lg:px-8">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 h-full items-center">
-                
-                {/* Left Side - Text Content */}
-                <div className="text-white z-10 pt-12 lg:pt-0">
-                  <h1 className="text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-                    Gjeni Punën e<br />
-                    Ëndrrave Tuaja
-                  </h1>
-                  <p className="text-xl lg:text-2xl mb-10 text-white/95 max-w-xl leading-relaxed">
-                    Lidhuni me mundësi të shkëlqyera karriere në kompani të njohura të Kosovës
-                  </p>
-                  
-                  <div className="flex flex-wrap gap-4 mb-16">
-                    <button
-                      onClick={() => navigate("/ListaPuneve")}
-                      className="px-8 py-4 bg-white text-[#0f4c75] font-semibold rounded-lg hover:bg-gray-50 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
-                    >
-                      Shfleto Punët
-                    </button>
-                    <button
-                      onClick={() => navigate("/Rreth-Nesh")}
-                      className="px-8 py-4 bg-transparent text-white font-semibold rounded-lg border-2 border-white hover:bg-white hover:text-[#0f4c75] transition-all duration-300"
-                    >
-                      Mëso Më Shumë
-                    </button>
+            {/* Header - with relative positioning and white text */}
+            <div className="relative z-10 header-white-text">
+              <Header />
+            </div>
+
+            {/* Hero Content */}
+            <div className="relative h-[600px]">
+              {/* Content Container */}
+              <div className="relative h-full max-w-7xl mx-auto px-6 lg:px-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 h-full items-center">
+                  {/* Left Side - Text Content */}
+                  <div className="text-white z-10 pt-12 lg:pt-0">
+                    <h1 className="text-left text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                      Gjeni Punën e<br />
+                      Ëndrrave Tuaja
+                    </h1>
+                    <p className="text-xl lg:text-2xl mb-10 text-white/95 max-w-xl leading-relaxed">
+                      Lidhuni me mundësi të shkëlqyera karriere në kompani të
+                      njohura të Kosovës
+                    </p>
+
+                    <div className="flex flex-wrap gap-4 mb-16">
+                      <button
+                        onClick={() => navigate("/ListaPuneve")}
+                        className="px-8 py-4 bg-white text-primary font-semibold rounded-lg hover:bg-gray-50 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                      >
+                        Shfleto Punët
+                      </button>
+                      <button
+                        onClick={() => navigate("/ListaKompanive")}
+                        className="px-8 py-4 bg-transparent text-white font-semibold rounded-lg border border-white hover:bg-white hover:text-primary transition-all duration-300"
+                      >
+                        Shfleto Kompanitë
+                      </button>
+                    </div>
+
+                    {/* Stats Section with increased bottom padding */}
+                    <div className="grid grid-cols-3 gap-8 pb-16">
+                      <div className="py-4">
+                        <div className="text-3xl font-bold mb-3">
+                          Punë të Verifikuara
+                        </div>
+                        <div className="text-sm text-white/90 font-medium leading-relaxed pb-2">
+                          Vetëm oferta të besueshme
+                        </div>
+                      </div>
+                      <div className="py-4">
+                        <div className="text-3xl font-bold mb-3">
+                          100% Falas
+                        </div>
+                        <div className="text-sm text-white/90 font-medium leading-relaxed pb-2">
+                          Pa tarifa të fshehura
+                        </div>
+                      </div>
+                      <div className="py-4">
+                        <div className="text-3xl font-bold mb-3">
+                          Mbështetje 24/7
+                        </div>
+                        <div className="text-sm text-white/90 font-medium leading-relaxed pb-2">
+                          Jemi këtu për ty
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
-                  {/* Stats Section */}
-                  <div className="grid grid-cols-3 gap-8">
-                    <div>
-                      <div className="text-3xl font-bold mb-2">Punë të Verifikuara</div>
-                      <div className="text-sm text-white/90 font-medium">Vetëm oferta të besueshme</div>
-                    </div>
-                    <div>
-                      <div className="text-3xl font-bold mb-2">100% Falas </div>
-                      <div className="text-sm text-white/90 font-medium">Pa tarifa të fshehura</div>
-                    </div>
-                    <div>
-                      <div className="text-3xl font-bold mb-2">Mbështetje 24/7</div>
-                      <div className="text-sm text-white/90 font-medium">Jemi këtu për ty</div>
-                    </div>
+                  {/* Right Side - Professional Image */}
+                  <div className="hidden lg:flex relative h-full items-end justify-end">
+                    <div
+                      className="w-full max-w-md h-[600px] bg-contain bg-bottom bg-no-repeat"
+                      style={{
+                        backgroundImage: `url('https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80')`,
+                        filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.4))",
+                      }}
+                    />
                   </div>
-                </div>
-
-                {/* Right Side - Professional Image */}
-                <div className="hidden lg:flex relative h-full items-end justify-end">
-                  <div 
-                    className="w-full max-w-md h-[500px] bg-contain bg-bottom bg-no-repeat"
-                    style={{
-                      backgroundImage: `url('https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80')`,
-                      filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.4))',
-                    }}
-                  />
                 </div>
               </div>
             </div>
           </div>
 
           {/* Search Section - Below Hero, Separate */}
-          <div className="bg-white py-8 px-4 shadow-sm">
+          <div className="py-8 px-4">
             <div className="max-w-5xl mx-auto">
               <Kerkimi />
             </div>
           </div>
 
           {/* Features Section */}
-          <div className="py-20 px-4 bg-gradient-to-b from-gray-50 to-white">
+          <div className="py-20 px-4 ">
             <div className="max-w-7xl mx-auto">
               <div className="text-center mb-16">
-                <h2 className="text-4xl font-bold text-[#0f4c75] mb-4">
+                <h2 className="text-4xl font-bold text-gray-800 mb-4">
                   Pse të Zgjedhni Punesohu?
                 </h2>
                 <p className="text-xl text-gray-600 max-w-2xl mx-auto">
@@ -169,46 +186,85 @@ function Ballina() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
-                <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-[#0f4c75]/20 group">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#0f4c75] to-[#6d94c5] rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-primary/20 group">
+                  <div className="w-16 h-16 bg-linear-to-br from-primary to-secondary rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <svg
+                      className="w-8 h-8 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                      />
                     </svg>
                   </div>
-                  <h3 className="text-2xl font-semibold mb-4 text-gray-900">Kërkim i Thjeshtë</h3>
+                  <h3 className="text-2xl font-semibold mb-4 text-gray-900">
+                    Kërkim i Thjeshtë
+                  </h3>
                   <p className="text-gray-600 leading-relaxed">
-                    Gjeni punën ideale me filtrat tanë të avancuar dhe platformën intuitive që kursen kohën tuaj
+                    Gjeni punën ideale me filtrat tanë të avancuar dhe
+                    platformën intuitive që kursen kohën tuaj
                   </p>
                 </div>
 
-                <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-[#6d94c5]/20 group">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#6d94c5] to-[#0f4c75] rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-secondary/20 group">
+                  <div className="w-16 h-16 bg-linear-to-br from- to-primary rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <svg
+                      className="w-8 h-8 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                      />
                     </svg>
                   </div>
-                  <h3 className="text-2xl font-semibold mb-4 text-gray-900">Kompani të Verifikuara</h3>
+                  <h3 className="text-2xl font-semibold mb-4 text-gray-900">
+                    Kompani të Verifikuara
+                  </h3>
                   <p className="text-gray-600 leading-relaxed">
-                    Bashkëpunojmë vetëm me kompani të verifikuara dhe të besueshme që ofrojnë mundësi reale
+                    Bashkëpunojmë vetëm me kompani të verifikuara dhe të
+                    besueshme që ofrojnë mundësi reale
                   </p>
                 </div>
 
-                <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-[#0f4c75]/20 group">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#0f4c75] to-[#6d94c5] rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-primary/20 group">
+                  <div className="w-16 h-16 bg-linear-to-br from-primary to-secondary rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <svg
+                      className="w-8 h-8 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 10V3L4 14h7v7l9-11h-7z"
+                      />
                     </svg>
                   </div>
-                  <h3 className="text-2xl font-semibold mb-4 text-gray-900">Aplikim i Shpejtë</h3>
+                  <h3 className="text-2xl font-semibold mb-4 text-gray-900">
+                    Aplikim i Shpejtë
+                  </h3>
                   <p className="text-gray-600 leading-relaxed">
-                    Aplikoni për pozicione me vetëm disa klikime dhe merrni përgjigje të shpejta nga punëdhënësit
+                    Aplikoni për pozicione me vetëm disa klikime dhe merrni
+                    përgjigje të shpejta nga punëdhënësit
                   </p>
                 </div>
               </div>
 
               {/* Job Listings Title */}
-              <div className="mb-10">
-                <h2 className="text-4xl font-bold text-[#0f4c75] mb-3">
+              <div>
+                <h2 className="text-4xl font-bold text-gray-800 mb-3">
                   Pozicione të Reja të Punës
                 </h2>
                 <p className="text-xl text-gray-600">
@@ -219,11 +275,11 @@ function Ballina() {
           </div>
 
           {/* Job Cards Section */}
-          <div className="pb-20 px-4 bg-white">
+          <div className="pb-20 px-4">
             <div className="shpalljaCard max-w-7xl mx-auto">
               {shpalljaData.slice(0, 9).map((shpallja, index) => {
                 return (
-                  <div 
+                  <div
                     key={shpallja._id}
                     className="animate-fade-in-card"
                     style={{ animationDelay: `${index * 0.1}s` }}
@@ -235,8 +291,18 @@ function Ballina() {
               {shpalljaData.length === 0 && (
                 <div className="col-span-full">
                   <div className="text-center p-20 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-300">
-                    <svg className="w-24 h-24 text-gray-400 mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    <svg
+                      className="w-24 h-24 text-gray-400 mx-auto mb-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={1.5}
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                      />
                     </svg>
                     <h3 className="text-2xl font-semibold text-gray-700 mb-3">
                       {kerkoParams.toString()
@@ -257,7 +323,7 @@ function Ballina() {
               <div className="flex justify-center mt-16">
                 <button
                   type="button"
-                  className="px-12 py-4 bg-[#0f4c75] hover:bg-[#0a3652] text-white text-lg font-semibold rounded-xl shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+                  className="px-12 py-4 bg-primary hover:bg-[#0a3652] text-white text-lg font-semibold rounded-xl shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
                   onClick={() => navigate("/ListaPuneve")}
                 >
                   Shfaq Më Shumë Punë
@@ -272,3 +338,4 @@ function Ballina() {
 }
 
 export default Ballina;
+
