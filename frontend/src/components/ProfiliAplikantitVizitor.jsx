@@ -226,25 +226,6 @@ const ProfiliAplikantitVizitor = () => {
                     </span>
                   </div>
                 )}
-
-                {profileData.email && (
-                  <div className="flex items-center gap-2">
-                    <FaEnvelope size={14} style={{ color: "#5A7A99" }} />
-                    <span>{profileData.email}</span>
-                  </div>
-                )}
-                {profileData.nrTelefonit && (
-                  <div className="flex items-center gap-2">
-                    <FaPhone size={14} style={{ color: "#5A7A99" }} />
-                    <span>{profileData.nrTelefonit}</span>
-                  </div>
-                )}
-                {eksperiencat.length > 0 && (
-                  <div className="flex items-center gap-2">
-                    <FaBriefcase size={14} style={{ color: "#5A7A99" }} />
-                    <span>{eksperiencat.length} pervoja</span>
-                  </div>
-                )}
               </div>
             </div>
           </div>

@@ -622,64 +622,67 @@ function ProfiliAplikantit() {
         {/* Cover Banner with SVG */}
         <div className="h-32 relative overflow-hidden">
           <svg
-              className="absolute inset-0 w-full h-full"
-              viewBox="0 0 1440 320"
-              preserveAspectRatio="xMidYMid slice"
-              xmlns="http://www.w3.org/2000/svg"
-              style={{ zIndex: 1 }}
-            >
-              <defs>
-                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop
-                    offset="0%"
-                    style={{ stopColor: "#3a3a3a", stopOpacity: 1 }}
-                  />
-                  <stop
-                    offset="100%"
-                    style={{ stopColor: "#4a4a4a", stopOpacity: 1 }}
-                  />
-                </linearGradient>
-                <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop
-                    offset="0%"
-                    style={{ stopColor: "#4a4a4a", stopOpacity: 1 }}
-                  />
-                  <stop
-                    offset="100%"
-                    style={{ stopColor: "#5a5a5a", stopOpacity: 1 }}
-                  />
-                </linearGradient>
-                <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop
-                    offset="0%"
-                    style={{ stopColor: "#5a5a5a", stopOpacity: 1 }}
-                  />
-                  <stop
-                    offset="100%"
-                    style={{ stopColor: "#6a6a6a", stopOpacity: 1 }}
-                  />
-                </linearGradient>
-              </defs>
+            className="absolute inset-0 w-full h-full"
+            viewBox="0 0 1440 320"
+            preserveAspectRatio="xMidYMid slice"
+            xmlns="http://www.w3.org/2000/svg"
+            style={{ zIndex: 1 }}
+          >
+            <defs>
+              <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop
+                  offset="0%"
+                  style={{ stopColor: "#3a3a3a", stopOpacity: 1 }}
+                />
+                <stop
+                  offset="100%"
+                  style={{ stopColor: "#4a4a4a", stopOpacity: 1 }}
+                />
+              </linearGradient>
+              <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop
+                  offset="0%"
+                  style={{ stopColor: "#4a4a4a", stopOpacity: 1 }}
+                />
+                <stop
+                  offset="100%"
+                  style={{ stopColor: "#5a5a5a", stopOpacity: 1 }}
+                />
+              </linearGradient>
+              <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop
+                  offset="0%"
+                  style={{ stopColor: "#5a5a5a", stopOpacity: 1 }}
+                />
+                <stop
+                  offset="100%"
+                  style={{ stopColor: "#6a6a6a", stopOpacity: 1 }}
+                />
+              </linearGradient>
+            </defs>
 
-              <path
-                fill="url(#grad1)"
-                d="M0,96L48,112C96,128,192,160,288,165.3C384,171,480,149,576,128C672,107,768,85,864,90.7C960,96,1056,128,1152,138.7C1248,149,1344,139,1392,133.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-                opacity="0.8"
-              />
-              <path
-                fill="url(#grad2)"
-                d="M0,160L48,170.7C96,181,192,203,288,197.3C384,192,480,160,576,149.3C672,139,768,149,864,165.3C960,181,1056,203,1152,197.3C1248,192,1344,160,1392,144L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-                opacity="0.6"
-              />
-              <path
-                fill="url(#grad3)"
-                d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,213.3C672,224,768,224,864,213.3C960,203,1056,181,1152,165.3C1248,149,1344,139,1392,133.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-                opacity="0.4"
-              />
-            </svg>
+            <path
+              fill="url(#grad1)"
+              d="M0,96L48,112C96,128,192,160,288,165.3C384,171,480,149,576,128C672,107,768,85,864,90.7C960,96,1056,128,1152,138.7C1248,149,1344,139,1392,133.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+              opacity="0.8"
+            />
+            <path
+              fill="url(#grad2)"
+              d="M0,160L48,170.7C96,181,192,203,288,197.3C384,192,480,160,576,149.3C672,139,768,149,864,165.3C960,181,1056,203,1152,197.3C1248,192,1344,160,1392,144L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+              opacity="0.6"
+            />
+            <path
+              fill="url(#grad3)"
+              d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,213.3C672,224,768,224,864,213.3C960,203,1056,181,1152,165.3C1248,149,1344,139,1392,133.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+              opacity="0.4"
+            />
+          </svg>
         </div>
 
-        <div className="px-8 pb-8 -mt-16" style={{ position: "relative", zIndex: 10 }}>
+        <div
+          className="px-8 pb-8 -mt-16"
+          style={{ position: "relative", zIndex: 10 }}
+        >
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
             {/* Profile Photo */}
             <div className="relative group">
@@ -800,7 +803,7 @@ function ProfiliAplikantit() {
               ) : (
                 <>
                   <div className="flex items-start justify-between flex-wrap gap-4 mb-4 mt-3">
-                    <div >
+                    <div>
                       <h1 className="text-3xl font-bold text-gray-900">
                         {perdoruesiData?.emri || perdoruesiData?.kompania}{" "}
                         {perdoruesiData?.mbiemri}
@@ -809,9 +812,11 @@ function ProfiliAplikantit() {
                         <p className="text-[#769FCD] text-lg font-medium mt-1">
                           {perdoruesiData.profesioni}
                         </p>
-                      ):(<p className="text-gray-400 text-lg font-medium mt-1">
+                      ) : (
+                        <p className="text-gray-400 text-lg font-medium mt-1">
                           Profesioni
-                        </p>)}
+                        </p>
+                      )}
                     </div>
                     <button
                       onClick={() => {
@@ -831,7 +836,7 @@ function ProfiliAplikantit() {
                     </button>
                   </div>
 
-                  <div className="space-y-2">                   
+                  <div className="space-y-2">
                     <div className="flex items-center gap-2 text-gray-600">
                       <div className="w-8 h-8 rounded-lg bg-[#F7FBFC] flex items-center justify-center">
                         <Mail size={16} className="text-[#769FCD]" />
@@ -903,7 +908,6 @@ function ProfiliAplikantit() {
                             className="w-full px-4 py-2.5 bg-white border border-[#D6E6F2] rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent text-sm"
                           />
                           <div className="flex gap-2 justify-end">
-                            
                             <button
                               onClick={() => setShfaqLinkeForm(false)}
                               className="px-4 py-2 bg-white border border-[#D6E6F2] text-gray-700 rounded-xl hover:bg-[#F7FBFC] text-sm transition-all duration-200"
@@ -933,7 +937,9 @@ function ProfiliAplikantit() {
         {/* Experience Section */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">Eksperienca</h2>
+            <h2 className="text-2xl font-bold text-gray-900">
+              Pervojat Profesionale
+            </h2>
             <button
               onClick={() => setShfaqFormenEksperienca(!shfaqFormenEksperienca)}
               className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#F7FBFC] hover:bg-[#D6E6F2] border border-[#D6E6F2] transition-all duration-200"
@@ -1037,14 +1043,13 @@ function ProfiliAplikantit() {
                   rows="3"
                 />
                 <div className="flex gap-3">
-                 
                   <button
                     onClick={() => setShfaqFormenEksperienca(false)}
                     className="px-6 py-2.5 bg-white border border-[#D6E6F2] text-gray-700 rounded-xl hover:bg-[#F7FBFC] transition-all duration-200"
                   >
                     Anulo
                   </button>
-                   <button
+                  <button
                     onClick={handleShtoEksperiencen}
                     className="px-6 py-2.5 bg-[#769FCD] text-white rounded-xl hover:bg-[#5a82b3] font-medium transition-all duration-200"
                   >
@@ -1208,14 +1213,13 @@ function ProfiliAplikantit() {
                   rows="3"
                 />
                 <div className="flex gap-3">
-                 
                   <button
                     onClick={() => setShfaqFormenEdukimi(false)}
                     className="px-6 py-2.5 bg-white border border-[#D6E6F2] text-gray-700 rounded-xl hover:bg-[#F7FBFC] transition-all duration-200"
                   >
                     Anulo
                   </button>
-                   <button
+                  <button
                     onClick={handleShtoEdukimin}
                     className="px-6 py-2.5 bg-[#769FCD] text-white rounded-xl hover:bg-[#5a82b3] font-medium transition-all duration-200"
                   >
@@ -1399,7 +1403,6 @@ function ProfiliAplikantit() {
                   className="w-full px-4 py-3 bg-white border border-[#D6E6F2] rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent"
                 />
                 <div className="flex gap-3">
-                  
                   <button
                     onClick={() => setShfaqFormenProjektet(false)}
                     className="px-6 py-2.5 bg-white border border-[#D6E6F2] text-gray-700 rounded-xl hover:bg-[#F7FBFC] transition-all duration-200"
@@ -1489,3 +1492,4 @@ function ProfiliAplikantit() {
 }
 
 export default ProfiliAplikantit;
+

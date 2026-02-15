@@ -56,7 +56,7 @@ const JobSearchIcon = ({ className = "" }) => (
   </svg>
 );
 
-function Header({ withlinear = false, forceNonHomePage = false }) {
+function Header({ withGradient = false, forceNonHomePage = false }) {
   const navigate = useNavigate();
   const location = useLocation();
   const { perdoruesiData, setPerdoruesiData } = Perdoruesi.usePerdoruesi();
@@ -156,7 +156,7 @@ function Header({ withlinear = false, forceNonHomePage = false }) {
           className={`absolute bottom-0 left-0 h-[3px] rounded-full transition-all duration-300 ease-out ${
             isHomePage
               ? "bg-white"
-              : "bg-linear-to-r from-[#0F4C75] via-[#3282B8] to-[#0F4C75]"
+              : "bg-gradient-to-r from-[#0F4C75] via-[#3282B8] to-[#0F4C75]"
           } ${
             active
               ? "w-full opacity-100"
@@ -174,13 +174,13 @@ function Header({ withlinear = false, forceNonHomePage = false }) {
         to={to}
         className={`relative text-base font-medium py-3 px-4 rounded-xl transition-all duration-300 flex items-center overflow-hidden ${
           active
-            ? "text-[#0F4C75] bg-linear-to-r from-[#0F4C75]/10 to-[#3282B8]/10 shadow-sm"
+            ? "text-[#0F4C75] bg-gradient-to-r from-[#0F4C75]/10 to-[#3282B8]/10 shadow-sm"
             : "text-zinc-700 hover:text-[#0F4C75] hover:bg-gray-50"
         }`}
         onClick={onClick}
       >
         {active && (
-          <span className="absolute left-0 top-0 bottom-0 w-1 bg-linear-to-b from-[#0F4C75] to-[#3282B8] rounded-r-full"></span>
+          <span className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#0F4C75] to-[#3282B8] rounded-r-full"></span>
         )}
         <span className="relative z-10">{children}</span>
       </Link>
@@ -190,7 +190,7 @@ function Header({ withlinear = false, forceNonHomePage = false }) {
   return (
     <>
       <div
-        className={`relative ${withlinear ? "bg-linear-to-r from-[#F7FBFC] via-[#D6E6F2] to-[#C8E8FA]" : ""}`}
+        className={`relative ${withGradient ? "bg-gradient-to-r from-[#F7FBFC] via-[#D6E6F2] to-[#C8E8FA]" : ""}`}
       >
         {/* Header Content */}
         <div
@@ -204,7 +204,7 @@ function Header({ withlinear = false, forceNonHomePage = false }) {
             </div>
             <div className="flex flex-col leading-none gap-0.5">
               <span
-                className={`text-[22px] tracking-tight font-bold ${isHomePage ? "text-white" : "bg-linear-to-r from-[#0F4C75] to-[#3282B8] bg-clip-text text-transparent"}`}
+                className={`text-[22px] tracking-tight font-bold ${isHomePage ? "text-white" : "bg-gradient-to-r from-[#0F4C75] to-[#3282B8] bg-clip-text text-transparent"}`}
               >
                 𝗣𝘂𝗻𝗲𝘀𝗼𝗵𝘂
               </span>
@@ -238,7 +238,7 @@ function Header({ withlinear = false, forceNonHomePage = false }) {
                           className="w-full h-full object-cover"
                         />
                       ) : (
-                        <div className="w-full h-full bg-linear-to-br from-[#0F4C75] to-[#3282B8] flex items-center justify-center">
+                        <div className="w-full h-full bg-gradient-to-br from-[#0F4C75] to-[#3282B8] flex items-center justify-center">
                           <User size={18} className="text-white" />
                         </div>
                       )}
@@ -274,7 +274,7 @@ function Header({ withlinear = false, forceNonHomePage = false }) {
                       <div className="py-2">
                         <Link
                           to={`/profili/${perdoruesiData._id}`}
-                          className="flex items-center px-4 py-3 text-zinc-700 font-medium hover:bg-linear-to-r hover:from-[#0F4C75]/5 hover:to-[#3282B8]/5 hover:text-[#0F4C75] transition-all duration-200 group"
+                          className="flex items-center px-4 py-3 text-zinc-700 font-medium hover:bg-gradient-to-r hover:from-[#0F4C75]/5 hover:to-[#3282B8]/5 hover:text-[#0F4C75] transition-all duration-200 group"
                           onClick={closeDropdown}
                         >
                           <div className="w-8 h-8 rounded-lg bg-[#0F4C75]/10 flex items-center justify-center mr-3 group-hover:bg-[#0F4C75]/20 group-hover:scale-110 transition-all duration-200">
@@ -289,7 +289,7 @@ function Header({ withlinear = false, forceNonHomePage = false }) {
                         {isPunedhenes ? (
                           <Link
                             to={`/profili/${perdoruesiData._id}/menaxhoShpalljet`}
-                            className="flex items-center px-4 py-3 text-zinc-700 font-medium hover:bg-linear-to-r hover:from-[#0F4C75]/5 hover:to-[#3282B8]/5 hover:text-[#0F4C75] transition-all duration-200 group"
+                            className="flex items-center px-4 py-3 text-zinc-700 font-medium hover:bg-gradient-to-r hover:from-[#0F4C75]/5 hover:to-[#3282B8]/5 hover:text-[#0F4C75] transition-all duration-200 group"
                             onClick={closeDropdown}
                           >
                             <div className="w-8 h-8 rounded-lg bg-[#0F4C75]/10 flex items-center justify-center mr-3 group-hover:bg-[#0F4C75]/20 group-hover:scale-110 transition-all duration-200">
@@ -303,7 +303,7 @@ function Header({ withlinear = false, forceNonHomePage = false }) {
                         ) : (
                           <Link
                             to={`/profili/${perdoruesiData._id}/menaxhoAplikimet`}
-                            className="flex items-center px-4 py-3 text-zinc-700 font-medium hover:bg-linear-to-r hover:from-[#0F4C75]/5 hover:to-[#3282B8]/5 hover:text-[#0F4C75] transition-all duration-200 group"
+                            className="flex items-center px-4 py-3 text-zinc-700 font-medium hover:bg-gradient-to-r hover:from-[#0F4C75]/5 hover:to-[#3282B8]/5 hover:text-[#0F4C75] transition-all duration-200 group"
                             onClick={closeDropdown}
                           >
                             <div className="w-8 h-8 rounded-lg bg-[#0F4C75]/10 flex items-center justify-center mr-3 group-hover:bg-[#0F4C75]/20 group-hover:scale-110 transition-all duration-200">
@@ -318,7 +318,7 @@ function Header({ withlinear = false, forceNonHomePage = false }) {
 
                         <Link
                           to={`/profili/${perdoruesiData._id}/konfigurimet`}
-                          className="flex items-center px-4 py-3 text-zinc-700 font-medium hover:bg-linear-to-r hover:from-[#0F4C75]/5 hover:to-[#3282B8]/5 hover:text-[#0F4C75] transition-all duration-200 group"
+                          className="flex items-center px-4 py-3 text-zinc-700 font-medium hover:bg-gradient-to-r hover:from-[#0F4C75]/5 hover:to-[#3282B8]/5 hover:text-[#0F4C75] transition-all duration-200 group"
                           onClick={closeDropdown}
                         >
                           <div className="w-8 h-8 rounded-lg bg-[#0F4C75]/10 flex items-center justify-center mr-3 group-hover:bg-[#0F4C75]/20 group-hover:scale-110 transition-all duration-200">
@@ -330,7 +330,7 @@ function Header({ withlinear = false, forceNonHomePage = false }) {
                         {!isPunedhenes && (
                           <Link
                             to={`/profili/${perdoruesiData._id}/punetRuajtura`}
-                            className="flex items-center px-4 py-3 text-zinc-700 font-medium hover:bg-linear-to-r hover:from-[#0F4C75]/5 hover:to-[#3282B8]/5 hover:text-[#0F4C75] transition-all duration-200 group"
+                            className="flex items-center px-4 py-3 text-zinc-700 font-medium hover:bg-gradient-to-r hover:from-[#0F4C75]/5 hover:to-[#3282B8]/5 hover:text-[#0F4C75] transition-all duration-200 group"
                             onClick={closeDropdown}
                           >
                             <div className="w-8 h-8 rounded-lg bg-[#0F4C75]/10 flex items-center justify-center mr-3 group-hover:bg-[#0F4C75]/20 group-hover:scale-110 transition-all duration-200">
@@ -384,7 +384,7 @@ function Header({ withlinear = false, forceNonHomePage = false }) {
                     </Link>
                     <Link
                       to="/kycja"
-                      className="px-5 py-2.5 bg-linear-to-r from-[#0F4C75] to-[#3282B8] rounded-xl text-white font-semibold hover:from-[#3282B8] hover:to-[#0F4C75] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                      className="px-5 py-2.5 bg-gradient-to-r from-[#0F4C75] to-[#3282B8] rounded-xl text-white font-semibold hover:from-[#3282B8] hover:to-[#0F4C75] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
                     >
                       Publiko Pune
                     </Link>
@@ -446,7 +446,7 @@ function Header({ withlinear = false, forceNonHomePage = false }) {
                           className="w-full h-full object-cover"
                         />
                       ) : (
-                        <div className="w-full h-full bg-linear-to-br from-[#0F4C75] to-[#3282B8] flex items-center justify-center">
+                        <div className="w-full h-full bg-gradient-to-br from-[#0F4C75] to-[#3282B8] flex items-center justify-center">
                           <User size={18} className="text-white" />
                         </div>
                       )}
@@ -532,7 +532,7 @@ function Header({ withlinear = false, forceNonHomePage = false }) {
                     handleCkycja();
                     closeMenu();
                   }}
-                  className="mt-4 bg-linear-to-r from-red-500 to-red-600 text-white px-4 py-3 rounded-xl font-semibold w-full hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+                  className="mt-4 bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-3 rounded-xl font-semibold w-full hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
                 >
                   <LogOut size={18} />
                   C'kycu
@@ -568,7 +568,7 @@ function Header({ withlinear = false, forceNonHomePage = false }) {
                     </Link>
                     <Link
                       to="/kycja"
-                      className="px-5 py-3 bg-linear-to-r from-[#0F4C75] to-[#3282B8] rounded-xl text-white font-semibold text-center hover:from-[#3282B8] hover:to-[#0F4C75] transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-xl"
+                      className="px-5 py-3 bg-gradient-to-r from-[#0F4C75] to-[#3282B8] rounded-xl text-white font-semibold text-center hover:from-[#3282B8] hover:to-[#0F4C75] transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-xl"
                       onClick={closeMenu}
                     >
                       Publiko Pune
