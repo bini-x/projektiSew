@@ -48,7 +48,7 @@ function BallinaMysafir() {
 
         if (params.toString()) {
           const response = await axios.get(
-            `http://localhost:3000/api/shpallja/kerko?${params.toString()}`,
+            `http://localhost:3000/api/kerkoShpalljen?${params.toString()}`,
           );
           if (response.data.success) {
             setShpalljaData(response.data.data || []);

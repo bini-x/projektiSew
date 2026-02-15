@@ -30,6 +30,7 @@ function ProfiliAplikantit() {
   const [newData, setNewData] = useState({
     emri: "",
     mbiemri: "",
+    profesioni: "",
     nrTelefonit: 0,
   });
   const [shfaqEditData, setShfaqEditData] = useState(false);
@@ -80,6 +81,7 @@ function ProfiliAplikantit() {
         emri: newData.emri,
         mbiemri: newData.mbiemri,
         nrTelefonit: newData.nrTelefonit,
+        profesioni: newData.profesioni,
       };
 
       const response = await axios.put(
@@ -734,6 +736,13 @@ function ProfiliAplikantit() {
                       {perdoruesiData?.emri || perdoruesiData?.kompania}{" "}
                       {perdoruesiData?.mbiemri}
                     </h1>
+                    <div className="flex items-center gap-2 text-gray-600">
+                      <div className="w-8 h-8 rounded-lg bg-[#F7FBFC] flex items-center justify-center">
+                        <Mail size={16} className="text-[#769FCD]" />
+                      </div>
+                      <p>{perdoruesiData.profesioni || "Profesioni"}</p>
+                    </div>
+
                     <button
                       onClick={() => {
                         setShfaqEditData(!shfaqEditData);

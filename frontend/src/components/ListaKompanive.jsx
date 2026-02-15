@@ -2,11 +2,67 @@ import { useEffect, useState } from "react";
 import Header from "./Header";
 import axios from "axios";
 import KompaniaCard from "./KompaniaCard";
-import Kerkimi from "./Kerkimi"
+import Kerkimi from "./Kerkimi";
+import { useSearchParams } from "react-router-dom";
 
 function ListaKompanive() {
+  const [shpalljaData, setShpalljaData] = useState([]);
   const [kompanite, setKompanite] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [kerkoParams] = useSearchParams();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/kompania/kompanite",
+        );
+        if (response.data.success) {
+          setKompanite(response.data.data);
+        }
+      } catch (err) {
+        console.error(err);
+        setShpalljaData([]);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [kerkoParams]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const params = new URLSearchParams(kerkoParams);
+
+        if (params.toString()) {
+          const response = await axios.get(
+            `http://localhost:3000/api/kerkoKompanine?${params.toString()}`,
+          );
+          if (response.data.success) {
+            setKompanite(response.data.data || []);
+          } else {
+            console.error("Gabim ne kerkim:  ", response.data.error);
+          }
+        } else {
+          const response = await axios.get(
+            "http://localhost:3000/api/kompania/kompanite",
+          );
+          if (response.data.success) {
+            setKompanite(response.data.data || []);
+          }
+        }
+      } catch (err) {
+        console.error(err);
+        setKompanite([]);
+      }
+    };
+
+    fetchData();
+  }, [kerkoParams]);
 
   const itemsPerPage = 6;
 
@@ -14,7 +70,7 @@ function ListaKompanive() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/kompania/kompanite"
+          "http://localhost:3000/api/kompania/kompanite",
         );
 
         if (response.data.success) {
@@ -29,56 +85,68 @@ function ListaKompanive() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/shpallja/kompania",
+        );
+        if (response.data.success) {
+          setShpalljaData(response.data.data);
+        }
+      } catch (err) {
+        console.error(err);
+        setShpalljaData([]);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const totalPages = Math.ceil(kompanite.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
-  const currentItems = kompanite.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  );
+  const currentItems = kompanite.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#F7FBFC] via-[#E3F2FD] to-[#B9D7EA]">
-
       <div className="pb-24 shadow-[#0F4C75]">
         <Header />
       </div>
 
       <div className="max-w-7xl mx-auto px-6 pb-24">
-
         {/* Hero Section */}
         <div className="text-center mb-25 ">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
             Kompanitë
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Zbulo kompanitë më të mira që ofrojnë mundësi pune në platformën tonë
+            Zbulo kompanitë më të mira që ofrojnë mundësi pune në platformën
+            tonë
           </p>
-          
+
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-10 max-w-4xl mx-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-2 gap-6 mt-10 max-w-4xl mx-auto">
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-md">
-              <p className="text-3xl font-bold text-gray-800 mb-2">{kompanite.length}+</p>
+              <p className="text-3xl font-bold text-gray-800 mb-2">
+                {kompanite.length}+
+              </p>
               <p className="text-gray-600 text-sm">Kompani të Regjistruara</p>
             </div>
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-md">
-              <p className="text-3xl font-bold text-gray-800 mb-2">500+</p>
+              <p className="text-3xl font-bold text-gray-800 mb-2">
+                {shpalljaData.length}+
+              </p>
               <p className="text-gray-600 text-sm">Vende Pune Aktive</p>
-            </div>
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-md">
-              <p className="text-3xl font-bold text-gray-800 mb-2">1000+</p>
-              <p className="text-gray-600 text-sm">Aplikantë të Regjistruar</p>
             </div>
           </div>
           <div className="mt-20">
-          <Kerkimi/>
+            <Kerkimi />
           </div>
         </div>
-        
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-
           {currentItems.map((k) => (
             <div
               key={k._id}
@@ -94,16 +162,12 @@ function ListaKompanive() {
               <KompaniaCard kompania={k} />
             </div>
           ))}
-
         </div>
 
         {totalPages > 1 && (
           <div className="flex justify-center items-center gap-3 mt-16">
-
             <button
-              onClick={() =>
-                setCurrentPage((prev) => Math.max(prev - 1, 1))
-              }
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
               disabled={currentPage === 1}
               className={`
                 w-9 h-9 rounded-full border transition
@@ -117,10 +181,7 @@ function ListaKompanive() {
               ‹
             </button>
 
-            {Array.from(
-              { length: totalPages },
-              (_, i) => i + 1
-            ).map((page) => (
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
               <button
                 key={page}
                 onClick={() => setCurrentPage(page)}
@@ -139,9 +200,7 @@ function ListaKompanive() {
 
             <button
               onClick={() =>
-                setCurrentPage((prev) =>
-                  Math.min(prev + 1, totalPages)
-                )
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
               }
               disabled={currentPage === totalPages}
               className={`
@@ -155,7 +214,6 @@ function ListaKompanive() {
             >
               ›
             </button>
-
           </div>
         )}
 
@@ -172,9 +230,7 @@ function ListaKompanive() {
             </div>
           </div>
         )}
-
       </div>
-
     </div>
   );
 }
