@@ -14,6 +14,7 @@ function Kerkimi() {
     kerko: "",
     lokacioniPunes: "",
     kategoriaPunes: "",
+    kompania: "",
   });
 
   const handleSubmit = (e) => {
@@ -31,6 +32,10 @@ function Kerkimi() {
 
     if (filters.kategoriaPunes.trim()) {
       params.append("kategoriaPunes", filters.kategoriaPunes.trim());
+    }
+
+    if (filters.kompania.trim()) {
+      params.append("kompania", filters.kompania.trim());
     }
 
     navigate(`${location.pathname}?${params.toString()}`);

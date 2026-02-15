@@ -56,7 +56,7 @@ const JobSearchIcon = ({ className = "" }) => (
   </svg>
 );
 
-function Header({ withGradient = false, forceNonHomePage = false }) {
+function Header() {
   const navigate = useNavigate();
   const location = useLocation();
   const { perdoruesiData, setPerdoruesiData } = Perdoruesi.usePerdoruesi();
@@ -64,9 +64,6 @@ function Header({ withGradient = false, forceNonHomePage = false }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileProfileOpen, setIsMobileProfileOpen] = useState(false);
   const dropdownRef = useRef(null);
-
-  // Check if we're on the home page
-  const isHomePage = forceNonHomePage ? false : location.pathname === "/";
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -125,6 +122,9 @@ function Header({ withGradient = false, forceNonHomePage = false }) {
 
   const isPunedhenes = perdoruesiData?.tipiPerdoruesit === "punedhenes";
 
+  // Check if we're on BallinaMysafir (root path with no user)
+  const isBallinaMysafir = location.pathname === "/" && !perdoruesiData;
+
   // Check if current path matches the link
   const isActive = (path) => {
     return location.pathname === path;
@@ -136,21 +136,13 @@ function Header({ withGradient = false, forceNonHomePage = false }) {
       <Link to={to} onClick={onClick} className="relative group py-2">
         <span
           className={`font-medium transition-colors duration-300 ${
-            isHomePage
-              ? "text-white"
-              : active
-                ? "text-[#0F4C75]"
-                : "text-zinc-700 hover:text-[#0F4C75]"
+            active ? "text-[#0F4C75]" : "text-zinc-700 hover:text-[#0F4C75]"
           }`}
         >
           {children}
         </span>
         <span
-          className={`absolute bottom-0 left-0 h-[3px] rounded-full transition-all duration-300 ease-out ${
-            isHomePage
-              ? "bg-white"
-              : "bg-gradient-to-r from-[#0F4C75] via-[#3282B8] to-[#0F4C75]"
-          } ${
+          className={`absolute bottom-0 left-0 h-[3px] bg-linear-to-r from-[#0F4C75] via-[#3282B8] to-[#0F4C75] rounded-full transition-all duration-300 ease-out ${
             active
               ? "w-full opacity-100"
               : "w-0 opacity-0 group-hover:w-full group-hover:opacity-100"
@@ -167,225 +159,222 @@ function Header({ withGradient = false, forceNonHomePage = false }) {
         to={to}
         className={`relative text-base font-medium py-3 px-4 rounded-xl transition-all duration-300 flex items-center overflow-hidden ${
           active
-            ? "text-[#0F4C75] bg-gradient-to-r from-[#0F4C75]/10 to-[#3282B8]/10 shadow-sm"
+            ? "text-[#0F4C75] bg-linear-to-r from-[#0F4C75]/10 to-[#3282B8]/10 shadow-sm"
             : "text-zinc-700 hover:text-[#0F4C75] hover:bg-gray-50"
         }`}
         onClick={onClick}
       >
         {active && (
-          <span className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#0F4C75] to-[#3282B8] rounded-r-full"></span>
+          <span className="absolute left-0 top-0 bottom-0 w-1 bg-linear-to-b from-[#0F4C75] to-[#3282B8] rounded-r-full"></span>
         )}
         <span className="relative z-10">{children}</span>
       </Link>
     );
   };
 
+  const kaFoto =
+    perdoruesiData?.foto && Object.keys(perdoruesiData?.foto).length > 0;
+
   return (
     <>
-      <div
-        className={`relative ${withGradient ? "bg-gradient-to-r from-[#F7FBFC] via-[#D6E6F2] to-[#EDF8FF]" : ""}`}
-      >
-        {/* Header Content */}
-        <div
-          className={`relative z-10 flex items-center justify-between w-full py-6 px-6 mx-auto text-base`}
-        >
-          <Link to="/" className="flex items-center gap-3 mr-8 group">
-            <div className="transform group-hover:scale-110 transition-all duration-300">
-              <JobSearchIcon
-                className={`${isHomePage ? "text-white" : "text-[#0F4C75]"} group-hover:text-[#3282B8] transition-colors duration-300`}
-              />
-            </div>
-            <div className="flex flex-col leading-none gap-0.5">
-              <span
-                className={`text-[22px] tracking-tight font-bold ${isHomePage ? "text-white" : "bg-gradient-to-r from-[#0F4C75] to-[#3282B8] bg-clip-text text-transparent"}`}
-              >
-                𝗣𝘂𝗻𝗲𝘀𝗼𝗵𝘂
-              </span>
-            </div>
-          </Link>
+      <div className="flex items-center justify-between w-full bg-transparent py-5 px-6 mx-auto text-base">
+        <Link to="/" className="flex items-center gap-3 mr-8 group">
+          <div className="transform group-hover:scale-110 transition-all duration-300">
+            <JobSearchIcon className="text-[#0F4C75] group-hover:text-[#3282B8] transition-colors duration-300" />
+          </div>
+          <div className="flex flex-col leading-none gap-0.5">
+            <span className="text-[22px]  bg-linear-to-r from-[#0F4C75] to-[#3282B8] bg-clip-text text-transparent tracking-tight">
+              𝗣𝘂𝗻𝗲𝘀𝗼𝗵𝘂
+            </span>
+          </div>
+        </Link>
 
-          <nav className="hidden md:flex space-x-8 items-center">
-            <NavLink to="/">Ballina</NavLink>
-            <NavLink to="/listaPuneve">Lista e Puneve</NavLink>
-            <NavLink to="/listaKompanive">Lista e Kompanive</NavLink>
-            <NavLink to="/listaAplikanteve">Lista e Aplikanteve</NavLink>
-            {isPunedhenes && <NavLink to="/publikopune">Publiko Pune</NavLink>}
-            <NavLink to="/rrethNesh">Rreth Nesh</NavLink>
-          </nav>
+        <nav className="hidden md:flex space-x-8 items-center">
+          <NavLink to="/">Ballina</NavLink>
+          <NavLink to="/listaPuneve">Lista e Puneve</NavLink>
+          <NavLink to="/listaKompanive">Lista e Kompanive</NavLink>
+          <NavLink to="/listaAplikanteve">Lista e Aplikanteve</NavLink>
+          {isPunedhenes && <NavLink to="/publikopune">Publiko Pune</NavLink>}
+          <NavLink to="/rrethNesh">Rreth Nesh</NavLink>
+        </nav>
 
-          <div className="hidden md:flex space-x-3 items-center ml-auto">
-            {perdoruesiData ? (
-              <>
-                <div className="relative" ref={dropdownRef}>
-                  <button
-                    onClick={toggleDropdown}
-                    className={`flex items-center space-x-3 px-4 py-2.5 rounded-xl transition-all duration-300 hover:shadow-sm group ${
-                      isHomePage ? "hover:bg-white/10" : "hover:bg-[#D6E6F2]"
-                    }`}
-                  >
-                    <div className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-300 bg-gray-200">
-                      {perdoruesiData?.foto ? (
-                        <img
-                          src={`http://localhost:3000/api/profili/${perdoruesiData._id}/foto`}
-                          alt="Profile"
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-[#0F4C75] to-[#3282B8] flex items-center justify-center">
-                          <User size={18} className="text-white" />
-                        </div>
-                      )}
-                    </div>
-                    <span
-                      className={`font-semibold text-sm ${isHomePage ? "text-white" : "text-zinc-700"}`}
-                    >
-                      {perdoruesiData.tipiPerdoruesit === "punedhenes"
-                        ? perdoruesiData.kompania
-                        : perdoruesiData.emri}
-                    </span>
-                    <FontAwesomeIcon
-                      icon={faChevronDown}
-                      className={`text-sm transition-transform duration-300 ${
-                        isHomePage ? "text-white/80" : "text-zinc-400"
-                      } ${isDropdownOpen ? "rotate-180" : ""}`}
-                    />
-                  </button>
-
-                  {isDropdownOpen && (
-                    <div className="absolute right-0 mt-3 w-72 bg-white rounded-2xl shadow-2xl border border-gray-100 py-2 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-300">
-                      <div className="px-4 py-3 border-b border-gray-100">
-                        <p className="text-xs text-gray-500 font-medium">
-                          Signed in as
-                        </p>
-                        <p className="text-sm font-semibold text-zinc-800 truncate">
-                          {perdoruesiData.tipiPerdoruesit === "punedhenes"
-                            ? perdoruesiData.kompania
-                            : perdoruesiData.emri}
-                        </p>
+        <div className="hidden md:flex space-x-3 items-center ml-auto">
+          {perdoruesiData ? (
+            <>
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  onClick={toggleDropdown}
+                  className="flex items-center space-x-3 px-4 py-2.5 rounded-xl hover:bg-[#D6E6F2] transition-all duration-300  hover:shadow-sm group"
+                >
+                  <div className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-300 bg-gray-200">
+                    {kaFoto ? (
+                      <img
+                        src={`http://localhost:3000/api/profili/${perdoruesiData._id}/foto`}
+                        alt="Profile"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-[#0F4C75] to-[#3282B8] flex items-center justify-center">
+                        <User size={18} className="text-white" />
                       </div>
+                    )}
+                  </div>
+                  <span className="text-zinc-700 font-semibold text-sm">
+                    {perdoruesiData.tipiPerdoruesit === "punedhenes"
+                      ? perdoruesiData.kompania
+                      : perdoruesiData.emri}
+                  </span>
+                  <FontAwesomeIcon
+                    icon={faChevronDown}
+                    className={`text-sm text-zinc-400 transition-transform duration-300 ${
+                      isDropdownOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
 
-                      <div className="py-2">
+                {isDropdownOpen && (
+                  <div className="absolute right-0 mt-3 w-72 bg-white rounded-2xl shadow-2xl border border-gray-100 py-2 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-300">
+                    <div className="px-4 py-3 border-b border-gray-100 ">
+                      <p className="text-xs text-gray-500 font-medium">
+                        Signed in as
+                      </p>
+                      <p className="text-sm font-semibold text-zinc-800 truncate">
+                        {perdoruesiData.tipiPerdoruesit === "punedhenes"
+                          ? perdoruesiData.kompania
+                          : perdoruesiData.emri}
+                      </p>
+                    </div>
+
+                    <div className="py-2">
+                      <Link
+                        to={`/profili/${perdoruesiData._id}`}
+                        className="flex items-center px-4 py-3 text-zinc-700 font-medium hover:bg-linear-to-r hover:from-[#0F4C75]/5 hover:to-[#3282B8]/5 hover:text-[#0F4C75] transition-all duration-200 group"
+                        onClick={closeDropdown}
+                      >
+                        <div className="w-8 h-8 rounded-lg bg-[#0F4C75]/10 flex items-center justify-center mr-3 group-hover:bg-[#0F4C75]/20 group-hover:scale-110 transition-all duration-200">
+                          <FontAwesomeIcon
+                            icon={faUser}
+                            className="text-[#0F4C75] text-sm"
+                          />
+                        </div>
+                        <span>Profili</span>
+                      </Link>
+
+                      {isPunedhenes ? (
                         <Link
-                          to={`/profili/${perdoruesiData._id}`}
-                          className="flex items-center px-4 py-3 text-zinc-700 font-medium hover:bg-gradient-to-r hover:from-[#0F4C75]/5 hover:to-[#3282B8]/5 hover:text-[#0F4C75] transition-all duration-200 group"
+                          to={`/profili/${perdoruesiData._id}/menaxhoShpalljet`}
+                          className="flex items-center px-4 py-3 text-zinc-700 font-medium hover:bg-linear-to-r hover:from-[#0F4C75]/5 hover:to-[#3282B8]/5 hover:text-[#0F4C75] transition-all duration-200 group"
                           onClick={closeDropdown}
                         >
                           <div className="w-8 h-8 rounded-lg bg-[#0F4C75]/10 flex items-center justify-center mr-3 group-hover:bg-[#0F4C75]/20 group-hover:scale-110 transition-all duration-200">
-                            <FontAwesomeIcon
-                              icon={faUser}
-                              className="text-[#0F4C75] text-sm"
+                            <SquareChartGantt
+                              size={16}
+                              className="text-[#0F4C75]"
                             />
                           </div>
-                          <span>Profili</span>
+                          <span>Menaxho Shpalljet</span>
                         </Link>
-
-                        {isPunedhenes ? (
-                          <Link
-                            to={`/profili/${perdoruesiData._id}/menaxhoShpalljet`}
-                            className="flex items-center px-4 py-3 text-zinc-700 font-medium hover:bg-gradient-to-r hover:from-[#0F4C75]/5 hover:to-[#3282B8]/5 hover:text-[#0F4C75] transition-all duration-200 group"
-                            onClick={closeDropdown}
-                          >
-                            <div className="w-8 h-8 rounded-lg bg-[#0F4C75]/10 flex items-center justify-center mr-3 group-hover:bg-[#0F4C75]/20 group-hover:scale-110 transition-all duration-200">
-                              <SquareChartGantt
-                                size={16}
-                                className="text-[#0F4C75]"
-                              />
-                            </div>
-                            <span>Menaxho Shpalljet</span>
-                          </Link>
-                        ) : (
-                          <Link
-                            to={`/profili/${perdoruesiData._id}/menaxhoAplikimet`}
-                            className="flex items-center px-4 py-3 text-zinc-700 font-medium hover:bg-gradient-to-r hover:from-[#0F4C75]/5 hover:to-[#3282B8]/5 hover:text-[#0F4C75] transition-all duration-200 group"
-                            onClick={closeDropdown}
-                          >
-                            <div className="w-8 h-8 rounded-lg bg-[#0F4C75]/10 flex items-center justify-center mr-3 group-hover:bg-[#0F4C75]/20 group-hover:scale-110 transition-all duration-200">
-                              <SquareChartGantt
-                                size={16}
-                                className="text-[#0F4C75]"
-                              />
-                            </div>
-                            <span>Menaxho Aplikimet</span>
-                          </Link>
-                        )}
-
+                      ) : (
                         <Link
-                          to={`/profili/${perdoruesiData._id}/konfigurimet`}
-                          className="flex items-center px-4 py-3 text-zinc-700 font-medium hover:bg-gradient-to-r hover:from-[#0F4C75]/5 hover:to-[#3282B8]/5 hover:text-[#0F4C75] transition-all duration-200 group"
+                          to={`/profili/${perdoruesiData._id}/menaxhoAplikimet`}
+                          className="flex items-center px-4 py-3 text-zinc-700 font-medium hover:bg-linear-to-r hover:from-[#0F4C75]/5 hover:to-[#3282B8]/5 hover:text-[#0F4C75] transition-all duration-200 group"
                           onClick={closeDropdown}
                         >
                           <div className="w-8 h-8 rounded-lg bg-[#0F4C75]/10 flex items-center justify-center mr-3 group-hover:bg-[#0F4C75]/20 group-hover:scale-110 transition-all duration-200">
-                            <Settings size={16} className="text-[#0F4C75]" />
+                            <SquareChartGantt
+                              size={16}
+                              className="text-[#0F4C75]"
+                            />
                           </div>
-                          <span>Konfigurimet</span>
+                          <span>Menaxho Aplikimet</span>
                         </Link>
+                      )}
 
-                        {!isPunedhenes && (
-                          <Link
-                            to={`/profili/${perdoruesiData._id}/punetRuajtura`}
-                            className="flex items-center px-4 py-3 text-zinc-700 font-medium hover:bg-gradient-to-r hover:from-[#0F4C75]/5 hover:to-[#3282B8]/5 hover:text-[#0F4C75] transition-all duration-200 group"
-                            onClick={closeDropdown}
-                          >
-                            <div className="w-8 h-8 rounded-lg bg-[#0F4C75]/10 flex items-center justify-center mr-3 group-hover:bg-[#0F4C75]/20 group-hover:scale-110 transition-all duration-200">
-                              <Heart size={16} className="text-[#0F4C75]" />
-                            </div>
-                            <span>Punet e Ruajtura</span>
-                          </Link>
-                        )}
-                      </div>
+                      <Link
+                        to={`/profili/${perdoruesiData._id}/konfigurimet`}
+                        className="flex items-center px-4 py-3 text-zinc-700 font-medium hover:bg-linear-to-r hover:from-[#0F4C75]/5 hover:to-[#3282B8]/5 hover:text-[#0F4C75] transition-all duration-200 group"
+                        onClick={closeDropdown}
+                      >
+                        <div className="w-8 h-8 rounded-lg bg-[#0F4C75]/10 flex items-center justify-center mr-3 group-hover:bg-[#0F4C75]/20 group-hover:scale-110 transition-all duration-200">
+                          <Settings size={16} className="text-[#0F4C75]" />
+                        </div>
+                        <span>Konfigurimet</span>
+                      </Link>
 
-                      <div className="border-t border-gray-100 pt-2 mt-2">
-                        <button
-                          type="button"
-                          className="w-full flex items-center px-4 py-3 text-zinc-700 font-medium hover:bg-red-50 hover:text-red-600 transition-all duration-200 group"
-                          onClick={handleCkycja}
+                      {!isPunedhenes && (
+                        <Link
+                          to={`/profili/${perdoruesiData._id}/punetRuajtura`}
+                          className="flex items-center px-4 py-3 text-zinc-700 font-medium hover:bg-linear-to-r hover:from-[#0F4C75]/5 hover:to-[#3282B8]/5 hover:text-[#0F4C75] transition-all duration-200 group"
+                          onClick={closeDropdown}
                         >
-                          <div className="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center mr-3 group-hover:bg-red-100 group-hover:scale-110 transition-all duration-200">
-                            <LogOut size={16} className="text-red-600" />
+                          <div className="w-8 h-8 rounded-lg bg-[#0F4C75]/10 flex items-center justify-center mr-3 group-hover:bg-[#0F4C75]/20 group-hover:scale-110 transition-all duration-200">
+                            <Heart size={16} className="text-[#0F4C75]" />
                           </div>
-                          <span>C'kycu</span>
-                        </button>
-                      </div>
+                          <span>Punet e Ruajtura</span>
+                        </Link>
+                      )}
                     </div>
-                  )}
-                </div>
-              </>
-            ) : (
-              <>
-                <Link
-                  to="/kycja"
-                  className={`px-5 py-2.5 border-2 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg ${
-                    isHomePage
-                      ? "border-white text-white hover:bg-white hover:text-[#0F4C75]"
-                      : "border-[#0F4C75] text-[#0F4C75] hover:bg-[#0F4C75] hover:text-white"
-                  }`}
-                >
-                  Kycu/Regjistrohu
-                </Link>
-                <Link
-                  to="/kycja"
-                  className={`px-5 py-2.5 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl ${
-                    isHomePage
-                      ? "bg-white/20 backdrop-blur-sm border-2 border-white/30 text-white hover:bg-white hover:text-[#0F4C75]"
-                      : "bg-gradient-to-r from-[#0F4C75] to-[#3282B8] text-white hover:from-[#3282B8] hover:to-[#0F4C75]"
-                  }`}
-                >
-                  Publiko Pune
-                </Link>
-              </>
-            )}
-          </div>
 
-          <button
-            className={`md:hidden text-2xl ml-auto transform hover:scale-110 transition-transform duration-200 ${
-              isHomePage ? "text-white" : "text-zinc-700"
-            } hover:text-[#0F4C75]`}
-            onClick={toggleMenu}
-            aria-label="Toggle menu"
-          >
-            <FontAwesomeIcon icon={isMenuOpen ? faTimes : faBars} />
-          </button>
+                    <div className="border-t border-gray-100 pt-2 mt-2">
+                      <button
+                        type="button"
+                        className="w-full flex items-center px-4 py-3 text-zinc-700 font-medium hover:bg-red-50 hover:text-red-600 transition-all duration-200 group"
+                        onClick={handleCkycja}
+                      >
+                        <div className="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center mr-3 group-hover:bg-red-100 group-hover:scale-110 transition-all duration-200">
+                          <LogOut size={16} className="text-red-600" />
+                        </div>
+                        <span>C'kycu</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </>
+          ) : (
+            <>
+              {isBallinaMysafir ? (
+                <>
+                  <Link
+                    to="/kycja"
+                    className="px-8 py-3 bg-white border border-white rounded-xl text-[#0F4C75] font-semibold hover:bg-transparent hover:text-white transition-all duration-300"
+                  >
+                    Kycu/Regjistrohu
+                  </Link>
+                  <Link
+                    to="/kycja"
+                    className="px-8 py-3 bg-transparent border border-white rounded-xl text-white font-semibold hover:bg-white hover:text-[#0F4C75] transition-all duration-300"
+                  >
+                    Publiko Pune
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/kycja"
+                    className="px-5 py-2.5 border-2 border-[#0F4C75] rounded-xl text-[#0F4C75] font-semibold hover:bg-[#0F4C75] hover:text-white transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+                  >
+                    Kycu/Regjistrohu
+                  </Link>
+                  <Link
+                    to="/kycja"
+                    className="px-5 py-2.5 bg-gradient-to-r from-[#0F4C75] to-[#3282B8] rounded-xl text-white font-semibold hover:from-[#3282B8] hover:to-[#0F4C75] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                  >
+                    Publiko Pune
+                  </Link>
+                </>
+              )}
+            </>
+          )}
         </div>
+
+        <button
+          className="md:hidden text-2xl ml-auto transform hover:scale-110 transition-transform duration-200 text-zinc-700 hover:text-[#0F4C75]"
+          onClick={toggleMenu}
+          aria-label="Toggle menu"
+        >
+          <FontAwesomeIcon icon={isMenuOpen ? faTimes : faBars} />
+        </button>
       </div>
 
       {isMenuOpen && (
@@ -421,7 +410,7 @@ function Header({ withGradient = false, forceNonHomePage = false }) {
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-300 bg-gray-200">
-                      {perdoruesiData?.foto ? (
+                      {kaFoto ? (
                         <img
                           src={`http://localhost:3000/api/profili/${perdoruesiData._id}/foto`}
                           alt="Profile"
@@ -514,7 +503,7 @@ function Header({ withGradient = false, forceNonHomePage = false }) {
                     handleCkycja();
                     closeMenu();
                   }}
-                  className="mt-4 bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-3 rounded-xl font-semibold w-full hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+                  className="mt-4 bg-linear-to-r from-red-500 to-red-600 text-white px-4 py-3 rounded-xl font-semibold w-full hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
                 >
                   <LogOut size={18} />
                   C'kycu
@@ -522,20 +511,41 @@ function Header({ withGradient = false, forceNonHomePage = false }) {
               </div>
             ) : (
               <div className="mt-4 border-t border-gray-200 pt-4 flex flex-col gap-3">
-                <Link
-                  to="/kycja"
-                  className="px-5 py-3 border-2 border-[#0F4C75] rounded-xl text-[#0F4C75] font-semibold text-center hover:bg-[#0F4C75] hover:text-white transition-all duration-300 transform hover:scale-[1.02]"
-                  onClick={closeMenu}
-                >
-                  Kycu/Regjistrohu
-                </Link>
-                <Link
-                  to="/kycja"
-                  className="px-5 py-3 bg-gradient-to-r from-[#0F4C75] to-[#3282B8] rounded-xl text-white font-semibold text-center hover:from-[#3282B8] hover:to-[#0F4C75] transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-xl"
-                  onClick={closeMenu}
-                >
-                  Publiko Pune
-                </Link>
+                {isBallinaMysafir ? (
+                  <>
+                    <Link
+                      to="/kycja"
+                      className="px-5 py-3 bg-white border border-white rounded-xl text-[#0F4C75] font-semibold text-center hover:bg-transparent hover:text-white transition-all duration-300 transform hover:scale-[1.02]"
+                      onClick={closeMenu}
+                    >
+                      Kycu/Regjistrohu
+                    </Link>
+                    <Link
+                      to="/kycja"
+                      className="px-5 py-3 bg-transparent border border-white rounded-xl text-white font-semibold text-center hover:bg-white hover:text-[#0F4C75] transition-all duration-300 transform hover:scale-[1.02]"
+                      onClick={closeMenu}
+                    >
+                      Publiko Pune
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      to="/kycja"
+                      className="px-5 py-3 border-2 border-[#0F4C75] rounded-xl text-[#0F4C75] font-semibold text-center hover:bg-[#0F4C75] hover:text-white transition-all duration-300 transform hover:scale-[1.02]"
+                      onClick={closeMenu}
+                    >
+                      Kycu/Regjistrohu
+                    </Link>
+                    <Link
+                      to="/kycja"
+                      className="px-5 py-3 bg-gradient-to-r from-[#0F4C75] to-[#3282B8] rounded-xl text-white font-semibold text-center hover:from-[#3282B8] hover:to-[#0F4C75] transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-xl"
+                      onClick={closeMenu}
+                    >
+                      Publiko Pune
+                    </Link>
+                  </>
+                )}
               </div>
             )}
           </nav>
