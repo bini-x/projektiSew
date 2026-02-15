@@ -121,6 +121,7 @@ const ProfiliAplikantitVizitor = () => {
     { key: "experience", label: "Pervoja" },
     { key: "education", label: "Edukimi" },
     { key: "projects", label: "Projektet" },
+    { key: "skills", label: "Aftesite" },
     { key: "info", label: "Informacione" },
   ];
 
@@ -218,6 +219,14 @@ const ProfiliAplikantitVizitor = () => {
                 {profileData.mbiemri || ""}
               </h1>
               <div className="flex flex-wrap items-center gap-6 text-sm text-gray-600">
+                {profileData.profesioni && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-[#769FCD] text-lg font-medium mt-1">
+                      {profileData.profesioni}
+                    </span>
+                  </div>
+                )}
+
                 {profileData.email && (
                   <div className="flex items-center gap-2">
                     <FaEnvelope size={14} style={{ color: "#5A7A99" }} />
@@ -433,6 +442,35 @@ const ProfiliAplikantitVizitor = () => {
                           </div>
                         </div>
                       </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === "skills" && (
+              <div>
+                <h2 className="text-lg font-bold text-gray-900 mb-6">
+                  Aftesite
+                </h2>
+                {!profileData.aftesite || profileData.aftesite.length === 0 ? (
+                  <p className="text-gray-500 text-center py-12">
+                    Nuk ka aftesi te shtuara
+                  </p>
+                ) : (
+                  <div className="flex flex-wrap gap-3">
+                    {profileData.aftesite.map((aftesi, index) => (
+                      <span
+                        key={index}
+                        className="px-4 py-2 rounded-full text-sm font-medium border border-gray-200 hover:shadow-md transition-shadow"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, #F7FBFC 0%, #D6E6F2 100%)",
+                          color: "#5A7A99",
+                        }}
+                      >
+                        {aftesi}
+                      </span>
                     ))}
                   </div>
                 )}

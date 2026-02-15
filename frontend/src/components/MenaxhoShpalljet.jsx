@@ -1,7 +1,6 @@
 import Header from "./Header";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   ArrowDownWideNarrow,
@@ -31,12 +30,13 @@ function MenaxhoShpalljet() {
   const { perdoruesiData } = Perdoruesi.usePerdoruesi();
   const [shpalljaData, setShpalljaData] = useState([]);
   const [shpalljaKlikuar, setShpalljaKlikuar] = useState(null);
-  const [filtrimiFaqes, setFiltrimiFaqes] = useState("Active");
+  const [filtrimiFaqes, setFiltrimiFaqes] = useState("Aktive");
   const [kerko, setKerko] = useState("");
   const [shfaqMeny, setShfaqMeny] = useState(null);
   const [menyRadhitjes, setMenyRadhitjes] = useState(false);
   const [sortimiDates, setSortimiDates] = useState("teRejat");
   const [isSaving, setIsSaving] = useState(false);
+  const [ndryshimiStatusit, setNdryshimiStatusit] = useState(false);
 
   const [aplikimet, setAplikimet] = useState([]);
   const [aplikimiKlikuar, setAplikimiKlikuar] = useState(null);
@@ -250,6 +250,7 @@ function MenaxhoShpalljet() {
               : aplikim,
           ),
         );
+        setNdryshimiStatusit(true);
       }
 
       await fetchShpalljet();
@@ -331,19 +332,19 @@ function MenaxhoShpalljet() {
         .toLowerCase()
         .includes(kerko.toLowerCase());
 
-      const isExpired = sh.status === "skaduar";
+      const kaSkaduara = sh.status === "skaduar";
 
-      if (filtrimiFaqes === "Active") {
-        return matchesSearch && !isExpired;
-      } else if (filtrimiFaqes === "Expired") {
-        return matchesSearch && isExpired;
+      if (filtrimiFaqes === "Aktive") {
+        return matchesSearch && !kaSkaduara;
+      } else if (filtrimiFaqes === "Te Skaduara") {
+        return matchesSearch && kaSkaduara;
       }
 
       return matchesSearch;
     }),
   );
 
-  const handleDownloadCv = async (aplikimiId, filename) => {
+  const handleDownloadCv = async (aplikimiId) => {
     try {
       window.open(
         `http://localhost:3000/api/shpallja/${aplikimiId}/download`,
@@ -370,7 +371,7 @@ function MenaxhoShpalljet() {
 
         <div className="tabela">
           <div className="flex space-x-8 overflow-x-auto pb-2 lg:pb-4">
-            {["Active", "Expired"].map((faqja) => (
+            {["Aktive", "Te Skaduara"].map((faqja) => (
               <button
                 key={faqja}
                 onClick={() => setFiltrimiFaqes(faqja)}
@@ -461,7 +462,7 @@ function MenaxhoShpalljet() {
                   <th className="tableHead">Lokacioni</th>
                   <th className="tableHead text-center">Orari</th>
 
-                  {filtrimiFaqes !== "Active" ? (
+                  {filtrimiFaqes !== "Aktive" ? (
                     <>
                       <th className="tableHead">Aplikimet ne Pritje</th>
                       <th className="tableHead">Aplikimet e Pranuara</th>
@@ -507,7 +508,7 @@ function MenaxhoShpalljet() {
                         {sh.numriNePritje} aplikant
                       </button>
                     </td>
-                    {filtrimiFaqes !== "Active" && (
+                    {filtrimiFaqes !== "Aktive" && (
                       <>
                         <td className="tableData">
                           <button
@@ -670,19 +671,30 @@ function MenaxhoShpalljet() {
       </div>
 
       {shpalljaKlikuar && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg w-fit overflow-y-auto shadow-xl max-h-[90vh]">
-            <div className="bg-[#f8f8f9] p-6 flex justify-between items-center">
-              <h2 className="text-xl font-bold">Modifiko Shpalljen</h2>
-              <button
-                onClick={() => setShpalljaKlikuar(null)}
-                className="cursor-pointer text-xl hover:text-gray-700"
-              >
-                <X size={24} />
-              </button>
+        <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setShpalljaKlikuar(null)}
+          ></div>
+          <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] w-full sm:w-3/4 md:w-2/3 lg:w-1/2 flex flex-col">
+            <div className="relative bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900 px-8 py-6 overflow-hidden">
+              <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:20px_20px]"></div>
+              <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl"></div>
+              <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl"></div>
+              <div className="relative flex justify-center items-center">
+                <h2 className="text-2xl font-bold text-white tracking-tight">
+                  Modifiko Shpalljen
+                </h2>
+                <button
+                  onClick={() => setShpalljaKlikuar(null)}
+                  className="absolute right-0 text-white/70 hover:text-white transition-all hover:bg-white/10 rounded-xl p-2 hover:rotate-90 duration-300"
+                >
+                  <X size={24} />
+                </button>
+              </div>
             </div>
 
-            <div className="p-6">
+            <div className="overflow-y-auto p-8">
               <form onSubmit={ruajNdryshimet} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
@@ -760,10 +772,12 @@ function MenaxhoShpalljet() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="labelTabela">Aftesite Primare</label>
+                  <div className="bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 p-5 rounded-xl border border-emerald-300 shadow-sm">
+                    <label className="labelTabela text-emerald-800">
+                      Aftesite Primare
+                    </label>
                     {shpalljaKlikuar.aftesitePrimare?.map((skill, index) => (
-                      <div key={index} className="flex items-center gap-2 mb-2">
+                      <div key={index} className="flex items-center gap-2 mb-3">
                         <input
                           type="text"
                           value={skill}
@@ -793,7 +807,7 @@ function MenaxhoShpalljet() {
                             });
                             showAlert("Aftësia u fshi", "success");
                           }}
-                          className="text-red-500 hover:text-red-700"
+                          className="text-red-500 hover:text-red-700 hover:bg-red-100 rounded-lg p-2 transition-all hover:scale-110"
                         >
                           <X size={18} />
                         </button>
@@ -815,16 +829,18 @@ function MenaxhoShpalljet() {
                           "info",
                         );
                       }}
-                      className="text-sm text-indigo-600 hover:text-indigo-800 mt-2"
+                      className="text-sm font-semibold text-emerald-700 hover:text-emerald-900 hover:bg-emerald-100 px-4 py-2 rounded-lg transition-all mt-1 inline-block"
                     >
                       + Shto aftesi primare
                     </button>
                   </div>
 
-                  <div>
-                    <label className="labelTabela">Aftesite Sekondare</label>
+                  <div className="bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 p-5 rounded-xl border border-amber-300 shadow-sm">
+                    <label className="labelTabela text-amber-800">
+                      Aftesite Sekondare
+                    </label>
                     {shpalljaKlikuar.aftesiteSekondare?.map((skill, index) => (
-                      <div key={index} className="flex items-center gap-2 mb-2">
+                      <div key={index} className="flex items-center gap-2 mb-3">
                         <input
                           type="text"
                           value={skill}
@@ -854,7 +870,7 @@ function MenaxhoShpalljet() {
                             });
                             showAlert("Aftësia u fshi", "success");
                           }}
-                          className="text-red-500 hover:text-red-700"
+                          className="text-red-500 hover:text-red-700 hover:bg-red-100 rounded-lg p-2 transition-all hover:scale-110"
                         >
                           <X size={18} />
                         </button>
@@ -876,18 +892,18 @@ function MenaxhoShpalljet() {
                           "info",
                         );
                       }}
-                      className="text-sm text-indigo-600 hover:text-indigo-800 mt-2"
+                      className="text-sm font-semibold text-amber-700 hover:text-amber-900 hover:bg-amber-100 px-4 py-2 rounded-lg transition-all mt-1 inline-block"
                     >
                       + Shto aftesi sekondare
                     </button>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6 border-t border-gray-200">
                   <button
                     type="button"
                     disabled={isSaving}
-                    className="publikoPune bg-red-500 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="publikoPune bg-red-500 hover:bg-red-600 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:shadow-lg hover:shadow-red-500/30"
                     onClick={() => fshijShpalljen(shpalljaKlikuar._id)}
                   >
                     Fshij Shpalljen
@@ -895,7 +911,7 @@ function MenaxhoShpalljet() {
                   <button
                     type="submit"
                     disabled={isSaving}
-                    className="publikoPune cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="publikoPune cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg transition-all"
                   >
                     {isSaving ? "Duke ruajtur..." : "Perfundo"}
                   </button>
@@ -1340,8 +1356,8 @@ function MenaxhoShpalljet() {
                 </div>
               </div>
 
-              {aplikimiKlikuar.status === "Ne_Pritje" &&
-                shpalljaZgjedhurPerAplikante?.status !== "skaduar" && (
+              {!ndryshimiStatusit &&
+                shpalljaZgjedhurPerAplikante?.status === "skaduar" && (
                   <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
                     <label
                       htmlFor="status"
@@ -1388,14 +1404,12 @@ function MenaxhoShpalljet() {
               >
                 Mbyll
               </button>
-              {aplikimiKlikuar.status === "Ne_Pritje" && (
-                <button
-                  onClick={ruajNdryshimetAplikimit}
-                  className="px-5 py-2.5 text-sm text-white font-semibold hover:text-black bg-primary hover:bg-white hover:border rounded-xl transition-all duration-200"
-                >
-                  Ruaj Ndryshimet
-                </button>
-              )}
+              <button
+                onClick={ruajNdryshimetAplikimit}
+                className="px-5 py-2.5 text-sm text-white font-semibold hover:text-black bg-primary hover:bg-white hover:border rounded-xl transition-all duration-200"
+              >
+                Ruaj Ndryshimet
+              </button>
             </div>
           </div>
         </div>
