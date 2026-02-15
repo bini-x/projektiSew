@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan, faPlus } from "@fortawesome/free-solid-svg-icons";
 import Header from "./Header";
 import { useAlert } from "../contexts/AlertContext";
+import Perdoruesi from "../PerdoruesiContext";
 
 function PublikoPune() {
   const navigate = useNavigate();
@@ -14,9 +15,11 @@ function PublikoPune() {
   const [aftesiaPrimareTanishme, setAftesiaPrimareTanishme] = useState("");
   const [aftesiteSekondare, setAftesiteSekondare] = useState([]);
   const [aftesiaSekondareTanishme, setAftesiaSekondareTanishme] = useState("");
+  const { perdoruesiData } = Perdoruesi.usePerdoruesi();
 
   const [formData, setFormData] = useState({
     emailKompanise: "",
+    emriKompanise: perdoruesiData.kompania,
     pozitaPunes: "",
     kategoriaPunes: "",
     lokacioniPunes: "",
@@ -105,6 +108,7 @@ function PublikoPune() {
 
     let dataToSend = {
       emailKompanise: formData.emailKompanise,
+      emriKompanise: formData.emriKompanise,
       pozitaPunes: formData.pozitaPunes,
       kategoriaPunes: formData.kategoriaPunes,
       lokacioniPunes: formData.lokacioniPunes,
@@ -135,6 +139,7 @@ function PublikoPune() {
 
       setFormData({
         emailKompanise: "",
+        emriKompanise: "",
         pozitaPunes: "",
         kategoriaPunes: "",
         lokacioniPunes: "",

@@ -4,7 +4,7 @@ const upload = require("../upload");
 const Aplikimi = require("../models/aplikimiSchema");
 const Shpallja = require("../models/shpalljaSchema");
 const Perdorues = require("../models/perdoruesSchema");
-const dergoMesazhin = require("../emailservice");
+const { dergoKonfirmimAplikimi, dergoStatusin } = require("../emailservice");
 
 router.post("/:id/aplikimi", upload.single("cvFile"), async (req, res) => {
   try {
@@ -69,10 +69,11 @@ router.post("/:id/aplikimi", upload.single("cvFile"), async (req, res) => {
     });
 
     await aplikimi.save();
-    await dergoMesazhin(
+    await dergoKonfirmimAplikimi(
       emailAplikantit,
-      "Aplikimi",
-      "Aplikimi u dergua me sukses!",
+      emriAplikantit,
+      shpallja.pozitaPunes,
+      shpallja.emriKompanise,
     );
 
     return res.status(200).json({
@@ -152,6 +153,7 @@ router.get("/:shpalljaId/aplikimet", async (req, res) => {
 router.put("/aplikimi/:id", upload.single("cvFile"), async (req, res) => {
   try {
     const aplikimiVjeter = await Aplikimi.findById(req.params.id);
+    const shpallja = await Shpallja.findById(aplikimiVjeter.shpalljaId);
     const updateData = { ...req.body };
 
     if (req.file) {
@@ -173,19 +175,23 @@ router.put("/aplikimi/:id", upload.single("cvFile"), async (req, res) => {
       aplikimiVjeter.status !== aplikimi.status &&
       aplikimi.status === "Pranuar"
     ) {
-      dergoMesazhin(
+      dergoStatusin(
         aplikimi.emailAplikantit,
-        "Njoftim rreth aplikimit tuaj",
-        "Urime, jeni pranuar!",
+        aplikimi.emriAplikantit,
+        shpallja.pozitaPunes,
+        shpallja.emriKompanise,
+        "Pranuar",
       );
     } else if (
       aplikimiVjeter.status !== aplikimi.status &&
       aplikimi.status === "Refuzuar"
     ) {
-      dergoMesazhin(
+      dergoStatusin(
         aplikimi.emailAplikantit,
-        "Njoftim rreth aplikimit tuaj",
-        "Ju faleminderit per aplikimin, per fat te keq kesar rradhe kemi vendosur te vazhdojme me kandidate te tjere!",
+        aplikimi.emriAplikantit,
+        shpallja.pozitaPunes,
+        shpallja.emriKompanise,
+        "Refuzuar",
       );
     }
 

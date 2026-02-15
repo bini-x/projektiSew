@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Perdorues = require("../models/perdoruesSchema");
 const PerdoruesPerkohshem = require("../models/perdoruesPerkohshemSchema");
-const dergoKodin = require("../emailservice");
+const { dergoKodin } = require("../emailservice");
 
 router.post("/perdoruesi", async (req, res) => {
   try {
@@ -81,11 +81,13 @@ router.post("/perdoruesi", async (req, res) => {
     }
 
     await perdoruesiPerkohshem.save();
-    await dergoKodin(
-      email,
-      "Verifiko email-in",
-      `Kodi juaj: ${kodiVerifikimit}`,
-    );
+    if (perdoruesiPerkohshem.emri) {
+      await dergoKodin(email, emri, `Kodi juaj: ${kodiVerifikimit}`);
+    }
+
+    if (perdoruesiPerkohshem.kompania) {
+      await dergoKodin(email, kompania, `Kodi juaj: ${kodiVerifikimit}`);
+    }
 
     return res.status(200).json({
       success: true,
