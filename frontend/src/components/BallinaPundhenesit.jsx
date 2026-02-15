@@ -169,7 +169,7 @@ function BallinaPundhenesit() {
         </div>
       </div>
 
-      <div className="mx-10 my-5 rounded-lg sticky top-0 z-20 bg-white/55 backdrop-blur-lg border-b border-[#F7FBFC] shadow-sm">
+      <div className="mx-10 my-5 rounded-lg sticky top-0 z-30 bg-white/55 backdrop-blur-lg border-b border-[#F7FBFC] shadow-sm">
         <div className=" mx-auto px-6 md:px-12 py-5">
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="relative flex-1 max-w-2xl ">

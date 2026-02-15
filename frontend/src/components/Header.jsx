@@ -194,7 +194,7 @@ function Header({ withGradient = false, forceNonHomePage = false }) {
       >
         {/* Header Content */}
         <div
-          className={`relative z-10 flex items-center justify-between w-full py-6 px-6 mx-auto text-base`}
+          className={`relative z-40 flex items-center justify-between w-full py-6 px-6 mx-auto text-base`}
         >
           <Link to="/" className="flex items-center gap-3 mr-8 group">
             <div className="transform group-hover:scale-110 transition-all duration-300">
