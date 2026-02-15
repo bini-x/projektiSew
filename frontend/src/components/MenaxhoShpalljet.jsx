@@ -677,17 +677,14 @@ function MenaxhoShpalljet() {
             onClick={() => setShpalljaKlikuar(null)}
           ></div>
           <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] w-full sm:w-3/4 md:w-2/3 lg:w-1/2 flex flex-col">
-            <div className="relative bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900 px-8 py-6 overflow-hidden">
-              <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:20px_20px]"></div>
-              <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl"></div>
-              <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl"></div>
+            <div className="relative bg-[#F5F7F8] px-8 py-6 overflow-hidden">
               <div className="relative flex justify-center items-center">
-                <h2 className="text-2xl font-bold text-white tracking-tight">
+                <h2 className="text-2xl font-bold text-gray-700 tracking-tight">
                   Modifiko Shpalljen
                 </h2>
                 <button
                   onClick={() => setShpalljaKlikuar(null)}
-                  className="absolute right-0 text-white/70 hover:text-white transition-all hover:bg-white/10 rounded-xl p-2 hover:rotate-90 duration-300"
+                  className="absolute right-0 text-gray-700  transition-all hover:bg-white/10 rounded-xl p-2 hover:rotate-5 duration-300"
                 >
                   <X size={24} />
                 </button>
@@ -903,7 +900,7 @@ function MenaxhoShpalljet() {
                   <button
                     type="button"
                     disabled={isSaving}
-                    className="publikoPune bg-red-500 hover:bg-red-600 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:shadow-lg hover:shadow-red-500/30"
+                    className="publikoPune cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:shadow-lg "
                     onClick={() => fshijShpalljen(shpalljaKlikuar._id)}
                   >
                     Fshij Shpalljen

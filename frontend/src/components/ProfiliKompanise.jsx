@@ -294,62 +294,62 @@ function ProfiliKompanise() {
       <div className="bg-white rounded-3xl shadow-sm overflow-hidden mb-6 border border-[#D6E6F2]">
         {/* Cover Banner with SVG and Action Button */}
         <div className="h-32 relative overflow-hidden">
-         <svg
-              className="absolute inset-0 w-full h-full"
-              viewBox="0 0 1440 320"
-              preserveAspectRatio="xMidYMid slice"
-              xmlns="http://www.w3.org/2000/svg"
-              style={{ zIndex: 1 }}
-            >
-              <defs>
-                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop
-                    offset="0%"
-                    style={{ stopColor: "#3a3a3a", stopOpacity: 1 }}
-                  />
-                  <stop
-                    offset="100%"
-                    style={{ stopColor: "#4a4a4a", stopOpacity: 1 }}
-                  />
-                </linearGradient>
-                <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop
-                    offset="0%"
-                    style={{ stopColor: "#4a4a4a", stopOpacity: 1 }}
-                  />
-                  <stop
-                    offset="100%"
-                    style={{ stopColor: "#5a5a5a", stopOpacity: 1 }}
-                  />
-                </linearGradient>
-                <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop
-                    offset="0%"
-                    style={{ stopColor: "#5a5a5a", stopOpacity: 1 }}
-                  />
-                  <stop
-                    offset="100%"
-                    style={{ stopColor: "#6a6a6a", stopOpacity: 1 }}
-                  />
-                </linearGradient>
-              </defs>
+          <svg
+            className="absolute inset-0 w-full h-full"
+            viewBox="0 0 1440 320"
+            preserveAspectRatio="xMidYMid slice"
+            xmlns="http://www.w3.org/2000/svg"
+            style={{ zIndex: 1 }}
+          >
+            <defs>
+              <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop
+                  offset="0%"
+                  style={{ stopColor: "#3a3a3a", stopOpacity: 1 }}
+                />
+                <stop
+                  offset="100%"
+                  style={{ stopColor: "#4a4a4a", stopOpacity: 1 }}
+                />
+              </linearGradient>
+              <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop
+                  offset="0%"
+                  style={{ stopColor: "#4a4a4a", stopOpacity: 1 }}
+                />
+                <stop
+                  offset="100%"
+                  style={{ stopColor: "#5a5a5a", stopOpacity: 1 }}
+                />
+              </linearGradient>
+              <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop
+                  offset="0%"
+                  style={{ stopColor: "#5a5a5a", stopOpacity: 1 }}
+                />
+                <stop
+                  offset="100%"
+                  style={{ stopColor: "#6a6a6a", stopOpacity: 1 }}
+                />
+              </linearGradient>
+            </defs>
 
-              <path
-                fill="url(#grad1)"
-                d="M0,96L48,112C96,128,192,160,288,165.3C384,171,480,149,576,128C672,107,768,85,864,90.7C960,96,1056,128,1152,138.7C1248,149,1344,139,1392,133.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-                opacity="0.8"
-              />
-              <path
-                fill="url(#grad2)"
-                d="M0,160L48,170.7C96,181,192,203,288,197.3C384,192,480,160,576,149.3C672,139,768,149,864,165.3C960,181,1056,203,1152,197.3C1248,192,1344,160,1392,144L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-                opacity="0.6"
-              />
-              <path
-                fill="url(#grad3)"
-                d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,213.3C672,224,768,224,864,213.3C960,203,1056,181,1152,165.3C1248,149,1344,139,1392,133.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-                opacity="0.4"
-              />
-            </svg>
+            <path
+              fill="url(#grad1)"
+              d="M0,96L48,112C96,128,192,160,288,165.3C384,171,480,149,576,128C672,107,768,85,864,90.7C960,96,1056,128,1152,138.7C1248,149,1344,139,1392,133.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+              opacity="0.8"
+            />
+            <path
+              fill="url(#grad2)"
+              d="M0,160L48,170.7C96,181,192,203,288,197.3C384,192,480,160,576,149.3C672,139,768,149,864,165.3C960,181,1056,203,1152,197.3C1248,192,1344,160,1392,144L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+              opacity="0.6"
+            />
+            <path
+              fill="url(#grad3)"
+              d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,213.3C672,224,768,224,864,213.3C960,203,1056,181,1152,165.3C1248,149,1344,139,1392,133.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+              opacity="0.4"
+            />
+          </svg>
           <div className="absolute top-6 right-6" style={{ zIndex: 2 }}>
             <button
               onClick={() => navigate("/publikopune")}
@@ -361,7 +361,10 @@ function ProfiliKompanise() {
           </div>
         </div>
 
-        <div className="px-8 pb-8 -mt-16" style={{ position: "relative", zIndex: 10 }}>
+        <div
+          className="px-8 pb-8 -mt-16"
+          style={{ position: "relative", zIndex: 10 }}
+        >
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
             {/* Logo / Profile Picture */}
             <div className="relative group">
@@ -452,7 +455,6 @@ function ProfiliKompanise() {
                   />
 
                   <div className="flex gap-3">
-                    
                     <button
                       type="button"
                       onClick={() => setEditKompaniaMode(false)}
@@ -466,7 +468,6 @@ function ProfiliKompanise() {
                     >
                       Ruaj Ndryshimet
                     </button>
-                    
                   </div>
                 </form>
               ) : (
@@ -509,12 +510,14 @@ function ProfiliKompanise() {
                         </div>
                         <span>{perdoruesiData.nrTelefonit}</span>
                       </div>
-                    ):( <div className="flex items-center gap-2 text-gray-600">
+                    ) : (
+                      <div className="flex items-center gap-2 text-gray-600">
                         <div className="w-8 h-8 rounded-lg bg-[#F7FBFC] flex items-center justify-center">
                           <Phone size={16} className="text-[#769FCD]" />
                         </div>
                         <span className="text-gray-400">+383-44-XXX-XXX</span>
-                      </div>)}
+                      </div>
+                    )}
                   </div>
 
                   {/* Links Section */}
@@ -770,3 +773,4 @@ function ProfiliKompanise() {
 }
 
 export default ProfiliKompanise;
+

@@ -111,7 +111,7 @@ function ListaKompanive() {
     <div className="min-h-screen bg-white">
       {/* Gradient Hero Section */}
       <div className="bg-gradient-to-br from-[#F7FBFC] to-[#B9D7EA] pb-16 backdrop-blur-sm">
-        <Header withGradient={true} />
+        <Header withGradient={false} />
 
         <div className="max-w-6xl mx-auto px-4 mt-20 mb-12">
           {/* Hero Section */}
@@ -178,7 +178,7 @@ function ListaKompanive() {
 
           {/* Search Component */}
           <div className="mt-20">
-            <Kerkimi />
+            <Kerkimi showLocation={false} showCategory={false} compact={true} />
           </div>
         </div>
       </div>

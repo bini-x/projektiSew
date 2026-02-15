@@ -12,6 +12,7 @@ import {
   X,
   Camera,
   Trash2,
+  ArrowRight,
 } from "lucide-react";
 import Perdoruesi from "../PerdoruesiContext";
 import { useAlert } from "../contexts/AlertContext";
@@ -109,9 +110,6 @@ function ProfiliAplikantit() {
     return "?";
   };
 
-  // Complete fixed handleNgarkoFoto for ProfiliAplikantit.jsx
-  // Replace your existing function (around line 77)
-
   const handleNgarkoFoto = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -152,10 +150,9 @@ function ProfiliAplikantit() {
         const newPhotoUrl = `http://localhost:3000/api/profili/${id}/foto?t=${Date.now()}`;
         setFotoProfile(newPhotoUrl);
 
-        // Update perdoruesiData to include foto property
         setPerdoruesiData((prev) => ({
           ...prev,
-          foto: { data: true }, // Signal that photo exists
+          foto: { data: true },
         }));
 
         alert("Fotoja u ngarkua me sukses!");
@@ -180,7 +177,6 @@ function ProfiliAplikantit() {
 
       if (response.data.success) {
         setFotoProfile(null);
-        // Update perdoruesiData to remove foto property
         setPerdoruesiData((prev) => {
           const updated = { ...prev };
           delete updated.foto;
@@ -278,7 +274,6 @@ function ProfiliAplikantit() {
       return;
     }
 
-    // Date validation
     if (eksperienceRe.dataFillimit && eksperienceRe.dataMbarimit) {
       const start = new Date(eksperienceRe.dataFillimit);
       const end = new Date(eksperienceRe.dataMbarimit);
@@ -386,7 +381,6 @@ function ProfiliAplikantit() {
       return;
     }
 
-    // Date validation
     if (edukimiRi.dataFillimit && edukimiRi.dataMbarimit) {
       const start = new Date(edukimiRi.dataFillimit);
       const end = new Date(edukimiRi.dataMbarimit);
@@ -619,7 +613,7 @@ function ProfiliAplikantit() {
     <div className="max-w-5xl mx-auto mb-8 mt-10 px-4">
       {/* Profile Header */}
       <div className="bg-white rounded-3xl shadow-sm overflow-hidden mb-6 border border-[#D6E6F2]">
-        {/* Cover Banner with SVG */}
+        {/* Cover Banner with SVG - KEEPING THIS */}
         <div className="h-32 relative overflow-hidden">
           <svg
             className="absolute inset-0 w-full h-full"
@@ -698,7 +692,7 @@ function ProfiliAplikantit() {
                 )}
               </div>
 
-              {/* Photo Action Buttons - Compact Design */}
+              {/* Photo Action Buttons */}
               <div className="absolute bottom-1 right-1 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                 <button
                   onClick={() => inputFotoRef.current?.click()}
@@ -769,7 +763,7 @@ function ProfiliAplikantit() {
                   />
 
                   <div className="flex items-center gap-2 text-gray-600 bg-white px-4 py-3 rounded-xl border border-[#D6E6F2]">
-                    <Mail size={18} className="text-[#769FCD]" />
+                    <Mail size={18} className="text-gray-500" />
                     <span>{perdoruesiData?.email}</span>
                   </div>
 
@@ -787,14 +781,14 @@ function ProfiliAplikantit() {
                     <button
                       type="button"
                       onClick={() => setShfaqEditData(false)}
-                      className="flex-1 bg-white border-2 border-[#D6E6F2] hover:bg-[#F7FBFC] text-gray-700 font-medium py-3 px-6 rounded-xl transition duration-200"
+                      className="flex-1 bg-white border border-gray-200 hover:bg-[#F7FBFC] text-gray-700 font-medium py-3 px-6 rounded-xl transition duration-200"
                     >
                       Anulo
                     </button>
                     <button
                       type="button"
                       onClick={modifikoProfilin}
-                      className="flex-1 bg-[#769FCD] hover:bg-[#5a82b3] text-white font-medium py-3 px-6 rounded-xl transition duration-200"
+                      className="flex-1 publikoPune"
                     >
                       Ruaj Ndryshimet
                     </button>
@@ -829,24 +823,24 @@ function ProfiliAplikantit() {
                           profesioni: perdoruesiData?.profesioni || "",
                         });
                       }}
-                      className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#F7FBFC] hover:bg-[#D6E6F2] border border-[#D6E6F2] transition-all duration-200"
+                      className="flex items-center justify-center w-10 h-10 rounded-xl bg-white/60 hover:bg-[#F5F7F8] border border-gray-300 transition-all duration-200"
                       title="Modifiko profilin"
                     >
-                      <Edit2 size={18} className="text-[#769FCD]" />
+                      <Edit2 size={18} className="text-gray-700" />
                     </button>
                   </div>
 
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-gray-600">
-                      <div className="w-8 h-8 rounded-lg bg-[#F7FBFC] flex items-center justify-center">
-                        <Mail size={16} className="text-[#769FCD]" />
+                      <div className="w-8 h-8 rounded-lg bg-[#F5F7F8] flex items-center justify-center">
+                        <Mail size={16} className="text-gray-700" />
                       </div>
                       <span>{perdoruesiData?.email}</span>
                     </div>
 
                     <div className="flex items-center gap-2 text-gray-600">
-                      <div className="w-8 h-8 rounded-lg bg-[#F7FBFC] flex items-center justify-center">
-                        <Phone size={16} className="text-[#769FCD]" />
+                      <div className="w-8 h-8 rounded-lg bg-[#F5F7F8] flex items-center justify-center">
+                        <Phone size={16} className="text-gray-700" />
                       </div>
                       <span>{perdoruesiData?.nrTelefonit}</span>
                     </div>
@@ -861,14 +855,14 @@ function ProfiliAplikantit() {
                             href={link.linku}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-[#F7FBFC] text-[#769FCD] rounded-xl text-sm hover:bg-[#D6E6F2] transition-all duration-200 border border-[#D6E6F2]"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-[#F7FBFC] text-gray-800 rounded-xl text-sm hover:bg-[#D6E6F2] transition-all duration-200 border border-[#D6E6F2]"
                           >
                             <Link size={14} />
                             {link.platforma}
                           </a>
                           <button
                             onClick={() => handleFshijLinkin(index)}
-                            className="absolute -top-1.5 -right-1.5 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-md"
+                            className="publikoPune"
                           >
                             <X size={10} />
                           </button>
@@ -876,7 +870,7 @@ function ProfiliAplikantit() {
                       ))}
                       <button
                         onClick={() => setShfaqLinkeForm(!shfaqLinkeForm)}
-                        className="inline-flex items-center gap-2 px-4 py-2 border-2 border-dashed border-[#B9D7EA] text-[#769FCD] rounded-xl text-sm hover:border-[#769FCD] hover:bg-[#F7FBFC] transition-all duration-200"
+                        className="inline-flex items-center gap-2 px-4 py-2 border-2 border-dashed border-gray-400 text-gray-700 rounded-xl text-sm hover:bg-[#F5F7F8] transition-all duration-200"
                       >
                         <Plus size={14} />
                         Shto Link
@@ -910,13 +904,13 @@ function ProfiliAplikantit() {
                           <div className="flex gap-2 justify-end">
                             <button
                               onClick={() => setShfaqLinkeForm(false)}
-                              className="px-4 py-2 bg-white border border-[#D6E6F2] text-gray-700 rounded-xl hover:bg-[#F7FBFC] text-sm transition-all duration-200"
+                              className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-xl hover:bg-[#F5F7F8] text-sm transition-all duration-200"
                             >
                               Anulo
                             </button>
                             <button
                               onClick={handleShtoLink}
-                              className="px-4 py-2 bg-[#769FCD] text-white rounded-xl hover:bg-[#5a82b3] text-sm font-medium transition-all duration-200"
+                              className="publikoPune w-fit"
                             >
                               Ruaj
                             </button>
@@ -933,24 +927,24 @@ function ProfiliAplikantit() {
       </div>
 
       {/* Main Content */}
-      <div className="bg-white rounded-3xl shadow-sm overflow-hidden p-8 border border-[#D6E6F2]">
+      <div className="bg-white rounded-3xl shadow-sm overflow-hidden p-8 border border-gray-200">
         {/* Experience Section */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">
+            <h2 className="text-2xl font-bold text-gray-700">
               Pervojat Profesionale
             </h2>
             <button
               onClick={() => setShfaqFormenEksperienca(!shfaqFormenEksperienca)}
-              className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#F7FBFC] hover:bg-[#D6E6F2] border border-[#D6E6F2] transition-all duration-200"
+              className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#F5F7F8] hover:bg-[#D6E6F2] border border-gray-300 transition-all duration-200"
               title="Shto eksperiencë"
             >
-              <Plus size={20} className="text-[#769FCD]" />
+              <Plus size={20} className="text-gray-600" />
             </button>
           </div>
 
           {shfaqFormenEksperienca && (
-            <div className="p-6 bg-[#F7FBFC] mb-6 rounded-2xl border border-[#D6E6F2]">
+            <div className="p-6 bg-[#F5F7F8] mb-6 rounded-2xl border border-gray-100">
               <div className="space-y-4">
                 <input
                   type="text"
@@ -1466,19 +1460,7 @@ function ProfiliAplikantit() {
                       className="inline-flex items-center gap-2 text-[#769FCD] hover:text-[#5a82b3] text-sm font-medium"
                     >
                       Shiko projektin
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M14 5l7 7m0 0l-7 7m7-7H3"
-                        />
-                      </svg>
+                      <ArrowRight size={16} />
                     </a>
                   )}
                 </div>
@@ -1492,4 +1474,3 @@ function ProfiliAplikantit() {
 }
 
 export default ProfiliAplikantit;
-

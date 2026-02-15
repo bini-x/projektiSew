@@ -27,14 +27,18 @@ function ShpalljaCard({ shpallja }) {
     const now = new Date();
     const diffMs = expires - now;
 
-    if (diffMs <= 1) return "AlmostExpired";
-
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
     if (diffDays === 0) {
       const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-      return `${diffHours} hour${diffHours !== 1 ? "s" : ""} left`;
+      return {
+        label: `${diffHours} orë${diffHours !== 1 ? "të mbetura" : "e mbeturë"}`,
+        isUrgent: true,
+      };
     }
-    return `${diffDays} dite`;
+    return {
+      label: `${diffDays} ditë`,
+      isUrgent: diffDays < 5,
+    };
   };
 
   const timeRemaining = getRemainingTime();
@@ -209,10 +213,11 @@ function ShpalljaCard({ shpallja }) {
             {shpallja.orari[0]}
           </span>
         )}
+
         {timeRemaining && (
           <span
             className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium ${
-              timeRemaining === "AlmostExpired"
+              timeRemaining.isUrgent
                 ? "bg-red-100 text-red-700"
                 : "bg-yellow-100 text-yellow-800"
             }`}
@@ -220,12 +225,10 @@ function ShpalljaCard({ shpallja }) {
             <FontAwesomeIcon
               icon={faClock}
               className={
-                timeRemaining === "AlmostExpired"
-                  ? "text-red-600"
-                  : "text-yellow-600"
+                timeRemaining.isUrgent ? "text-red-600" : "text-yellow-600"
               }
             />
-            {timeRemaining}
+            {timeRemaining.label}
           </span>
         )}
       </div>
