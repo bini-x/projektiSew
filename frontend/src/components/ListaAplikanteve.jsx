@@ -8,6 +8,7 @@ import { useSearchParams } from "react-router-dom";
 
 function ListaAplikanteve() {
   const [aplikantet, setAplikantet] = useState([]);
+  const [aplikantetPaKerkim, setAplikantetPaKerkim] = useState([]);
   const [aplikimet, setAplikimet] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [kerkoParams] = useSearchParams();
@@ -19,11 +20,11 @@ function ListaAplikanteve() {
           "http://localhost:3000/api/aplikantet/",
         );
         if (response.data.success) {
-          setAplikantet(response.data.data);
+          setAplikantetPaKerkim(response.data.data);
         }
       } catch (error) {
         console.error(error);
-        setAplikantet([]);
+        setAplikantetPaKerkim([]);
       }
     };
 
@@ -112,7 +113,7 @@ function ListaAplikanteve() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-10 max-w-4xl mx-auto">
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-md">
               <p className="text-3xl font-bold text-gray-800 mb-2">
-                {aplikantet.length}+
+                {aplikantetPaKerkim.length}+
               </p>
               <p className="text-gray-600 text-sm">Aplikantë të Regjistruar</p>
             </div>

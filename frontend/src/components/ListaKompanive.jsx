@@ -8,6 +8,7 @@ import { useSearchParams } from "react-router-dom";
 function ListaKompanive() {
   const [shpalljaData, setShpalljaData] = useState([]);
   const [kompanite, setKompanite] = useState([]);
+  const [kompanitePaKerkim, setKompanitePaKerkim] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [kerkoParams] = useSearchParams();
 
@@ -18,11 +19,11 @@ function ListaKompanive() {
           "http://localhost:3000/api/kompania/kompanite",
         );
         if (response.data.success) {
-          setKompanite(response.data.data);
+          setKompanitePaKerkim(response.data.data);
         }
       } catch (err) {
         console.error(err);
-        setShpalljaData([]);
+        setKompanitePaKerkim([]);
       }
     };
 
@@ -130,7 +131,7 @@ function ListaKompanive() {
           <div className="grid grid-cols-2 sm:grid-cols-2 gap-6 mt-10 max-w-4xl mx-auto">
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-md">
               <p className="text-3xl font-bold text-gray-800 mb-2">
-                {kompanite.length}+
+                {kompanitePaKerkim.length}+
               </p>
               <p className="text-gray-600 text-sm">Kompani të Regjistruara</p>
             </div>
