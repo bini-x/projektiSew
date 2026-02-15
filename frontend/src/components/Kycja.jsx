@@ -124,7 +124,7 @@ function Kycja() {
             <div className="pt-2">
               <button
                 type="submit"
-                className="butoniKycjeRegjistrim w-full h-10 sm:h-12 text-sm sm:text-base"
+                className="publikoPune w-full h-10 sm:h-12 text-sm sm:text-base"
               >
                 Kycu
               </button>
@@ -137,9 +137,11 @@ function Kycja() {
               >
                 ← Ballina
               </Link>
-              
+
               <div className="grid gap-1 grid-cols-1 items-center">
-                <p className="text-center text-sm text-gray-600">Nuk jeni te regjistruar?</p>
+                <p className="text-center text-sm text-gray-600">
+                  Nuk jeni te regjistruar?
+                </p>
                 <Link
                   to="/regjistrimi"
                   className="h-10 sm:h-12 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-all flex items-center justify-center"
@@ -155,3 +157,4 @@ function Kycja() {
   );
 }
 export default Kycja;
+
