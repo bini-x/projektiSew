@@ -125,11 +125,11 @@ function ShpalljaCard({ shpallja }) {
   };
 
   return (
-    <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-gray-200 shadow-lg w-full p-6 transition-colors duration-200">
+    <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-gray-200 shadow-lg w-full p-6 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 hover:border-gray-300 hover:bg-white/90 group">
       {/* Header with Logo, Company Name, and Bookmark */}
       <div className="flex items-start gap-3 mb-2">
         {/* Company Logo */}
-        <div className="shrink-o">
+        <div className="shrink-0 transition-transform duration-300 group-hover:scale-110">
           {(isPhotoUrl || isPhotoBase64) && !fotoError ? (
             <img
               src={shpallja.fotoProfili}
@@ -148,10 +148,10 @@ function ShpalljaCard({ shpallja }) {
 
         {/* Company Name and Title */}
         <div className="flex-1 min-w-0">
-          <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+          <p className="text-xs text-gray-500 uppercase tracking-wide mb-1 transition-colors duration-300 group-hover:text-[#0f4c75]">
             {getCompanyName()}
           </p>
-          <h3 className="font-semibold text-gray-900 text-base leading-tight mb-0">
+          <h3 className="font-semibold text-gray-900 text-base leading-tight mb-0 transition-colors duration-300 group-hover:text-[#0f4c75]">
             {shpallja.pozitaPunes}
           </h3>
         </div>
@@ -169,7 +169,7 @@ function ShpalljaCard({ shpallja }) {
           >
             <FontAwesomeIcon
               icon={eshteRuajtur ? faBookmarkSolid : faBookmarkRegular}
-              className={`text-l ${eshteRuajtur ? "text-primary" : "text-gray-400"}`}
+              className={`text-xl ${eshteRuajtur ? "text-primary" : "text-gray-400"}`}
             />
           </button>
         )}
@@ -177,7 +177,7 @@ function ShpalljaCard({ shpallja }) {
 
       {/* Job Details */}
       <div className="mb-2 h-10 overflow-hidden">
-        <p className="text-sm text-gray-600 mb-3 line-clamp-2 min-h-[2.5rem]">
+        <p className="text-sm text-gray-600 mb-3 line-clamp-2 min-h-[2.5rem] transition-colors duration-300 group-hover:text-gray-700">
           {shpallja.pershkrimiPunes
             ? shpallja.pershkrimiPunes.substring(0, 100) +
               (shpallja.pershkrimiPunes.length > 100 ? "..." : "")
@@ -186,23 +186,26 @@ function ShpalljaCard({ shpallja }) {
       </div>
 
       {/* HR Line */}
-      <hr className="hrCard" />
+      <hr className="hrCard transition-opacity duration-300 group-hover:opacity-50" />
 
       {/* Footer - Tags and Location */}
-      <div className="flex items-center gap-3 mb-3 flex-wrap">
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
-          <FontAwesomeIcon icon={faLocationDot} className="text-gray-500" />
+      <div className="flex items-center gap-2 mb-3 flex-wrap">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium transition-all duration-300 group-hover:bg-[#0f4c75]/10 group-hover:text-[#0f4c75]">
+          <FontAwesomeIcon
+            icon={faLocationDot}
+            className="text-gray-500 transition-colors duration-300 group-hover:text-[#0f4c75]"
+          />
           {shpallja.lokacioniPunes || "Remote"}
         </span>
 
         {shpallja.niveliPunes && (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium transition-all duration-300 group-hover:bg-[#0f4c75]/10 group-hover:text-[#0f4c75]">
             {shpallja.niveliPunes}
           </span>
         )}
 
         {shpallja.orari && shpallja.orari.length > 0 && (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium transition-all duration-300 group-hover:bg-[#0f4c75]/10 group-hover:text-[#0f4c75]">
             {shpallja.orari[0]}
           </span>
         )}
@@ -231,10 +234,10 @@ function ShpalljaCard({ shpallja }) {
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div>
           {shpallja.pagaPrej > 0 && shpallja.pagaDeri > 0 && (
-            <p className="text-sm font-medium text-gray-900">
+            <p className="text-sm font-medium text-gray-900 transition-colors duration-300 group-hover:text-[#0f4c75]">
               <FontAwesomeIcon
                 icon={faDollarSign}
-                className="mr-1 text-gray-500"
+                className="mr-1 text-gray-500 transition-colors duration-300 group-hover:text-[#0f4c75]"
               />
               {shpallja.pagaPrej}-{shpallja.pagaDeri}
             </p>
@@ -242,21 +245,21 @@ function ShpalljaCard({ shpallja }) {
         </div>
 
         <button
-          className="relative group bg-transparent cursor-pointer"
+          className="relative group/button bg-transparent cursor-pointer"
           onClick={handleClick}
         >
           <div
             className={`${perdoruesiData?.tipiPerdoruesit === "punedhenes" ? "hidden" : "block"}`}
           >
-            <span className="relative z-10 bg-linear-to-r from-slate-700 via-gray-800 to-black bg-clip-text text-transparent font-semibold text-sm group-hover:from-slate-800 group-hover:via-gray-900 group-hover:to-black transition-all duration-300">
+            <span className="relative z-10 bg-gradient-to-r from-slate-700 via-gray-800 to-black bg-clip-text text-transparent font-semibold text-sm group-hover/button:from-slate-800 group-hover/button:via-gray-900 group-hover/button:to-black transition-all duration-300">
               Apliko tani
             </span>
             <FontAwesomeIcon
               icon={faArrowRightLong}
-              className="ml-1 text-gray-700 group-hover:text-black group-hover:translate-x-1 transition-all duration-300"
+              className="ml-1 text-gray-700 group-hover/button:text-black group-hover/button:translate-x-1 transition-all duration-300"
             />
           </div>
-          <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-linear-to-r from-slate-700 to-black group-hover:w-full transition-all duration-500 ease-out"></div>
+          <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-slate-700 to-black group-hover/button:w-full transition-all duration-500 ease-out"></div>
         </button>
       </div>
     </div>

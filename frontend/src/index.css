@@ -26,7 +26,7 @@
   }
 
   .publikoPune {
-    @apply px-6 py-2 bg-primary text-white rounded-lg hover:bg-white hover:text-primary border font-medium transition-colors duration-200 cursor-pointer;
+    @apply w-full px-6 py-3 bg-linear-to-r from-[#0f4c75] to-[#6d94c5] text-white font-semibold rounded-xl hover:from-[#0d3d5e] hover:to-[#5a7dad] transition-all duration-300 shadow-lg hover:shadow-xl;
   }
 
   .kycja {
@@ -137,10 +137,10 @@
     padding-bottom: 0.5rem;
   }
 
-  /* Force all text elements to be white */
-  .header-white-text a,
-  .header-white-text button,
-  .header-white-text span {
+  /* Force all text elements to be white - EXCEPT buttons and links with specific classes */
+  .header-white-text a:not([class*="bg-"]):not([class*="border"]),
+  .header-white-text button:not([class*="bg-"]):not([class*="border"]),
+  .header-white-text span:not([class*="bg-"]):not([class*="border"]) {
     color: white !important;
   }
 
@@ -157,7 +157,7 @@
   }
 
   /* Make sure logo icon is white */
-  .header-white-text svg {
+  .header-white-text svg:not([class*="lucide"]) {
     color: white !important;
   }
 
@@ -166,33 +166,12 @@
     background: white !important;
   }
 
-  /* Profile button and hover effects */
-  .header-white-text button:hover {
+  /* Profile button hover effects - only for profile dropdown button */
+  .header-white-text
+    button[class*="rounded-xl"]:not([class*="bg-white"]):not(
+      [class*="bg-transparent"]
+    ):hover {
     background-color: rgba(255, 255, 255, 0.15) !important;
-  }
-
-  /* Login/Signup buttons */
-  .header-white-text a[class*="border-"] {
-    border-color: white !important;
-    color: white !important;
-  }
-
-  .header-white-text a[class*="border-"]:hover {
-    background-color: white !important;
-    color: #0f4c75 !important;
-  }
-
-  /* Gradient button styling */
-  .header-white-text a[class*="bg-linear"] {
-    background: rgba(255, 255, 255, 0.25) !important;
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 255, 255, 0.4) !important;
-    color: white !important;
-  }
-
-  .header-white-text a[class*="bg-linear"]:hover {
-    background: white !important;
-    color: #0f4c75 !important;
   }
 
   /* CRITICAL: Dropdown menu - reset styles and allow original hover states */

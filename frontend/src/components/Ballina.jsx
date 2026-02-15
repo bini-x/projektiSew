@@ -22,7 +22,7 @@ function Ballina() {
 
         if (params.toString()) {
           const response = await axios.get(
-            `http://localhost:3000/api/shpallja/kerko?${params.toString()}`,
+            `http://localhost:3000/api/kerkoShpalljen?${params.toString()}`,
           );
           if (response.data.success) {
             setShpalljaData(response.data.data || []);
@@ -166,13 +166,6 @@ function Ballina() {
             </div>
           </div>
 
-          {/* Search Section - Below Hero, Separate */}
-          <div className="py-8 px-4">
-            <div className="max-w-5xl mx-auto">
-              <Kerkimi />
-            </div>
-          </div>
-
           {/* Features Section */}
           <div className="py-20 px-4 ">
             <div className="max-w-7xl mx-auto">
@@ -263,17 +256,23 @@ function Ballina() {
               </div>
 
               {/* Job Listings Title */}
-              <div>
-                <h2 className="text-4xl font-bold text-gray-800 mb-3">
-                  Pozicione të Reja të Punës
-                </h2>
-                <p className="text-xl text-gray-600">
-                  Eksploroni mundësitë më të fundit të karrierës
-                </p>
-              </div>
+              {/* <div> */}
+              {/*   <h2 className="text-4xl font-bold text-gray-800 mb-3"> */}
+              {/*     Pozicione të Reja të Punës */}
+              {/*   </h2> */}
+              {/*   <p className="text-xl text-gray-600"> */}
+              {/*     Eksploroni mundësitë më të fundit të karrierës */}
+              {/*   </p> */}
+              {/* </div> */}
             </div>
           </div>
 
+          {/* Search Section - Below Hero, Separate */}
+          <div className="py-8 px-4">
+            <div className="max-w-5xl mx-auto">
+              <Kerkimi />
+            </div>
+          </div>
           {/* Job Cards Section */}
           <div className="pb-20 px-4">
             <div className="shpalljaCard max-w-7xl mx-auto">
@@ -338,4 +337,3 @@ function Ballina() {
 }
 
 export default Ballina;
-

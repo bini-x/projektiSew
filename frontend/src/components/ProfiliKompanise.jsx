@@ -92,18 +92,17 @@ function ProfiliKompanise() {
       "image/gif",
     ];
     if (!llojetELejuara.includes(file.type)) {
-      showAlert("Vetëm fotot janë të lejuara (JPEG, PNG, WEBP, GIF)", "info");
+      alert("Vetëm fotot janë të lejuara (JPEG, PNG, WEBP, GIF)");
       return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      showAlert("Madhësia e fotos është shumë e madhe. Maksimumi 5MB", "info");
+      alert("Madhësia e fotos është shumë e madhe. Maksimumi 5MB");
       return;
     }
 
     const formData = new FormData();
     formData.append("photoFile", file);
-
     setPoNgarkohetFoto(true);
 
     try {
@@ -118,17 +117,20 @@ function ProfiliKompanise() {
       );
 
       if (response.data.success) {
-        setFotoProfile(
-          `http://localhost:3000/api/profili/${id}/foto?t=${Date.now()}`,
-        );
-        showAlert("Fotoja u ngarkua me sukses!", "success");
+        const newPhotoUrl = `http://localhost:3000/api/profili/${id}/foto?t=${Date.now()}`;
+        setFotoProfile(newPhotoUrl);
+
+        // Update perdoruesiData to include foto property
+        setPerdoruesiData((prev) => ({
+          ...prev,
+          foto: { data: true }, // Signal that photo exists
+        }));
+
+        alert("Fotoja u ngarkua me sukses!");
       }
     } catch (error) {
       console.error(error);
-      showAlert(
-        error.response?.data?.message || "Gabim në ngarkimin e fotos",
-        "error",
-      );
+      alert(error.response?.data?.message || "Gabim në ngarkimin e fotos");
     } finally {
       setPoNgarkohetFoto(false);
     }
@@ -146,11 +148,17 @@ function ProfiliKompanise() {
 
       if (response.data.success) {
         setFotoProfile(null);
-        showAlert("Fotoja u fshi me sukses!", "success");
+        // Update perdoruesiData to remove foto property
+        setPerdoruesiData((prev) => {
+          const updated = { ...prev };
+          delete updated.foto;
+          return updated;
+        });
+        alert("Fotoja u fshi me sukses!");
       }
     } catch (error) {
       console.error(error);
-      showAlert("Gabim në fshirjen e fotos", "error");
+      alert("Gabim në fshirjen e fotos");
     }
   };
 
