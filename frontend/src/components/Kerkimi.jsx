@@ -31,6 +31,11 @@ function Kerkimi({
   const navigate = useNavigate();
   const location = useLocation();
   const [filters, setFilters] = useState(EMPTY_FILTERS);
+  const [filters, setFilters] = useState({
+    kerko: "",
+    lokacioniPunes: "",
+    kategoriaPunes: "",
+  });
 
   // Ref so updateURL always reads the latest filters without stale closures
   const filtersRef = useRef(filters);

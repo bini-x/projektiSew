@@ -140,13 +140,13 @@ function Kycja() {
 
               <div className="grid gap-1 grid-cols-1 items-center">
                 <p className="text-center text-sm text-gray-600">
-                  Nuk jeni te regjistruar?
+                  Nuk keni llogari?
                 </p>
                 <Link
                   to="/regjistrimi"
                   className="h-10 sm:h-12 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-all flex items-center justify-center"
                 >
-                  Regjistrohu
+                  Regjistrohuni
                 </Link>
               </div>
             </div>
@@ -157,4 +157,3 @@ function Kycja() {
   );
 }
 export default Kycja;
-

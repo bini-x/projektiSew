@@ -1,6 +1,5 @@
 import axios from "axios";
 import "../index.css";
-import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan, faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -9,7 +8,6 @@ import { useAlert } from "../contexts/AlertContext";
 import Perdoruesi from "../PerdoruesiContext";
 
 function PublikoPune() {
-  const navigate = useNavigate();
   const { showAlert } = useAlert();
   const [aftesitePrimare, setAftesitePrimare] = useState([]);
   const [aftesiaPrimareTanishme, setAftesiaPrimareTanishme] = useState("");
@@ -19,7 +17,7 @@ function PublikoPune() {
 
   const [formData, setFormData] = useState({
     emailKompanise: "",
-    emriKompanise: perdoruesiData.kompania,
+    emriKompanise: perdoruesiData?.kompania || "",
     pozitaPunes: "",
     kategoriaPunes: "",
     lokacioniPunes: "",
@@ -154,11 +152,6 @@ function PublikoPune() {
       }
     }
 
-    if (aftesitePrimare.length === 0) {
-      showAlert("Ju lutem shtoni të paktën një aftësi primare", "warning");
-      return;
-    }
-
     let dataToSend = {
       emailKompanise: formData.emailKompanise,
       emriKompanise: formData.emriKompanise,
@@ -213,6 +206,46 @@ function PublikoPune() {
     }
   };
 
+  if (perdoruesiData?.tipiPerdoruesit !== "punedhenes") {
+    return (
+      <div className="min-h-screen">
+        <Header />
+        <div className="flex flex-col items-center justify-center min-h-[80vh] px-4">
+          <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 max-w-md text-center">
+            <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg
+                className="w-8 h-8 text-yellow-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              Qasje e ndaluar
+            </h2>
+            <p className="text-gray-600 mb-6">
+              Vetëm punëdhënësit mund të publikojnë punë. Nëse jeni punëdhënës,
+              ju lutemi regjistrohuni si i tillë.
+            </p>
+            <a
+              href="/"
+              className="inline-block px-6 py-3 bg-gradient-to-r from-[#0F4C75] to-[#3282B8] text-white rounded-lg font-semibold hover:from-[#3282B8] hover:to-[#0F4C75] transition-all duration-300"
+            >
+              Kthehu në ballina
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen">
       <div className="bg-linear-to-br from-[#F7FBFC] via-[#D6E6F2] to-[#B9D7EA] pb-32 relative ">
@@ -228,7 +261,11 @@ function PublikoPune() {
 
       <div className="max-w-3xl mx-auto px-4 -mt-20 pb-20 relative z-20">
         <div className="bg-white rounded-2xl  shadow-2xl p-8 md:p-12">
-          <form onSubmit={handleSubmit} className="space-y-8">
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-8"
+            auto-complete="off"
+          >
             <div>
               <h2 className="text-2xl font-semibold text-gray-900 mb-6">
                 Informacioni i Punës
@@ -509,7 +546,7 @@ function PublikoPune() {
               {/* Primary Skills */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Aftësitë Primare<span className="text-red-500">*</span>
+                  Aftësitë Primare{" "}
                 </label>
 
                 {aftesitePrimare.length > 0 && (

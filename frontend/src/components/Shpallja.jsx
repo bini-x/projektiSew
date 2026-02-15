@@ -177,11 +177,6 @@ function Shpallja() {
     navigate(`/${id}/aplikimi`);
   };
 
-  const hasPhoto =
-    (shpallja.fotoProfili?.startsWith("http") ||
-      shpallja.fotoProfili?.startsWith("data:")) &&
-    !fotoError;
-
   return (
     <div className="min-h-screen ">
       <Header withGradient={true} />
@@ -209,9 +204,9 @@ function Shpallja() {
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
                   {/* Logo + Company + Title */}
                   <div className="flex items-start gap-4">
-                    {hasPhoto ? (
+                    {shpallja.perdoruesiId._id ? (
                       <img
-                        src={shpallja.fotoProfili}
+                        src={`http://localhost:3000/api/profili/${shpallja.perdoruesiId._id}/foto`}
                         alt="Company Logo"
                         className="w-16 h-16 rounded-xl object-cover border border-[#D6E6F2] shrink-0"
                         onError={handlePhotoError}
@@ -225,9 +220,9 @@ function Shpallja() {
                     )}
                     <div>
                       <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1">
-                        {getCompanyName()}
+                        {shpallja.emriKompanise}
                       </p>
-                      <h1 className="text-xl md:text-2xl font-bold text-gray-900 leading-tight">
+                      <h1 className="text-xl md:text-2xl font-bold text-gray-900 leading-tight text-left">
                         {shpallja.pozitaPunes}
                       </h1>
                     </div>
@@ -385,9 +380,11 @@ function Shpallja() {
           <div className="lg:w-80 space-y-4">
             {/* Apply Card */}
             <div className="bg-white/70 border border-[#F7FBFC] rounded-2xl shadow-lg p-6">
-              <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">
-                Apliko tani
-              </h3>
+              {perdoruesiData?.tipiPerdoruesit === "aplikant" && (
+                <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">
+                  Apliko tani
+                </h3>
+              )}
 
               {/* Job detail rows */}
               <div className="divide-y divide-gray-100">
@@ -487,9 +484,9 @@ function Shpallja() {
                 Rreth kompanisë
               </h3>
               <div className="flex items-center gap-3 mb-4">
-                {hasPhoto ? (
+                {shpallja.perdoruesiId._id ? (
                   <img
-                    src={shpallja.fotoProfili}
+                    src={`http://localhost:3000/api/profili/${shpallja.perdoruesiId._id}/foto`}
                     alt="Company Logo"
                     className="w-10 h-10 rounded-lg object-cover border border-[#D6E6F2] shrink-0"
                     onError={handlePhotoError}

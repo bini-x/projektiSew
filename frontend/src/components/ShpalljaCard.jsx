@@ -251,11 +251,11 @@ function ShpalljaCard({ shpallja }) {
           className="relative group/button bg-transparent cursor-pointer"
           onClick={handleClick}
         >
-          <div
-            className={`${perdoruesiData?.tipiPerdoruesit === "punedhenes" ? "hidden" : "block"}`}
-          >
+          <div className={`}`}>
             <span className="relative z-10 bg-gradient-to-r from-slate-700 via-gray-800 to-black bg-clip-text text-transparent font-semibold text-sm group-hover/button:from-slate-800 group-hover/button:via-gray-900 group-hover/button:to-black transition-all duration-300">
-              Apliko tani
+              {perdoruesiData?.tipiPerdoruesit === "punedhenes"
+                ? "Shiko me shume"
+                : "Apliko tani"}
             </span>
             <FontAwesomeIcon
               icon={faArrowRightLong}
