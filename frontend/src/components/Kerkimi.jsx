@@ -14,7 +14,6 @@ function Kerkimi() {
     kerko: "",
     lokacioniPunes: "",
     kategoriaPunes: "",
-    kompania: "",
   });
 
   const handleSubmit = (e) => {
@@ -34,12 +33,9 @@ function Kerkimi() {
       params.append("kategoriaPunes", filters.kategoriaPunes.trim());
     }
 
-    if (filters.kompania.trim()) {
-      params.append("kompania", filters.kompania.trim());
-    }
-
     navigate(`${location.pathname}?${params.toString()}`);
   };
+
   return (
     <div className="w-full max-w-6xl mx-auto px-4 my-8">
       <div className="bg-white border border-gray-100 rounded-2xl shadow-xl ">

@@ -240,7 +240,7 @@ function MenaxhoAplikimet() {
 
   return (
     <div className="bg-white min-h-screen">
-      <Header />
+      <Header withGradient={true} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-6">
           <h1 className="text-2xl font-semibold text-gray-900">
@@ -355,10 +355,11 @@ function MenaxhoAplikimet() {
                   const shpallja = shpalljaData.find(
                     (sh) => sh._id === aplikimi.shpalljaId,
                   );
-                  const expirationDate = shpallja?.dataKrijimit 
+                  const expirationDate = shpallja?.dataKrijimit
                     ? getExpirationDate(shpallja.dataKrijimit)
                     : null;
-                  const isExpired = shpallja?.status?.toLowerCase() === "skaduar";
+                  const isExpired =
+                    shpallja?.status?.toLowerCase() === "skaduar";
 
                   return (
                     <tr key={aplikimi._id} className="hover:bg-gray-50">
@@ -382,7 +383,13 @@ function MenaxhoAplikimet() {
                       </td>
                       <td className="tableData">
                         {expirationDate ? (
-                          <span className={isExpired ? "text-red-600 font-medium" : "text-gray-500"}>
+                          <span
+                            className={
+                              isExpired
+                                ? "text-red-600 font-medium"
+                                : "text-gray-500"
+                            }
+                          >
                             {formatDate(expirationDate)}
                             {isExpired && (
                               <span className="ml-2 text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded-full">

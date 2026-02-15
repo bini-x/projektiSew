@@ -87,9 +87,6 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// ========== RUTET PER NGARKIMIN E FOTOS ==========
-
-// Ngarko foton e profilit
 router.post(
   "/:id/ngarko-foto",
   uploadFoto.single("photoFile"),
@@ -104,7 +101,6 @@ router.post(
 
       const perdoruesiId = req.params.id;
 
-      // Perditeso perdoruesin me te dhenat e fotos
       const perdoruesi = await Perdorues.findByIdAndUpdate(
         perdoruesiId,
         {
@@ -162,7 +158,6 @@ router.post(
   },
 );
 
-// Merr foton e profilit
 router.get("/:id/foto", async (req, res) => {
   try {
     const perdoruesi = await Perdorues.findById(req.params.id);
@@ -177,7 +172,7 @@ router.get("/:id/foto", async (req, res) => {
     res.set({
       "Content-Type": perdoruesi.foto.mimetype,
       "Content-Length": perdoruesi.foto.size,
-      "Cache-Control": "public, max-age=86400", // Cache per 1 dite
+      "Cache-Control": "public, max-age=86400",
     });
 
     res.send(perdoruesi.foto.data);
@@ -190,7 +185,6 @@ router.get("/:id/foto", async (req, res) => {
   }
 });
 
-// Fshi foton e profilit
 router.delete("/:id/foto", async (req, res) => {
   try {
     const perdoruesi = await Perdorues.findByIdAndUpdate(

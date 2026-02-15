@@ -88,7 +88,7 @@ function Ballina() {
 
             {/* Header - with relative positioning and white text */}
             <div className="relative z-10 header-white-text">
-              <Header />
+              <Header withGradient={false} />
             </div>
 
             {/* Hero Content */}
