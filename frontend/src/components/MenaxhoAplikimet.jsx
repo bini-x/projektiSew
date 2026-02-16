@@ -131,7 +131,6 @@ function MenaxhoAplikimet() {
   const ruajNdryshimet = async (e) => {
     e.preventDefault();
 
-    // Validation
     if (!aplikimiKlikuar.emriAplikantit?.trim()) {
       showAlert("Ju lutem shkruani emrin", "warning");
       return;
@@ -471,7 +470,6 @@ function MenaxhoAplikimet() {
             </table>
           </div>
 
-          {/* Mobile responsive section */}
           <div className="lg:hidden divide-y divide-gray-200">
             {filteredData.map((aplikimi) => {
               const shpallja = shpalljaData.find(

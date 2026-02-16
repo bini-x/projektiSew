@@ -165,7 +165,6 @@ function ListaPuneve() {
         <Kerkimi />
       </div>
       <div className="m-10 md:m-20 lg:m-30">
-        {/* Section before job listings */}
         <div className="text-center mb-8 -mt-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-700 mb-3">
             Gjej punën që të përshtatet
@@ -183,7 +182,6 @@ function ListaPuneve() {
         </div>
         {totalPages > 1 && (
           <div className="flex justify-center items-center gap-2 my-10">
-            {/* Previous Button */}
             <button
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
               disabled={currentPage === 1}
@@ -213,7 +211,6 @@ function ListaPuneve() {
               <span className="hidden sm:inline">Prev</span>
             </button>
 
-            {/* Page Numbers */}
             <div className="flex gap-1">
               {Array.from({ length: totalPages }, (_, i) => i + 1).map(
                 (page) => (
@@ -235,7 +232,6 @@ function ListaPuneve() {
               )}
             </div>
 
-            {/* Next Button */}
             <button
               onClick={() =>
                 setCurrentPage((prev) => Math.min(prev + 1, totalPages))

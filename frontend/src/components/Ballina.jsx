@@ -59,19 +59,15 @@ function Ballina() {
         <BallinaPundhenesit />
       ) : (
         <>
-          {/* Header with Hero Background - Combined Section */}
           <div className="relative overflow-hidden">
-            {/* Background Image with Overlay */}
             <div
               className="absolute inset-0 bg-cover bg-center"
               style={{
                 backgroundImage: `url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80')`,
               }}
             >
-              {/* linear Overlay */}
               <div className="absolute inset-0 bg-linear-to-r from-[#0f4c75]/90 via-[#0f4c75]/85 to-[#6d94c5]/80" />
 
-              {/* Diagonal Pattern Overlay */}
               <div
                 className="absolute inset-0 opacity-10"
                 style={{
@@ -86,16 +82,12 @@ function Ballina() {
               />
             </div>
 
-            {/* Header - with relative positioning and white text */}
             <div className="relative z-10 header-white-text">
               <Header />
             </div>
 
-            {/* Hero Content */}
             <div className="relative h-[600px] flex items-center justify-center">
-              {/* Content Container */}
               <div className="relative w-full max-w-4xl mx-auto px-6 text-center">
-                {/* Centered Text Content */}
                 <div className="text-white z-10">
                   <h1 className="text-5xl lg:text-6xl font-bold mb-6 leading-tight">
                     Gjeni Punën e Ëndrrave Tuaja
@@ -120,7 +112,6 @@ function Ballina() {
                     </button>
                   </div>
 
-                  {/* Stats Section */}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto">
                     <div className="py-4">
                       <div className="text-3xl font-bold mb-3">
@@ -150,7 +141,6 @@ function Ballina() {
             </div>
           </div>
 
-          {/* Features Section */}
           <div className="py-20 px-4 ">
             <div className="max-w-7xl mx-auto">
               <div className="text-center mb-16">
@@ -238,26 +228,14 @@ function Ballina() {
                   </p>
                 </div>
               </div>
-
-              {/* Job Listings Title */}
-              {/* <div> */}
-              {/*   <h2 className="text-4xl font-bold text-gray-800 mb-3"> */}
-              {/*     Pozicione të Reja të Punës */}
-              {/*   </h2> */}
-              {/*   <p className="text-xl text-gray-600"> */}
-              {/*     Eksploroni mundësitë më të fundit të karrierës */}
-              {/*   </p> */}
-              {/* </div> */}
             </div>
           </div>
 
-          {/* Search Section - Below Hero, Separate */}
           <div className="py-8 px-4">
             <div className="max-w-5xl mx-auto">
               <Kerkimi />
             </div>
           </div>
-          {/* Job Cards Section */}
           <div className="pb-20 px-4">
             <div className="shpalljaCard max-w-7xl mx-auto">
               {shpalljaData.slice(0, 9).map((shpallja, index) => {

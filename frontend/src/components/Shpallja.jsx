@@ -182,7 +182,6 @@ function Shpallja() {
       <Header withGradient={true} />
 
       <div className="max-w-6xl mx-auto px-4 py-8 md:px-8">
-        {/* Back link */}
         <button
           onClick={() => navigate(-1)}
           className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-800 transition-colors mb-6 group"
@@ -194,15 +193,11 @@ function Shpallja() {
           Kthehu tek punët
         </button>
 
-        {/* Two column layout */}
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* LEFT COLUMN: Job Details Card */}
           <div className="flex-1">
             <div className="bg-white/70 border border-[#F7FBFC] rounded-2xl shadow-lg overflow-hidden">
-              {/* Job Header */}
               <div className="p-6 md:p-8 border-b border-gray-200">
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
-                  {/* Logo + Company + Title */}
                   <div className="flex items-start gap-4">
                     {shpallja.perdoruesiId._id ? (
                       <img
@@ -228,7 +223,6 @@ function Shpallja() {
                     </div>
                   </div>
 
-                  {/* Bookmark */}
                   {perdoruesiData?.tipiPerdoruesit !== "punedhenes" && (
                     <button
                       onClick={ndryshoRuajtjen}
@@ -253,7 +247,6 @@ function Shpallja() {
                   )}
                 </div>
 
-                {/* Tag pills */}
                 <div className="flex flex-wrap gap-2">
                   {shpallja.lokacioniPunes && (
                     <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
@@ -305,9 +298,7 @@ function Shpallja() {
                 </div>
               </div>
 
-              {/* Content Sections */}
               <div className="p-6 md:p-8 space-y-6">
-                {/* Job Description */}
                 <div>
                   <h2 className="text-xl font-bold text-gray-900 mb-4">
                     Përshkrimi i Punës
@@ -323,7 +314,6 @@ function Shpallja() {
                   )}
                 </div>
 
-                {/* Required Skills */}
                 <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-8">
                   <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                     <span className="w-1 h-5 bg-primary rounded-full inline-block"></span>
@@ -348,7 +338,6 @@ function Shpallja() {
                   )}
                 </div>
 
-                {/* Optional Skills */}
                 <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-8">
                   <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                     <span className="w-1 h-5 bg-primary rounded-full inline-block"></span>
@@ -376,9 +365,7 @@ function Shpallja() {
             </div>
           </div>
 
-          {/* RIGHT COLUMN: Sidebar */}
           <div className="lg:w-80 space-y-4">
-            {/* Apply Card */}
             <div className="bg-white/70 border border-[#F7FBFC] rounded-2xl shadow-lg p-6">
               {perdoruesiData?.tipiPerdoruesit === "aplikant" && (
                 <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">
@@ -386,7 +373,6 @@ function Shpallja() {
                 </h3>
               )}
 
-              {/* Job detail rows */}
               <div className="divide-y divide-gray-100">
                 {shpallja.pagaPrej > 0 && shpallja.pagaDeri > 0 && (
                   <div className="flex items-center justify-between py-3">
@@ -478,7 +464,6 @@ function Shpallja() {
               </div>
             </div>
 
-            {/* About Company Card */}
             <div className="bg-white/70 border border-[#F7FBFC] rounded-2xl shadow-lg p-6">
               <h3 className="text-xs font-bold text-gray-600 uppercase tracking-wider mb-4">
                 Rreth kompanisë
@@ -508,7 +493,6 @@ function Shpallja() {
                 </div>
               </div>
 
-              {/* View Company Button */}
               {shpallja.perdoruesiId._id && (
                 <button
                   onClick={() =>

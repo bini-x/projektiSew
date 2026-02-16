@@ -302,9 +302,7 @@ function ProfiliKompanise() {
 
   return (
     <div className="max-w-5xl mx-auto mb-8 mt-10 px-4">
-      {/* Header Section */}
       <div className="bg-white rounded-3xl shadow-sm overflow-hidden mb-6 border border-gray-200">
-        {/* Cover Banner with SVG and Action Button */}
         <div className="h-32 relative overflow-hidden">
           <svg
             className="absolute inset-0 w-full h-full"
@@ -378,7 +376,6 @@ function ProfiliKompanise() {
           style={{ position: "relative", zIndex: 10 }}
         >
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
-            {/* Logo / Profile Picture */}
             <div className="relative group">
               <div className="w-32 h-32 rounded-2xl bg-white flex items-center justify-center text-[#769FCD] text-4xl font-bold shadow-xl border-4 border-white overflow-hidden">
                 {fotoProfile ? (
@@ -392,7 +389,6 @@ function ProfiliKompanise() {
                 )}
               </div>
 
-              {/* Photo Action Buttons - Compact Design */}
               <div className="absolute bottom-1 right-1 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                 <button
                   onClick={() => inputFotoRef.current?.click()}
@@ -427,7 +423,6 @@ function ProfiliKompanise() {
               />
             </div>
 
-            {/* Company Info */}
             <div className="flex-1 text-center sm:text-left w-full mt-4 sm:mt-16">
               {editKompaniaMode ? (
                 <form
@@ -609,9 +604,7 @@ function ProfiliKompanise() {
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="bg-white rounded-3xl shadow-sm overflow-hidden p-8 border border-gray-200">
-        {/* Punë të Hapura */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
@@ -713,7 +706,6 @@ function ProfiliKompanise() {
 
         <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent my-8"></div>
 
-        {/* Rreth Kompanisë */}
         <div>
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-gray-700">

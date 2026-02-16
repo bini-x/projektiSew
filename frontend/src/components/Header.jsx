@@ -378,11 +378,14 @@ function Header({ withGradient = false, forceNonHomePage = false }) {
                   <>
                     <Link
                       to="/kycja"
-                      className="px-5 py-2.5 border border-[#0F4C75] rounded-xl text-[#0F4C75] font-semibold hover:bg-linear-to-r from-[#0f4c75] to-[#6d94c5] hover:text-white transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+                      className="px-5 py-2.5 border-2 border-[#0F4C75] rounded-xl text-[#0F4C75] font-semibold hover:bg-[#0F4C75] hover:text-white transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
                     >
                       Kycu/Regjistrohu
                     </Link>
-                    <Link to="/kycja" className="publikoPune">
+                    <Link
+                      to="/kycja"
+                      className="px-5 py-2.5 bg-gradient-to-r from-[#0F4C75] to-[#3282B8] rounded-xl text-white font-semibold hover:from-[#3282B8] hover:to-[#0F4C75] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                    >
                       Publiko Pune
                     </Link>
                   </>
@@ -405,7 +408,7 @@ function Header({ withGradient = false, forceNonHomePage = false }) {
 
       {isMenuOpen && (
         <div
-          className={`md:hidden ${isBallinaMysafir ? "bg-white/95 backdrop-blur-sm" : "bg-white"} shadow-2xl rounded-2xl overflow-hidden mx-4 mt-2 border ${isBallinaMysafir ? "border-white/20" : "border-gray-100"} animate-in fade-in slide-in-from-top-4 duration-300`}
+          className={`mobile-menu-override md:hidden ${isBallinaMysafir ? "bg-white/95 backdrop-blur-sm" : "bg-white"} shadow-2xl rounded-2xl overflow-hidden mx-4 mt-2 border ${isBallinaMysafir ? "border-white/20" : "border-gray-100"} animate-in fade-in slide-in-from-top-4 duration-300`}
         >
           <nav className="flex flex-col py-4 px-4 space-y-1">
             <MobileNavLink to="/" onClick={closeMenu}>

@@ -116,7 +116,6 @@ function PublikoPune() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validation checks
     if (!formData.pozitaPunes.trim()) {
       showAlert("Ju lutem shkruani titullin e punës", "warning");
       return;
@@ -519,7 +518,6 @@ function PublikoPune() {
                 </div>
               </div>
 
-              {/* Job Description */}
               <div className="mb-6">
                 <label
                   htmlFor="pershkrimiPunes"
@@ -543,7 +541,6 @@ function PublikoPune() {
                 ></textarea>
               </div>
 
-              {/* Primary Skills */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Aftësitë Primare{" "}
@@ -597,7 +594,6 @@ function PublikoPune() {
                 </div>
               </div>
 
-              {/* Secondary Skills */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2 mt-5">
                   Aftësitë Sekondare
@@ -654,7 +650,6 @@ function PublikoPune() {
               </div>
             </div>
 
-            {/* Submit Button */}
             <div className="pt-6 flex justify-end">
               <button type="submit" className="publikoPune ">
                 Publiko Punën

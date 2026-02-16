@@ -46,13 +46,11 @@ function Kerkimi({
     navigate(`${location.pathname}?${params.toString()}`, { replace: true });
   };
 
-  // Debounce only the text input
   useEffect(() => {
     const timeout = setTimeout(() => updateURL(), 300);
     return () => clearTimeout(timeout);
   }, [filters.kerko]);
 
-  // Dropdowns fire instantly
   useEffect(() => {
     updateURL();
   }, [filters.lokacioniPunes, filters.kategoriaPunes]);
@@ -86,7 +84,6 @@ function Kerkimi({
               compact ? "flex items-center gap-2 px-4 py-3" : "responsiveKerko"
             }
           >
-            {/* Text search */}
             <div
               className={compact ? "flex items-center gap-2 flex-1" : "kerko"}
             >
@@ -117,7 +114,6 @@ function Kerkimi({
               )}
             </div>
 
-            {/* City dropdown */}
             {showLocation && (
               <div className="kerko">
                 <FontAwesomeIcon
@@ -176,7 +172,6 @@ function Kerkimi({
               </div>
             )}
 
-            {/* Category dropdown */}
             {showCategory && (
               <div className="kerko">
                 <FontAwesomeIcon icon={faBriefcase} className="text-gray-400" />
@@ -264,7 +259,6 @@ function Kerkimi({
           </div>
         </form>
 
-        {/* Active filter chips */}
         {activeFilters.length > 0 && (
           <div className="flex flex-wrap items-center gap-2 px-6 pb-4">
             {activeFilters.map(([key, value]) => (

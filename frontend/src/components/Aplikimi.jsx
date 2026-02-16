@@ -78,7 +78,6 @@ function Aplikimi() {
       return;
     }
 
-    // Validate required fields
     if (!aplikimi.emriAplikantit || !aplikimi.mbiemriAplikantit) {
       showAlert("Ju lutem plotësoni emrin dhe mbiemrin", "warning");
       setIsSubmitting(false);

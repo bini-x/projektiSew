@@ -16,12 +16,10 @@ function BallinaPundhenesit() {
 
   const itemsPerPage = 6;
 
-  // Reset to page 1 when search changes
   useEffect(() => {
     setCurrentPage(1);
   }, [kerkoParams]);
 
-  // Fetch applicants (with or without search)
   useEffect(() => {
     const fetchAplikantet = async () => {
       setIsLoading(true);
@@ -32,12 +30,10 @@ function BallinaPundhenesit() {
         let response;
 
         if (params.toString()) {
-          // Search with filters
           response = await axios.get(
             `http://localhost:3000/api/kerkoAplikantin?${params.toString()}`,
           );
         } else {
-          // Get all applicants
           response = await axios.get("http://localhost:3000/api/aplikantet");
         }
 
@@ -59,7 +55,6 @@ function BallinaPundhenesit() {
     fetchAplikantet();
   }, [kerkoParams]);
 
-  // Fetch total applicants count for stats (without search)
   useEffect(() => {
     const fetchTotalApplicants = async () => {
       try {
@@ -193,14 +188,12 @@ function BallinaPundhenesit() {
           </div>
         </div>
 
-        {/* Loading State */}
         {isLoading && (
           <div className="flex justify-center items-center py-20">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0f4c75]"></div>
           </div>
         )}
 
-        {/* Error State */}
         {error && !isLoading && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-lg text-center max-w-2xl mx-auto mb-8">
             <p className="font-medium">{error}</p>
@@ -213,7 +206,6 @@ function BallinaPundhenesit() {
           </div>
         )}
 
-        {/* Search Results Count */}
         {!isLoading && kerkoParams.toString() && (
           <div className="text-center mb-6">
             <p className="text-gray-600">
@@ -226,7 +218,6 @@ function BallinaPundhenesit() {
           </div>
         )}
 
-        {/* Applicants Grid */}
         {!isLoading && !error && aplikantet.length > 0 && (
           <>
             <div className="rounded-2xl grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
@@ -243,10 +234,8 @@ function BallinaPundhenesit() {
               ))}
             </div>
 
-            {/* Pagination */}
             {totalPages > 1 && (
               <div className="flex justify-center items-center gap-2 mt-16">
-                {/* Previous Button */}
                 <button
                   onClick={() =>
                     setCurrentPage((prev) => Math.max(prev - 1, 1))
@@ -278,7 +267,6 @@ function BallinaPundhenesit() {
                   <span className="hidden sm:inline">Prev</span>
                 </button>
 
-                {/* Page Numbers */}
                 <div className="flex gap-1">
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map(
                     (page) => (
@@ -300,7 +288,6 @@ function BallinaPundhenesit() {
                   )}
                 </div>
 
-                {/* Next Button */}
                 <button
                   onClick={() =>
                     setCurrentPage((prev) => Math.min(prev + 1, totalPages))
@@ -336,7 +323,6 @@ function BallinaPundhenesit() {
           </>
         )}
 
-        {/* Empty State */}
         {!isLoading && !error && aplikantet.length === 0 && (
           <div className="text-center py-20 bg-white rounded-2xl border border-[#D6E6F2]">
             <svg

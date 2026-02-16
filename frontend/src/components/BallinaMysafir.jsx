@@ -75,19 +75,15 @@ function BallinaMysafir() {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#F5F7F8]">
-      {/* Header with Hero Background - Combined Section */}
       <div className="relative overflow-hidden">
-        {/* Background Image with Overlay */}
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage: `url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80')`,
           }}
         >
-          {/* linear Overlay */}
           <div className="absolute inset-0 bg-linear-to-r from-[#0f4c75]/90 via-[#0f4c75]/85 to-[#6d94c5]/80" />
 
-          {/* Diagonal Pattern Overlay */}
           <div
             className="absolute inset-0 opacity-10"
             style={{
@@ -102,14 +98,11 @@ function BallinaMysafir() {
           />
         </div>
 
-        {/* Header - with relative positioning and white text */}
         <div className="relative z-10 header-white-text">
           <Header />
         </div>
 
-        {/* Hero Content */}
         <div className="relative min-h-[600px] flex flex-col items-center justify-center py-20">
-          {/* Decorative elements */}
           <div className="absolute top-32 left-10 z-10 opacity-20">
             <Sparkles size={40} color="#ffffff" />
           </div>
@@ -117,34 +110,27 @@ function BallinaMysafir() {
             <Sparkles size={50} color="#ffffff" />
           </div>
 
-          {/* Content Container */}
           <div className="relative z-20 text-center px-4 max-w-4xl mx-auto">
-            {/* Subtitle above main heading */}
             <p className="text-lg md:text-xl text-white/90 mb-3 font-light tracking-wide">
               Platforma më e madhe e punësimit në Kosovë
             </p>
 
-            {/* Main Heading */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-3 drop-shadow-2xl leading-tight">
               Gjeni punën perfekte për ju
             </h1>
 
-            {/* Tagline below main heading */}
             <p className="text-base md:text-lg text-white/80 mb-8 font-light max-w-2xl mx-auto">
               Mundësi pune nga kompanitë më të mira
             </p>
 
-            {/* Search Component */}
             <Kerkimi />
           </div>
         </div>
       </div>
 
-      {/* Two Column Section */}
       <div className="py-20 px-4 ">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Employers Card */}
             <div className="bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl p-8 border border-gray-100 flex flex-col">
               <h1 className="text-2xl font-semibold mb-4 text-gray-800">
                 Po punësoni talentë?
@@ -176,7 +162,6 @@ function BallinaMysafir() {
               </button>
             </div>
 
-            {/* Job Seekers Card */}
             <div className="bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl p-8 border border-gray-100 flex flex-col">
               <h1 className="text-2xl font-semibold mb-7 text-gray-800">
                 Po kërkoni punë?
@@ -211,7 +196,6 @@ function BallinaMysafir() {
         </div>
       </div>
 
-      {/* Features Section */}
       <div className="py-20 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
@@ -300,7 +284,6 @@ function BallinaMysafir() {
             </div>
           </div>
 
-          {/* Job Listings Title */}
           <div>
             <h2 className="text-4xl font-bold text-gray-800 mb-3">
               Pozicione të Reja të Punës
@@ -312,7 +295,6 @@ function BallinaMysafir() {
         </div>
       </div>
 
-      {/* Job Cards Section */}
       <div className="pb-20 px-4">
         <div className="shpalljaCard max-w-7xl mx-auto">
           {shpalljaData.slice(0, 9).map((shpallja, index) => {

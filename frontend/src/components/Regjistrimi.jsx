@@ -120,7 +120,6 @@ function Regjistrimi() {
           fjalekalimi: dataAplikant.fjalekalimi,
         };
       } else if (tipiPerdoruesit === "punedhenes") {
-        // Validate all fields
         if (
           !dataPunedhenesi.kompania.trim() ||
           !dataPunedhenesi.email.trim() ||
@@ -131,12 +130,10 @@ function Regjistrimi() {
           return;
         }
 
-        // Validate email
         if (!validateEmail(dataPunedhenesi.email)) {
           return;
         }
 
-        // Validate passwords match
         if (
           dataPunedhenesi.fjalekalimi !== dataPunedhenesi.konfirmoFjalekalimin
         ) {
@@ -144,7 +141,6 @@ function Regjistrimi() {
           return;
         }
 
-        // Validate password strength
         if (!validatePassword(dataPunedhenesi.fjalekalimi)) {
           return;
         }
@@ -253,7 +249,6 @@ function Regjistrimi() {
               className="grid grid-cols-1 gap-3 sm:gap-4"
               autoComplete="off"
             >
-              {/* Emri */}
               <div className="grid grid-cols-1 gap-1">
                 <label htmlFor="emri" className="text-sm sm:text-base">
                   Emri <span className="text-red-500">*</span>
@@ -273,7 +268,6 @@ function Regjistrimi() {
                 />
               </div>
 
-              {/* Mbiemri */}
               <div className="grid grid-cols-1 gap-1">
                 <label htmlFor="mbiemri" className="text-sm sm:text-base">
                   Mbiemri <span className="text-red-500">*</span>
@@ -293,7 +287,6 @@ function Regjistrimi() {
                 />
               </div>
 
-              {/* Email */}
               <div className="grid grid-cols-1 gap-1">
                 <label htmlFor="email" className="text-sm sm:text-base">
                   Email <span className="text-red-500">*</span>
@@ -313,7 +306,6 @@ function Regjistrimi() {
                 />
               </div>
 
-              {/* Fjalekalimi */}
               <div className="grid grid-cols-1 gap-1">
                 <label htmlFor="fjalekalimi" className="text-sm sm:text-base">
                   Fjalëkalimi <span className="text-red-500">*</span>
@@ -353,7 +345,6 @@ function Regjistrimi() {
                 </div>
               </div>
 
-              {/* Konfirmo Fjalekalimin */}
               <div className="grid grid-cols-1 gap-1">
                 <label
                   htmlFor="konfirmoFjalekalimin"
@@ -400,7 +391,6 @@ function Regjistrimi() {
                 </div>
               </div>
 
-              {/* Password requirements info */}
               <div className="bg-blue-50 rounded-lg p-3 border border-blue-100 text-xs">
                 <p className="font-semibold text-blue-900 mb-1">
                   Kërkesat për fjalëkalimin:
@@ -431,7 +421,6 @@ function Regjistrimi() {
               onSubmit={handleSubmit}
               className="grid grid-cols-1 gap-3 sm:gap-4"
             >
-              {/* Kompania */}
               <div className="grid grid-cols-1 gap-1">
                 <label htmlFor="kompania" className="text-sm sm:text-base">
                   Kompania <span className="text-red-500">*</span>
@@ -451,7 +440,6 @@ function Regjistrimi() {
                 />
               </div>
 
-              {/* Email */}
               <div className="grid grid-cols-1 gap-1">
                 <label htmlFor="email_p" className="text-sm sm:text-base">
                   Email <span className="text-red-500">*</span>
@@ -471,7 +459,6 @@ function Regjistrimi() {
                 />
               </div>
 
-              {/* Fjalekalimi */}
               <div className="grid grid-cols-1 gap-1">
                 <label htmlFor="fjalekalimi_p" className="text-sm sm:text-base">
                   Fjalëkalimin <span className="text-red-500">*</span>
@@ -511,7 +498,6 @@ function Regjistrimi() {
                 </div>
               </div>
 
-              {/* Konfirmo Fjalekalimin */}
               <div className="grid grid-cols-1 gap-1">
                 <label
                   htmlFor="konfirmoFjalekalimin_p"
@@ -558,7 +544,6 @@ function Regjistrimi() {
                 </div>
               </div>
 
-              {/* Password requirements info */}
               <div className="bg-blue-50 rounded-lg p-3 border border-blue-100 text-xs">
                 <p className="font-semibold text-blue-900 mb-1">
                   Kërkesat për fjalëkalimin:

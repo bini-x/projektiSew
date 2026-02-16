@@ -21,7 +21,6 @@ const CustomAlert = () => {
 
   return (
     <>
-      {/* Alert Toast */}
       {alert.open && (
         <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-96 max-w-[90%] ease-in-out transition-all duration-300">
           <div
@@ -40,18 +39,14 @@ const CustomAlert = () => {
         </div>
       )}
 
-      {/* Confirm Dialog */}
       {confirm.open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          {/* Backdrop */}
           <div
             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
             onClick={hideConfirm}
           ></div>
 
-          {/* Modal */}
           <div className="relative z-10 w-full max-w-md mx-4 bg-white rounded-2xl shadow-2xl overflow-hidden">
-            {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center">
@@ -69,12 +64,10 @@ const CustomAlert = () => {
               </button>
             </div>
 
-            {/* Body */}
             <div className="p-6">
               <p className="text-gray-600 leading-relaxed">{confirm.message}</p>
             </div>
 
-            {/* Footer */}
             <div className="flex gap-3 p-6 bg-gray-50 border-t border-gray-200">
               <button
                 onClick={hideConfirm}

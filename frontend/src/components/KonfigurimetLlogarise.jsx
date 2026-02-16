@@ -46,13 +46,11 @@ function KonfigurimetLlogarise() {
   }, [id]);
 
   const validatePassword = (password) => {
-    // At least 8 characters
     if (password.length < 8) {
       showAlert("Fjalëkalimi duhet të jetë të paktën 8 karaktere", "warning");
       return false;
     }
 
-    // Contains uppercase and lowercase
     if (!/[a-z]/.test(password) || !/[A-Z]/.test(password)) {
       showAlert(
         "Fjalëkalimi duhet të përmbajë shkronja të vogla dhe të mëdha",
@@ -61,7 +59,6 @@ function KonfigurimetLlogarise() {
       return false;
     }
 
-    // Contains at least one number or symbol
     if (!/[0-9!@#$%^&*(),.?":{}|<>]/.test(password)) {
       showAlert(
         "Fjalëkalimi duhet të përmbajë të paktën 1 numër ose simbol",
@@ -70,7 +67,6 @@ function KonfigurimetLlogarise() {
       return false;
     }
 
-    // No spaces
     if (/\s/.test(password)) {
       showAlert("Fjalëkalimi nuk duhet të përmbajë hapësira", "warning");
       return false;
@@ -82,7 +78,6 @@ function KonfigurimetLlogarise() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // If user is changing password, validate all password fields
     if (currentPassword || newPassword || repeatPassword) {
       if (!currentPassword) {
         showAlert("Ju lutem shkruani fjalëkalimin aktual", "warning");
@@ -161,7 +156,6 @@ function KonfigurimetLlogarise() {
         setNewPassword("");
         setRepeatPassword("");
 
-        // Update local state with new password if changed
         if (newPassword) {
           setPerdoruesiData((prev) => ({
             ...prev,
@@ -192,7 +186,6 @@ function KonfigurimetLlogarise() {
       <Header withGradient={true} />
       <div className="container mx-auto px-4 py-8 max-w-3xl">
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-          {/* Header with icon and title */}
           <div className="bg-[#0F4C75] px-8 py-6 text-white">
             <div className="flex items-center space-x-4">
               <div className="p-3 bg-white/20 rounded-full">
@@ -209,14 +202,12 @@ function KonfigurimetLlogarise() {
             </div>
           </div>
 
-          {/* Form Section */}
           <div className="p-8">
             <form
               onSubmit={handleSubmit}
               className="space-y-6"
               autoComplete="off"
             >
-              {/* Conditional fields based on user type */}
               {perdoruesiData.tipiPerdoruesit === "aplikant" ? (
                 <>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -273,7 +264,6 @@ function KonfigurimetLlogarise() {
                 </div>
               )}
 
-              {/* Email field - common for both */}
               <div className="space-y-2">
                 <label
                   htmlFor="email"
@@ -291,7 +281,6 @@ function KonfigurimetLlogarise() {
                 />
               </div>
 
-              {/* Separator */}
               <div className="relative py-4">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-gray-200"></div>
@@ -303,9 +292,7 @@ function KonfigurimetLlogarise() {
                 </div>
               </div>
 
-              {/* Password fields */}
               <div className="space-y-4">
-                {/* Current Password */}
                 <div className="space-y-2">
                   <label
                     htmlFor="fjalekalimi"
@@ -393,7 +380,6 @@ function KonfigurimetLlogarise() {
                 </div>
               </div>
 
-              {/* Password requirements card */}
               <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
                 <h4 className="text-sm font-semibold text-[#0F4C75] mb-2">
                   Kërkesat për fjalëkalimin:
@@ -407,7 +393,6 @@ function KonfigurimetLlogarise() {
                 </ul>
               </div>
 
-              {/* Submit button */}
               <div className="pt-4">
                 <button type="submit" className="publikoPune">
                   Përditëso të dhënat

@@ -16,12 +16,10 @@ function ListaKompanive() {
 
   const itemsPerPage = 6;
 
-  // Reset to page 1 when search changes
   useEffect(() => {
     setCurrentPage(1);
   }, [kerkoParams]);
 
-  // Fetch companies (with or without search)
   useEffect(() => {
     const fetchKompanite = async () => {
       setIsLoading(true);
@@ -32,12 +30,10 @@ function ListaKompanive() {
         let response;
 
         if (params.toString()) {
-          // Search with filters
           response = await axios.get(
             `http://localhost:3000/api/kerkoKompanine?${params.toString()}`,
           );
         } else {
-          // Get all companies
           response = await axios.get(
             "http://localhost:3000/api/kompania/kompanite",
           );
@@ -61,7 +57,6 @@ function ListaKompanive() {
     fetchKompanite();
   }, [kerkoParams]);
 
-  // Fetch total companies count for stats (without search)
   useEffect(() => {
     const fetchTotalCompanies = async () => {
       try {
@@ -80,7 +75,6 @@ function ListaKompanive() {
     fetchTotalCompanies();
   }, []);
 
-  // Fetch active jobs count
   useEffect(() => {
     const fetchJobsCount = async () => {
       try {
@@ -109,12 +103,10 @@ function ListaKompanive() {
 
   return (
     <div className="min-h-screen bg-[#F5F7F8]">
-      {/* Gradient Hero Section */}
       <div className="bg-gradient-to-br from-[#F7FBFC] to-[#B9D7EA] pb-16 backdrop-blur-sm">
         <Header withGradient={false} />
 
         <div className="max-w-6xl mx-auto px-4 mt-20 mb-12">
-          {/* Hero Section */}
           <div className="text-center mb-8">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-4">
               Kompanitë
@@ -125,7 +117,6 @@ function ListaKompanive() {
             </p>
           </div>
 
-          {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10 max-w-4xl mx-auto">
             <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 bg-[#0f4c75] rounded-full flex items-center justify-center mb-4 mx-auto">
@@ -176,16 +167,13 @@ function ListaKompanive() {
             </div>
           </div>
 
-          {/* Search Component */}
           <div className="mt-20">
             <Kerkimi showLocation={false} showCategory={false} compact={true} />
           </div>
         </div>
       </div>
 
-      {/* Main Content Section */}
       <div className="max-w-7xl mx-auto px-6 py-16">
-        {/* Section Header */}
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-700 mb-3">
             Gjej kompaninë që të përshtatet
@@ -195,14 +183,12 @@ function ListaKompanive() {
           </p>
         </div>
 
-        {/* Loading State */}
         {isLoading && (
           <div className="flex justify-center items-center py-20">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0f4c75]"></div>
           </div>
         )}
 
-        {/* Error State */}
         {error && !isLoading && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-lg text-center max-w-2xl mx-auto mb-8">
             <p className="font-medium">{error}</p>
@@ -215,7 +201,6 @@ function ListaKompanive() {
           </div>
         )}
 
-        {/* Search Results Count */}
         {!isLoading && kerkoParams.toString() && (
           <div className="text-center mb-6">
             <p className="text-gray-600">
@@ -228,7 +213,6 @@ function ListaKompanive() {
           </div>
         )}
 
-        {/* Companies Grid */}
         {!isLoading && !error && kompanite.length > 0 && (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
@@ -237,10 +221,8 @@ function ListaKompanive() {
               ))}
             </div>
 
-            {/* Pagination */}
             {totalPages > 1 && (
               <div className="flex justify-center items-center gap-2 mt-16">
-                {/* Previous Button */}
                 <button
                   onClick={() =>
                     setCurrentPage((prev) => Math.max(prev - 1, 1))
@@ -272,7 +254,6 @@ function ListaKompanive() {
                   <span className="hidden sm:inline">Prev</span>
                 </button>
 
-                {/* Page Numbers */}
                 <div className="flex gap-1">
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map(
                     (page) => (
@@ -294,7 +275,6 @@ function ListaKompanive() {
                   )}
                 </div>
 
-                {/* Next Button */}
                 <button
                   onClick={() =>
                     setCurrentPage((prev) => Math.min(prev + 1, totalPages))
@@ -330,7 +310,6 @@ function ListaKompanive() {
           </>
         )}
 
-        {/* Empty State */}
         {!isLoading && !error && kompanite.length === 0 && (
           <div className="text-center mt-20">
             <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-12 max-w-lg mx-auto shadow-lg">

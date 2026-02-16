@@ -94,12 +94,10 @@ function ListaAplikanteve() {
 
   return (
     <div className="min-h-screen bg-[#F5F7F8]">
-      {/* Gradient Hero Section */}
       <div className="bg-gradient-to-br from-[#F7FBFC] to-[#B9D7EA] pb-16 backdrop-blur-sm">
         <Header withGradient={false} />
 
         <div className="max-w-6xl mx-auto px-4 mt-20 mb-12">
-          {/* Hero Section */}
           <div className="text-center mb-8">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-4">
               Aplikantët
@@ -110,7 +108,6 @@ function ListaAplikanteve() {
             </p>
           </div>
 
-          {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10 max-w-4xl mx-auto">
             <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 bg-[#0f4c75] rounded-full flex items-center justify-center mb-4 mx-auto">
@@ -161,16 +158,13 @@ function ListaAplikanteve() {
             </div>
           </div>
 
-          {/* Search Section */}
           <div className="mt-20">
             <Kerkimi showLocation={false} showCategory={false} compact={true} />
           </div>
         </div>
       </div>
 
-      {/* Content Section */}
       <div className="max-w-7xl mx-auto px-6 py-16">
-        {/* Section Title */}
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-700 mb-3">
             Gjej talentin që kërkon
@@ -181,7 +175,6 @@ function ListaAplikanteve() {
           </p>
         </div>
 
-        {/* Applicants Grid */}
         {aplikantet.length === 0 ? (
           <div className="text-center mt-20">
             <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-12 max-w-lg mx-auto shadow-lg">
@@ -202,7 +195,6 @@ function ListaAplikanteve() {
               ))}
             </div>
 
-            {/* Pagination */}
             {totalPages > 1 && (
               <div className="flex justify-center items-center gap-3 mt-16">
                 <button

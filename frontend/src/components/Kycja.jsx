@@ -62,13 +62,11 @@ function Kycja() {
             <h1>Kycu</h1>
           </div>
 
-          {/* Form */}
           <form
             onSubmit={handleSubmit}
             className="grid gap-4 sm:gap-5"
             autoComplete="off"
           >
-            {/* Email Field */}
             <div className="grid gap-1">
               <label htmlFor="email" className="text-sm sm:text-base">
                 Email

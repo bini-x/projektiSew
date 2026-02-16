@@ -2,7 +2,6 @@
 @import "tailwindcss";
 
 @theme {
-  /* Colors */
   --color-primary: #0f4c75;
   --color-secondary: #6d94c5;
   --color-footer: #34495e;
@@ -20,20 +19,18 @@
   }
 }
 @layer components {
-  /* Ballina */
   .nav-link {
     @apply text-gray-700 hover:text-primary font-medium transition-colors duration-200;
   }
 
   .publikoPune {
-    @apply w-full px-6 py-3 bg-linear-to-r from-[#0f4c75] to-[#6d94c5] text-white font-semibold rounded-xl hover:from-[#0d3d5e] hover:to-[#5a7dad] transition-all duration-300 shadow-lg hover:shadow-xl;
+    @apply w-full px-6 py-3 bg-gradient-to-r from-[#0f4c75] to-[#6d94c5] text-white font-semibold rounded-xl hover:from-[#0d3d5e] hover:to-[#5a7dad] transition-all duration-300 shadow-lg hover:shadow-xl;
   }
 
   .kycja {
     @apply px-6 py-2 text-primary hover:text-white font-medium duration-200 border hover:bg-primary rounded-lg transition-colors;
   }
 
-  /* Butoni */
   .butoniKycjeRegjistrim {
     @apply border  block rounded-3xl p-1 w-full bg-primary hover:bg-white border-primary text-white hover:text-black cursor-pointer;
   }
@@ -98,7 +95,7 @@
     @apply grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-[repeat(3,430px)] gap-8 justify-center mx-4 my-6 md:mx-10 md:my-10 lg:mx-16;
   }
   .hrCard {
-    @apply border-0 h-px bg-linear-to-r from-transparent via-gray-300 to-transparent mt-2 mb-3;
+    @apply border-0 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent mt-2 mb-3;
   }
 
   .ballinaMysafir {
@@ -129,22 +126,17 @@
     @apply flex flex-col lg:flex-row items-start lg:items-center justify-between mb-6 border-b border-gray-200 gap-4;
   }
 
-  /* Header White Text Styles for Hero Background */
-
-  /* Add spacing to header in hero section */
   .header-white-text {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
   }
 
-  /* Force all text elements to be white - EXCEPT buttons and links with specific classes */
   .header-white-text a:not([class*="bg-"]):not([class*="border"]),
   .header-white-text button:not([class*="bg-"]):not([class*="border"]),
   .header-white-text span:not([class*="bg-"]):not([class*="border"]) {
     color: white !important;
   }
 
-  /* Logo text should be white - override gradient */
   .header-white-text .bg-clip-text {
     background: white !important;
     -webkit-background-clip: text !important;
@@ -156,17 +148,14 @@
     color: white !important;
   }
 
-  /* Make sure logo icon is white */
   .header-white-text svg:not([class*="lucide"]) {
     color: white !important;
   }
 
-  /* Navigation links hover underline - make it white */
   .header-white-text nav a .absolute {
     background: white !important;
   }
 
-  /* Profile button hover effects - only for profile dropdown button */
   .header-white-text
     button[class*="rounded-xl"]:not([class*="bg-white"]):not(
       [class*="bg-transparent"]
@@ -174,7 +163,6 @@
     background-color: rgba(255, 255, 255, 0.15) !important;
   }
 
-  /* CRITICAL: Dropdown menu - reset styles and allow original hover states */
   .header-white-text .absolute.right-0 {
     background-color: white !important;
   }
@@ -186,7 +174,6 @@
     color: #374151 !important;
   }
 
-  /* Allow hover states to work in dropdown - remove !important for hover */
   .header-white-text .absolute.right-0 a:hover,
   .header-white-text .absolute.right-0 button:hover {
     background: linear-gradient(
@@ -197,17 +184,14 @@
     color: #0f4c75 !important;
   }
 
-  /* Dropdown icons - keep blue color */
   .header-white-text .absolute.right-0 svg {
     color: #0f4c75 !important;
   }
 
-  /* Icon background hover effects */
   .header-white-text .absolute.right-0 .group:hover .bg-\[\#0F4C75\]\/10 {
     background-color: rgba(15, 76, 117, 0.2) !important;
   }
 
-  /* Red logout button hover */
   .header-white-text .absolute.right-0 .hover\:bg-red-50:hover {
     background-color: #fef2f2 !important;
   }
@@ -220,7 +204,6 @@
     color: #dc2626 !important;
   }
 
-  /* Header text colors in dropdown */
   .header-white-text .absolute.right-0 .text-gray-500 {
     color: #6b7280 !important;
   }
@@ -233,8 +216,53 @@
     color: #3f3f46 !important;
   }
 
-  /* Mobile menu should stay normal */
   .header-white-text + div {
     color: #374151 !important;
+  }
+
+  .mobile-menu-override {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(8px) !important;
+  }
+
+  .mobile-menu-override
+    *:not([class*="bg-gradient"]):not(.publikoPune):not(.publikoPune *),
+  .mobile-menu-override a:not([class*="bg-gradient"]):not(.publikoPune),
+  .mobile-menu-override button:not([class*="bg-gradient"]):not(.publikoPune),
+  .mobile-menu-override
+    span:not([class*="bg-gradient"]):not([class*="lucide"]):not(.publikoPune) {
+    color: #1f2937 !important;
+  }
+
+  .mobile-menu-override .text-gray-800,
+  .mobile-menu-override [class*="text-gray"] {
+    color: #1f2937 !important;
+  }
+
+  .mobile-menu-override .publikoPune {
+    color: white !important;
+  }
+
+  .header-white-text ~ .mobile-menu-override,
+  .header-white-text + .mobile-menu-override {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+  }
+
+  .header-white-text
+    ~ .mobile-menu-override
+    *:not([class*="bg-gradient"]):not(.text-white):not([class*="text-red"]):not(
+      .publikoPune
+    ):not(.publikoPune *),
+  .header-white-text
+    + .mobile-menu-override
+    *:not([class*="bg-gradient"]):not(.text-white):not([class*="text-red"]):not(
+      .publikoPune
+    ):not(.publikoPune *) {
+    color: #1f2937 !important;
+  }
+
+  .header-white-text ~ .mobile-menu-override .publikoPune,
+  .header-white-text + .mobile-menu-override .publikoPune {
+    color: white !important;
   }
 }

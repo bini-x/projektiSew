@@ -16,7 +16,6 @@ function AplikantiCard({ aplikanti }) {
         const response = await axios.get(
           `http://localhost:3000/api/profili/${aplikanti._id}`,
         );
-        // Ngarko foton e profile nese ekziston
         if (response.data.data.foto) {
           setFotoProfile(
             `http://localhost:3000/api/profili/${aplikanti._id}/foto`,
@@ -44,9 +43,7 @@ function AplikantiCard({ aplikanti }) {
 
   return (
     <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-gray-200 shadow-lg w-full p-6 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 hover:border-gray-300 hover:bg-white/90 group">
-      {/* Header with Profile Photo and Name */}
       <div className="flex items-start gap-3 mb-4">
-        {/* Profile Photo */}
         <div className="shrink-0 transition-transform duration-300 group-hover:scale-110">
           <div className="w-16 h-16 rounded-xl overflow-hidden bg-gradient-to-br from-slate-700 via-gray-800 to-black flex items-center justify-center border border-gray-200">
             {fotoProfile ? (
@@ -63,7 +60,6 @@ function AplikantiCard({ aplikanti }) {
           </div>
         </div>
 
-        {/* Applicant Name */}
         <div className="flex-1 min-w-0">
           <h3 className="font-bold text-xl text-gray-900 leading-tight transition-colors duration-300 group-hover:text-[#0f4c75]">
             {aplikanti.emri} {aplikanti.mbiemri}
@@ -71,7 +67,6 @@ function AplikantiCard({ aplikanti }) {
         </div>
       </div>
 
-      {/* Applicant Email */}
       <div className="mb-4">
         <p className="flex items-center text-gray-700 font-medium text-sm transition-colors duration-300 group-hover:text-gray-900">
           <FontAwesomeIcon
@@ -82,13 +77,9 @@ function AplikantiCard({ aplikanti }) {
         </p>
       </div>
 
-      {/* HR Line */}
       <hr className="border-gray-200 my-4 transition-opacity duration-300 group-hover:opacity-50" />
 
-      {/* Footer - View More Button */}
       <div className="flex items-center justify-between">
-        <div>{/* Placeholder for additional info if needed */}</div>
-
         <button
           className="relative group/button bg-transparent cursor-pointer"
           onClick={handleClick}

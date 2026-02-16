@@ -121,7 +121,6 @@ function ShpalljaCard({ shpallja }) {
   const isPhotoBase64 =
     shpallja.fotoProfili && shpallja.fotoProfili.startsWith("data:");
 
-  // Extract company name from email (before @)
   const getCompanyName = () => {
     if (!shpallja.emailKompanise) return "COMPANY";
     const name = shpallja.emailKompanise.split("@")[0];
@@ -130,9 +129,7 @@ function ShpalljaCard({ shpallja }) {
 
   return (
     <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-gray-200 shadow-lg w-full p-6 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 hover:border-gray-300 hover:bg-white/90 group">
-      {/* Header with Logo, Company Name, and Bookmark */}
       <div className="flex items-start gap-3 mb-2">
-        {/* Company Logo */}
         <div className="shrink-0 transition-transform duration-300 group-hover:scale-110">
           {(isPhotoUrl || isPhotoBase64) && !fotoError ? (
             <img
@@ -150,7 +147,6 @@ function ShpalljaCard({ shpallja }) {
           )}
         </div>
 
-        {/* Company Name and Title */}
         <div className="flex-1 min-w-0">
           <p className="text-xs text-gray-500 uppercase tracking-wide mb-1 transition-colors duration-300 group-hover:text-[#0f4c75]">
             {getCompanyName()}
@@ -160,7 +156,6 @@ function ShpalljaCard({ shpallja }) {
           </h3>
         </div>
 
-        {/* Bookmark Button */}
         {perdoruesiData?.tipiPerdoruesit !== "punedhenes" && (
           <button
             onClick={ndryshoRuajtjen}
@@ -179,7 +174,6 @@ function ShpalljaCard({ shpallja }) {
         )}
       </div>
 
-      {/* Job Details */}
       <div className="mb-2 h-10 overflow-hidden">
         <p className="text-sm text-gray-600 mb-3 line-clamp-2 min-h-[2.5rem] transition-colors duration-300 group-hover:text-gray-700">
           {shpallja.pershkrimiPunes
@@ -189,10 +183,8 @@ function ShpalljaCard({ shpallja }) {
         </p>
       </div>
 
-      {/* HR Line */}
       <hr className="hrCard transition-opacity duration-300 group-hover:opacity-50" />
 
-      {/* Footer - Tags and Location */}
       <div className="flex items-center gap-2 mb-3 flex-wrap">
         <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium transition-all duration-300 group-hover:bg-[#0f4c75]/10 group-hover:text-[#0f4c75]">
           <FontAwesomeIcon
@@ -233,7 +225,6 @@ function ShpalljaCard({ shpallja }) {
         )}
       </div>
 
-      {/* Apply Button */}
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div>
           {shpallja.pagaPrej > 0 && shpallja.pagaDeri > 0 && (
