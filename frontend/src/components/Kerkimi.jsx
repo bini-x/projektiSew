@@ -12,10 +12,8 @@ const EMPTY_FILTERS = {
   kerko: "",
   lokacioniPunes: "",
   kategoriaPunes: "",
-  kompania: "",
 };
 
-// Human-readable labels for each filter chip
 const FILTER_LABELS = {
   kerko: (v) => `"${v}"`,
   lokacioniPunes: (v) => v,
@@ -31,13 +29,7 @@ function Kerkimi({
   const navigate = useNavigate();
   const location = useLocation();
   const [filters, setFilters] = useState(EMPTY_FILTERS);
-  const [filters, setFilters] = useState({
-    kerko: "",
-    lokacioniPunes: "",
-    kategoriaPunes: "",
-  });
 
-  // Ref so updateURL always reads the latest filters without stale closures
   const filtersRef = useRef(filters);
   useEffect(() => {
     filtersRef.current = filters;
@@ -51,7 +43,6 @@ function Kerkimi({
       params.append("lokacioniPunes", f.lokacioniPunes.trim());
     if (f.kategoriaPunes.trim())
       params.append("kategoriaPunes", f.kategoriaPunes.trim());
-    if (f.kompania.trim()) params.append("kompania", f.kompania.trim());
     navigate(`${location.pathname}?${params.toString()}`, { replace: true });
   };
 
@@ -64,7 +55,7 @@ function Kerkimi({
   // Dropdowns fire instantly
   useEffect(() => {
     updateURL();
-  }, [filters.lokacioniPunes, filters.kategoriaPunes, filters.kompania]);
+  }, [filters.lokacioniPunes, filters.kategoriaPunes]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

@@ -3,78 +3,85 @@ import Header from "./Header";
 import { useEffect, useState } from "react";
 import { Search, CircleCheck, MessageCircleMore } from "lucide-react";
 import axios from "axios";
+import Kerkimi from "./Kerkimi";
+import { useSearchParams } from "react-router-dom";
 
 function BallinaPundhenesit() {
   const [aplikantet, setAplikantet] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filterActive, setFilterActive] = useState("te-gjithe");
-  const [sortOrder, setSortOrder] = useState("newest");
+  const [aplikantetPaKerkim, setAplikantetPaKerkim] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [kerkoParams] = useSearchParams();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
+  const itemsPerPage = 6;
+
+  // Reset to page 1 when search changes
   useEffect(() => {
-    const fetchData = async () => {
+    setCurrentPage(1);
+  }, [kerkoParams]);
+
+  // Fetch applicants (with or without search)
+  useEffect(() => {
+    const fetchAplikantet = async () => {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const params = new URLSearchParams(kerkoParams);
+        let response;
+
+        if (params.toString()) {
+          // Search with filters
+          response = await axios.get(
+            `http://localhost:3000/api/kerkoAplikantin?${params.toString()}`,
+          );
+        } else {
+          // Get all applicants
+          response = await axios.get("http://localhost:3000/api/aplikantet");
+        }
+
+        if (response.data.success || response.data.data) {
+          setAplikantet(response.data.data || []);
+        } else {
+          setError("Gabim gjatë kërkimit të aplikantëve");
+          setAplikantet([]);
+        }
+      } catch (err) {
+        console.error("Error fetching applicants:", err);
+        setError(err.response?.data?.message || "Gabim në lidhjen me serverin");
+        setAplikantet([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAplikantet();
+  }, [kerkoParams]);
+
+  // Fetch total applicants count for stats (without search)
+  useEffect(() => {
+    const fetchTotalApplicants = async () => {
       try {
         const response = await axios.get(
           "http://localhost:3000/api/aplikantet",
         );
-        setAplikantet(response.data.data);
-      } catch (error) {
-        console.error(error);
+        if (response.data.data) {
+          setAplikantetPaKerkim(response.data.data);
+        }
+      } catch (err) {
+        console.error(err);
+        setAplikantetPaKerkim([]);
       }
     };
 
-    fetchData();
+    fetchTotalApplicants();
   }, []);
 
-  useEffect(() => {
-    const selectEl = document.querySelector("select");
-    if (!selectEl) return;
-
-    const handleChange = (e) => {
-      const value = e.target.value;
-      if (value.includes("Më të rinjtë")) setSortOrder("newest");
-      if (value.includes("Më të vjetrit")) setSortOrder("oldest");
-      if (value.includes("Emrit (A-Z)")) setSortOrder("az");
-      if (value.includes("Emrit (Z-A)")) setSortOrder("za");
-    };
-
-    selectEl.addEventListener("change", handleChange);
-    return () => selectEl.removeEventListener("change", handleChange);
-  }, []);
-
-  useEffect(() => {
-    let sorted = [...aplikantet];
-
-    const getDate = (item) => {
-      if (item.createdAt) return new Date(item.createdAt);
-      if (item._id)
-        return new Date(parseInt(item._id.substring(0, 8), 16) * 1000);
-      return new Date(0);
-    };
-
-    if (sortOrder === "newest") {
-      sorted.sort((a, b) => getDate(b) - getDate(a));
-    }
-
-    if (sortOrder === "oldest") {
-      sorted.sort((a, b) => getDate(a) - getDate(b));
-    }
-
-    if (sortOrder === "az") {
-      sorted.sort((a, b) => (a.emri || "").localeCompare(b.emri || ""));
-    }
-
-    if (sortOrder === "za") {
-      sorted.sort((a, b) => (b.emri || "").localeCompare(a.emri || ""));
-    }
-
-    setAplikantet(sorted);
-  }, [sortOrder]);
-
-  const filteredAplikantet = aplikantet.filter(
-    (a) =>
-      a.emri?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      a.email?.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
+  const totalPages = Math.ceil(aplikantet.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = aplikantet.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div className="bg-[#F5F7F8] min-h-screen font-sans">
@@ -97,7 +104,7 @@ function BallinaPundhenesit() {
               <div className="grid grid-cols-3 gap-4">
                 <div className="bg-white/60 backdrop-blur-sm rounded-xl px-6 py-4 border border-[#D6E6F2]">
                   <div className="text-3xl font-bold text-gray-800">
-                    {aplikantet.length}
+                    {aplikantetPaKerkim.length}
                   </div>
                   <div className="text-sm mt-1 text-gray-600 font-light">
                     Kandidatë aktivë
@@ -169,56 +176,8 @@ function BallinaPundhenesit() {
         </div>
       </div>
 
-      <div className="mx-10 my-5 rounded-lg sticky top-0 z-30 bg-white/55 backdrop-blur-lg border-b border-[#F7FBFC] shadow-sm">
-        <div className=" mx-auto px-6 md:px-12 py-5">
-          <div className="flex flex-col md:flex-row items-center justify-between">
-            <div className="relative flex-1 max-w-2xl ">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <Search className="text-gray-500" />
-              </div>
-              <input
-                type="text"
-                placeholder="Kërko kandidatë sipas emrit, emailit ose pozicionit..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-200 focus:border-gray-400 transition-all outline-none text-gray-800 bg-white placeholder:text-gray-400 font-light"
-              />
-            </div>
-
-            <div className="flex gap-2 flex-wrap">
-              <button
-                onClick={() => setFilterActive("te-gjithe")}
-                className={`px-5 py-2.5 rounded-lg font-medium transition-all ${
-                  filterActive === "te-gjithe"
-                    ? "bg-primary text-white shadow-lg "
-                    : "bg-white text-primary hover:bg-primary hover:text-white border border-[#769FCD]"
-                }`}
-              >
-                Të gjithë
-              </button>
-              <button
-                onClick={() => setFilterActive("te-rinj")}
-                className={`px-5 py-2.5 rounded-lg font-medium transition-all ${
-                  filterActive === "te-rinj"
-                    ? "bg-primary text-white shadow-lg "
-                    : "bg-white text-primary hover:bg-primary hover:text-white border border-[#769FCD]"
-                }`}
-              >
-                Të rinjtë
-              </button>
-              <button
-                onClick={() => setFilterActive("te-preferuar")}
-                className={`px-5 py-2.5 rounded-lg font-medium transition-all ${
-                  filterActive === "te-preferuar"
-                    ? "bg-primary text-white shadow-lg "
-                    : "bg-white text-primary hover:bg-primary hover:text-white border border-[#769FCD]"
-                }`}
-              >
-                Të preferuar
-              </button>
-            </div>
-          </div>
-        </div>
+      <div className="sticky top-0 z-30 flex justify-center my-5">
+        <Kerkimi showLocation={false} showCategory={false} compact={true} />
       </div>
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-10">
@@ -228,34 +187,157 @@ function BallinaPundhenesit() {
               Kandidatët e disponueshëm
             </h2>
             <p className="text-sm text-gray-600 font-extralight">
-              {filteredAplikantet.length}{" "}
-              {filteredAplikantet.length === 1 ? "rezultat" : "rezultate"}
+              {aplikantet.length}{" "}
+              {aplikantet.length === 1 ? "rezultat" : "rezultate"}
             </p>
           </div>
-
-          <select className="px-4 py-2.5 rounded-lg border border-gray-200 focus:border-gray-800  outline-none bg-white font-medium text-gray-800">
-            <option>Rendit sipas: Më të rinjtë</option>
-            <option>Rendit sipas: Më të vjetrit</option>
-            <option>Rendit sipas: Emrit (A-Z)</option>
-            <option>Rendit sipas: Emrit (Z-A)</option>
-          </select>
         </div>
 
-        {filteredAplikantet.length > 0 ? (
-          <div className="rounded-2xl grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredAplikantet.map((a, index) => (
-              <div
-                key={a._id}
-                className="bg-white/60 rounded-2xl shadow-lg transition-colors duration-200 "
-                style={{
-                  animation: `fadeInUp 0.4s ease-out ${index * 0.08}s both`,
-                }}
-              >
-                <AplikantiCard aplikanti={a} />
-              </div>
-            ))}
+        {/* Loading State */}
+        {isLoading && (
+          <div className="flex justify-center items-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0f4c75]"></div>
           </div>
-        ) : (
+        )}
+
+        {/* Error State */}
+        {error && !isLoading && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-lg text-center max-w-2xl mx-auto mb-8">
+            <p className="font-medium">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="mt-3 text-sm underline hover:no-underline"
+            >
+              Provo përsëri
+            </button>
+          </div>
+        )}
+
+        {/* Search Results Count */}
+        {!isLoading && kerkoParams.toString() && (
+          <div className="text-center mb-6">
+            <p className="text-gray-600">
+              U gjetën{" "}
+              <span className="font-semibold text-[#0f4c75]">
+                {aplikantet.length}
+              </span>{" "}
+              rezultate
+            </p>
+          </div>
+        )}
+
+        {/* Applicants Grid */}
+        {!isLoading && !error && aplikantet.length > 0 && (
+          <>
+            <div className="rounded-2xl grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+              {currentItems.map((a, index) => (
+                <div
+                  key={a._id}
+                  className="bg-white/60 rounded-2xl shadow-lg transition-colors duration-200 "
+                  style={{
+                    animation: `fadeInUp 0.4s ease-out ${index * 0.08}s both`,
+                  }}
+                >
+                  <AplikantiCard aplikanti={a} />
+                </div>
+              ))}
+            </div>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="flex justify-center items-center gap-2 mt-16">
+                {/* Previous Button */}
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                  }
+                  disabled={currentPage === 1}
+                  className={`
+                    px-3 py-1 rounded-full border transition-all duration-200
+                    flex items-center gap-1
+                    ${
+                      currentPage === 1
+                        ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
+                        : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400"
+                    }
+                  `}
+                >
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 19l-7-7 7-7"
+                    />
+                  </svg>
+                  <span className="hidden sm:inline">Prev</span>
+                </button>
+
+                {/* Page Numbers */}
+                <div className="flex gap-1">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                    (page) => (
+                      <button
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        className={`
+                          w-9 h-9 rounded-full font-medium transition-all duration-200
+                          ${
+                            currentPage === page
+                              ? "bg-primary text-white shadow-md scale-105"
+                              : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 hover:border-gray-400"
+                          }
+                        `}
+                      >
+                        {page}
+                      </button>
+                    ),
+                  )}
+                </div>
+
+                {/* Next Button */}
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                  }
+                  disabled={currentPage === totalPages}
+                  className={`
+                    px-3 py-1 rounded-full border transition-all duration-200
+                    flex items-center gap-1
+                    ${
+                      currentPage === totalPages
+                        ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
+                        : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400"
+                    }
+                  `}
+                >
+                  <span className="hidden sm:inline">Next</span>
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </button>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* Empty State */}
+        {!isLoading && !error && aplikantet.length === 0 && (
           <div className="text-center py-20 bg-white rounded-2xl border border-[#D6E6F2]">
             <svg
               className="w-16 h-16 mx-auto text-[#B9D7EA] mb-4"
@@ -271,11 +353,23 @@ function BallinaPundhenesit() {
               />
             </svg>
             <h3 className="text-xl font-bold text-[#0F4C75] mb-2">
-              Nuk u gjetën rezultate
+              {kerkoParams.toString()
+                ? "Nuk u gjetën rezultate"
+                : "Asnjë aplikant ende"}
             </h3>
             <p className="text-[#6D94C5]">
-              Provo të kërkosh me terma të tjerë ose ndryshoje filtrin
+              {kerkoParams.toString()
+                ? "Provo të ndryshosh kriteret e kërkimit"
+                : "Kthehu më vonë për të parë aplikantët e rinj"}
             </p>
+            {kerkoParams.toString() && (
+              <button
+                onClick={() => (window.location.href = "/listaAplikanteve")}
+                className="mt-6 px-6 py-2.5 bg-[#0f4c75] text-white rounded-lg hover:bg-[#0a3a5a] transition-colors"
+              >
+                Shiko të gjithë aplikantët
+              </button>
+            )}
           </div>
         )}
       </div>

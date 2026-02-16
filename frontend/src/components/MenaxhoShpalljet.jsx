@@ -673,7 +673,7 @@ function MenaxhoShpalljet() {
       {shpalljaKlikuar && (
         <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
           <div
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/10 "
             onClick={() => setShpalljaKlikuar(null)}
           ></div>
           <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] w-full sm:w-3/4 md:w-2/3 lg:w-1/2 flex flex-col">

@@ -190,7 +190,7 @@ function Aplikimi() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#F5F7F8]">
       <Header />
 
       <div className="max-w-4xl mx-auto px-4 py-8">

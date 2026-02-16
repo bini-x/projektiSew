@@ -30,6 +30,7 @@ function MenaxhoAplikimet() {
   const [menyRadhitjes, setMenyRadhitjes] = useState(false);
   const [sortimiDates, setSortimiDates] = useState("teRejat");
   const [cvFile, setCvFile] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -161,6 +162,7 @@ function MenaxhoAplikimet() {
       return;
     }
 
+    setIsSaving(true);
     try {
       const formData = new FormData();
       formData.append("emriAplikantit", aplikimiKlikuar.emriAplikantit);
@@ -192,6 +194,8 @@ function MenaxhoAplikimet() {
     } catch (error) {
       console.error(error);
       showAlert("Gabim gjatë ruajtjes së ndryshimeve", "error");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -246,7 +250,7 @@ function MenaxhoAplikimet() {
           <h1 className="text-2xl font-semibold text-gray-900">
             Menaxho Aplikimet
           </h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="paragraf mt-1">
             Menaxho dhe modifiko aplikimet e tua për pozita pune
           </p>
         </div>
@@ -343,7 +347,7 @@ function MenaxhoAplikimet() {
                   <th className="tableHead">Data e Aplikimit</th>
                   <th className="tableHead">Data e Skadimit Te Shpalljes</th>
                   <th className="tableHead">Lokacioni</th>
-                  <th className="tableHead text-center ">Orari</th>
+                  <th className="tableHead text-center">Orari</th>
                   <th className="tableHead">Statusi</th>
                   {filtrimiFaqes === "Aktive" && (
                     <th className="tableHead text-right">Veprime</th>
@@ -425,7 +429,7 @@ function MenaxhoAplikimet() {
                         )}
                       </td>
                       {filtrimiFaqes === "Aktive" && (
-                        <td className="tableData text-right">
+                        <td className="tableData text-right text-sm font-medium">
                           <div className="relative">
                             <button
                               onClick={() =>
@@ -441,13 +445,13 @@ function MenaxhoAplikimet() {
                             </button>
 
                             {shfaqMeny === aplikimi._id && (
-                              <div className="absolute right-6 top-0 max-w-48 bg-white rounded-lg shadow-lg border border-gray-200  z-10">
+                              <div className="absolute right-6 top-0 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
                                 <button
                                   onClick={() => {
                                     setAplikimiKlikuar(aplikimi);
                                     setShfaqMeny(null);
                                   }}
-                                  className="w-full text-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 rounded-t-lg"
+                                  className="butonModifikimi"
                                 >
                                   <FontAwesomeIcon
                                     icon={faPencil}
@@ -480,12 +484,12 @@ function MenaxhoAplikimet() {
                       <div className="text-base font-medium text-gray-900 mb-1">
                         {shpallja?.pozitaPunes || "N/A"}
                       </div>
-                      <div className="tableInfo mb-2">
+                      <div className="text-sm text-gray-500 mb-2">
                         {shpallja?.kategoriaPunes || "N/A"}
                       </div>
 
                       <div className="space-y-2">
-                        <div className="tableInfo">
+                        <div className="flex items-center text-sm text-gray-600">
                           <Calendar size={14} className="mr-2 text-gray-400" />
                           {new Date(aplikimi.dataKrijimit).toLocaleDateString(
                             "en-US",
@@ -497,12 +501,12 @@ function MenaxhoAplikimet() {
                           )}
                         </div>
 
-                        <div className="tableInfo">
+                        <div className="flex items-center text-sm text-gray-600">
                           <MapPin size={14} className="mr-2 text-gray-400" />
                           {shpallja?.lokacioniPunes || "N/A"}
                         </div>
 
-                        <div className="tableInfo">
+                        <div className="flex items-center text-sm text-gray-600">
                           <Building size={14} className="mr-2 text-gray-400" />
                           <span className="px-2 py-1 bg-gray-100 rounded">
                             {shpallja?.orari || "N/A"}
@@ -524,13 +528,13 @@ function MenaxhoAplikimet() {
                       </button>
 
                       {shfaqMeny === aplikimi._id && (
-                        <div className="absolute right-6 top-0 max-w-48 bg-white rounded-lg shadow-lg border border-gray-200  z-10">
+                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
                           <button
                             onClick={() => {
                               setAplikimiKlikuar(aplikimi);
                               setShfaqMeny(null);
                             }}
-                            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2 rounded-t-lg"
+                            className="butonModifikimi"
                           >
                             <FontAwesomeIcon
                               icon={faPencil}
@@ -544,8 +548,18 @@ function MenaxhoAplikimet() {
                   </div>
 
                   <div className="flex justify-between items-center mt-4 pt-3 border-t border-gray-100">
-                    <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
-                      Në pritje
+                    <span
+                      className={`px-2 py-1 text-xs font-medium rounded-full ${
+                        aplikimi.status === "Pranuar"
+                          ? "bg-green-100 text-green-800"
+                          : aplikimi.status === "Ne_Pritje"
+                            ? "bg-yellow-100 text-yellow-800"
+                            : "bg-red-100 text-red-800"
+                      }`}
+                    >
+                      {aplikimi.status === "Ne_Pritje"
+                        ? "Në pritje"
+                        : aplikimi.status}
                     </span>
                   </div>
                 </div>
@@ -562,29 +576,37 @@ function MenaxhoAplikimet() {
       </div>
 
       {aplikimiKlikuar && (
-        <div className="fixed inset-0 bg-black/20 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg w-fit overflow-y-auto shadow-xl max-h-[90vh]">
-            <div className="bg-[#f8f8f9] p-6 flex justify-between items-center">
-              <h2 className="text-xl font-bold">Modifiko Aplikimin</h2>
-              <button
-                onClick={() => {
-                  setAplikimiKlikuar(null);
-                  setCvFile(null);
-                }}
-                className="cursor-pointer text-xl hover:text-gray-700"
-              >
-                <X size={24} />
-              </button>
+        <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
+          <div
+            className="absolute inset-0 bg-black/10 "
+            onClick={() => {
+              setAplikimiKlikuar(null);
+              setCvFile(null);
+            }}
+          ></div>
+          <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] w-full sm:w-3/4 md:w-2/3 lg:w-1/2 flex flex-col">
+            <div className="relative bg-[#F5F7F8] px-8 py-6 overflow-hidden">
+              <div className="relative flex justify-center items-center">
+                <h2 className="text-2xl font-bold text-gray-700 tracking-tight">
+                  Modifiko Aplikimin
+                </h2>
+                <button
+                  onClick={() => {
+                    setAplikimiKlikuar(null);
+                    setCvFile(null);
+                  }}
+                  className="absolute right-0 text-gray-700 transition-all hover:bg-white/10 rounded-xl p-2 hover:rotate-5 duration-300"
+                >
+                  <X size={24} />
+                </button>
+              </div>
             </div>
 
-            <div className="p-6">
+            <div className="overflow-y-auto p-8">
               <form onSubmit={ruajNdryshimet} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label
-                      htmlFor="emriAplikantit"
-                      className="block text-sm font-medium text-gray-600 mb-2"
-                    >
+                    <label htmlFor="emriAplikantit" className="labelTabela">
                       Emri <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -599,10 +621,7 @@ function MenaxhoAplikimet() {
                   </div>
 
                   <div>
-                    <label
-                      htmlFor="mbiemriAplikantit"
-                      className="block text-sm font-medium text-gray-600 mb-2"
-                    >
+                    <label htmlFor="mbiemriAplikantit" className="labelTabela">
                       Mbiemri <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -618,10 +637,7 @@ function MenaxhoAplikimet() {
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="emailAplikantit"
-                    className="block text-sm font-medium text-gray-600 mb-2"
-                  >
+                  <label htmlFor="emailAplikantit" className="labelTabela">
                     Email <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -636,10 +652,7 @@ function MenaxhoAplikimet() {
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="nrTelefonit"
-                    className="block text-sm font-medium text-gray-600 mb-2"
-                  >
+                  <label htmlFor="nrTelefonit" className="labelTabela">
                     Nr. Telefonit <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -654,10 +667,7 @@ function MenaxhoAplikimet() {
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="eksperienca"
-                    className="block text-sm font-medium text-gray-600 mb-2"
-                  >
+                  <label htmlFor="eksperienca" className="labelTabela">
                     Eksperienca <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -672,10 +682,7 @@ function MenaxhoAplikimet() {
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="letraMotivuese"
-                    className="block text-sm font-medium text-gray-600 mb-2"
-                  >
+                  <label htmlFor="letraMotivuese" className="labelTabela">
                     Letra Motivuese <span className="text-red-500">*</span>
                   </label>
                   <textarea
@@ -688,11 +695,9 @@ function MenaxhoAplikimet() {
                     required
                   />
                 </div>
+
                 <div>
-                  <label
-                    htmlFor="cvFile"
-                    className="block text-sm font-medium text-gray-600 mb-2"
-                  >
+                  <label htmlFor="cvFile" className="labelTabela">
                     CV (lini bosh nëse nuk doni të ndryshoni)
                   </label>
                   <input
@@ -700,7 +705,7 @@ function MenaxhoAplikimet() {
                     type="file"
                     accept=".pdf,.doc,.docx"
                     onChange={handleFileChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-gray-300 rounded-lg"
                   />
                   {cvFile && (
                     <p className="text-sm text-green-600 mt-2">
@@ -722,12 +727,13 @@ function MenaxhoAplikimet() {
                   )}
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-1 gap-6 w-full">
+                <div className="grid grid-cols-1 gap-4 pt-6 border-t border-gray-200">
                   <button
                     type="submit"
-                    className="publikoPune cursor-pointer w-full"
+                    disabled={isSaving}
+                    className="publikoPune cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg transition-all"
                   >
-                    Perfundo
+                    {isSaving ? "Duke ruajtur..." : "Perfundo"}
                   </button>
                 </div>
               </form>

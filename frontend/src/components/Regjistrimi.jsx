@@ -3,11 +3,16 @@ import "../index.css";
 import { useState } from "react";
 import axios from "axios";
 import { useAlert } from "../contexts/AlertContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye } from "@fortawesome/free-regular-svg-icons";
+import { faEyeSlash } from "@fortawesome/free-regular-svg-icons/faEyeSlash";
 
 function Regjistrimi() {
   const { showAlert } = useAlert();
   const navigate = useNavigate();
   const [tipiPerdoruesit, setTipiPerdoruesit] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [dataAplikant, setDataAplikant] = useState({
     emri: "",
@@ -189,7 +194,7 @@ function Regjistrimi() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen p-4 bg-linear-to-br from-[#F7FBFC] to-[#B9D7EA] pb-10  shadow-[#0F4C75]">
+    <div className="flex justify-center items-center min-h-screen p-4 bg-[#F5F7F8] pb-10  shadow-[#0F4C75]">
       <div
         className="w-full max-w-162.5
                 bg-white rounded-lg shadow-2xl 
@@ -248,57 +253,152 @@ function Regjistrimi() {
               className="grid grid-cols-1 gap-3 sm:gap-4"
               autoComplete="off"
             >
-              {[
-                {
-                  id: "emri",
-                  label: "Emri",
-                  placeholder: "Emri",
-                  type: "text",
-                },
-                {
-                  id: "mbiemri",
-                  label: "Mbiemri",
-                  placeholder: "Mbiemri",
-                  type: "text",
-                },
-                {
-                  id: "email",
-                  label: "Email",
-                  placeholder: "shembull@gmail.com",
-                  type: "email",
-                },
-                {
-                  id: "fjalekalimi",
-                  label: "Fjalëkalimi",
-                  placeholder: "Fjalëkalimi",
-                  type: "password",
-                },
-                {
-                  id: "konfirmoFjalekalimin",
-                  label: "Konfirmo Fjalëkalimin",
-                  placeholder: "Konfirmo fjalëkalimin",
-                  type: "password",
-                },
-              ].map((field) => (
-                <div key={field.id} className="grid grid-cols-1 gap-1">
-                  <label htmlFor={field.id} className="text-sm sm:text-base">
-                    {field.label} <span className="text-red-500">*</span>
-                  </label>
+              {/* Emri */}
+              <div className="grid grid-cols-1 gap-1">
+                <label htmlFor="emri" className="text-sm sm:text-base">
+                  Emri <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="emri"
+                  type="text"
+                  placeholder="Emri"
+                  className="border-inputbg bg-inputbg rounded-sm p-2 sm:p-3 w-full h-10 sm:h-12 placeholder-gray-500"
+                  onChange={(e) =>
+                    setDataAplikant({
+                      ...dataAplikant,
+                      emri: e.target.value,
+                    })
+                  }
+                  required
+                />
+              </div>
+
+              {/* Mbiemri */}
+              <div className="grid grid-cols-1 gap-1">
+                <label htmlFor="mbiemri" className="text-sm sm:text-base">
+                  Mbiemri <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="mbiemri"
+                  type="text"
+                  placeholder="Mbiemri"
+                  className="border-inputbg bg-inputbg rounded-sm p-2 sm:p-3 w-full h-10 sm:h-12 placeholder-gray-500"
+                  onChange={(e) =>
+                    setDataAplikant({
+                      ...dataAplikant,
+                      mbiemri: e.target.value,
+                    })
+                  }
+                  required
+                />
+              </div>
+
+              {/* Email */}
+              <div className="grid grid-cols-1 gap-1">
+                <label htmlFor="email" className="text-sm sm:text-base">
+                  Email <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="shembull@gmail.com"
+                  className="border-inputbg bg-inputbg rounded-sm p-2 sm:p-3 w-full h-10 sm:h-12 placeholder-gray-500"
+                  onChange={(e) =>
+                    setDataAplikant({
+                      ...dataAplikant,
+                      email: e.target.value,
+                    })
+                  }
+                  required
+                />
+              </div>
+
+              {/* Fjalekalimi */}
+              <div className="grid grid-cols-1 gap-1">
+                <label htmlFor="fjalekalimi" className="text-sm sm:text-base">
+                  Fjalëkalimi <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
                   <input
-                    id={field.id}
-                    type={field.type}
-                    placeholder={field.placeholder}
-                    className="border-inputbg bg-inputbg rounded-sm p-2 sm:p-3 w-full h-10 sm:h-12 placeholder-gray-500"
+                    id="fjalekalimi"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Fjalëkalimi"
+                    className="border-inputbg bg-inputbg rounded-sm p-2 sm:p-3 pr-10 w-full h-10 sm:h-12 placeholder-gray-500"
                     onChange={(e) =>
                       setDataAplikant({
                         ...dataAplikant,
-                        [field.id]: e.target.value,
+                        fjalekalimi: e.target.value,
                       })
                     }
                     required
                   />
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer">
+                    <FontAwesomeIcon
+                      icon={faEye}
+                      className={
+                        showPassword ? "!hidden" : "!block text-gray-800"
+                      }
+                      onClick={() => setShowPassword(!showPassword)}
+                      size="sm"
+                    />
+                    <FontAwesomeIcon
+                      icon={faEyeSlash}
+                      className={
+                        showPassword ? "!block text-gray-600" : "!hidden"
+                      }
+                      onClick={() => setShowPassword(!showPassword)}
+                      size="sm"
+                    />
+                  </div>
                 </div>
-              ))}
+              </div>
+
+              {/* Konfirmo Fjalekalimin */}
+              <div className="grid grid-cols-1 gap-1">
+                <label
+                  htmlFor="konfirmoFjalekalimin"
+                  className="text-sm sm:text-base"
+                >
+                  Konfirmo Fjalëkalimin <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
+                  <input
+                    id="konfirmoFjalekalimin"
+                    type={showConfirmPassword ? "text" : "password"}
+                    placeholder="Konfirmo fjalëkalimin"
+                    className="border-inputbg bg-inputbg rounded-sm p-2 sm:p-3 pr-10 w-full h-10 sm:h-12 placeholder-gray-500"
+                    onChange={(e) =>
+                      setDataAplikant({
+                        ...dataAplikant,
+                        konfirmoFjalekalimin: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer">
+                    <FontAwesomeIcon
+                      icon={faEye}
+                      className={
+                        showConfirmPassword ? "!hidden" : "!block text-gray-800"
+                      }
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
+                      size="sm"
+                    />
+                    <FontAwesomeIcon
+                      icon={faEyeSlash}
+                      className={
+                        showConfirmPassword ? "!block text-gray-600" : "!hidden"
+                      }
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
+                      size="sm"
+                    />
+                  </div>
+                </div>
+              </div>
 
               {/* Password requirements info */}
               <div className="bg-blue-50 rounded-lg p-3 border border-blue-100 text-xs">
@@ -331,51 +431,132 @@ function Regjistrimi() {
               onSubmit={handleSubmit}
               className="grid grid-cols-1 gap-3 sm:gap-4"
             >
-              {[
-                {
-                  id: "kompania",
-                  label: "Kompania",
-                  placeholder: "Emri i kompanisë",
-                  type: "text",
-                },
-                {
-                  id: "email",
-                  label: "Email",
-                  placeholder: "kompania@gmail.com",
-                  type: "email",
-                },
-                {
-                  id: "fjalekalimi",
-                  label: "Fjalëkalimin",
-                  placeholder: "Fjalëkalimi",
-                  type: "password",
-                },
-                {
-                  id: "konfirmoFjalekalimin",
-                  label: "Konfirmo fjalëkalimin",
-                  placeholder: "Konfirmo fjalëkalimin",
-                  type: "password",
-                },
-              ].map((field) => (
-                <div key={field.id} className="grid grid-cols-1 gap-1">
-                  <label htmlFor={field.id} className="text-sm sm:text-base">
-                    {field.label} <span className="text-red-500">*</span>
-                  </label>
+              {/* Kompania */}
+              <div className="grid grid-cols-1 gap-1">
+                <label htmlFor="kompania" className="text-sm sm:text-base">
+                  Kompania <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="kompania"
+                  type="text"
+                  placeholder="Emri i kompanisë"
+                  className="border-inputbg bg-inputbg rounded-sm p-2 sm:p-3 w-full h-10 sm:h-12 placeholder-gray-500"
+                  onChange={(e) =>
+                    setDataPunedhenesi({
+                      ...dataPunedhenesi,
+                      kompania: e.target.value,
+                    })
+                  }
+                  required
+                />
+              </div>
+
+              {/* Email */}
+              <div className="grid grid-cols-1 gap-1">
+                <label htmlFor="email_p" className="text-sm sm:text-base">
+                  Email <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="email_p"
+                  type="email"
+                  placeholder="kompania@gmail.com"
+                  className="border-inputbg bg-inputbg rounded-sm p-2 sm:p-3 w-full h-10 sm:h-12 placeholder-gray-500"
+                  onChange={(e) =>
+                    setDataPunedhenesi({
+                      ...dataPunedhenesi,
+                      email: e.target.value,
+                    })
+                  }
+                  required
+                />
+              </div>
+
+              {/* Fjalekalimi */}
+              <div className="grid grid-cols-1 gap-1">
+                <label htmlFor="fjalekalimi_p" className="text-sm sm:text-base">
+                  Fjalëkalimin <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
                   <input
-                    id={field.id}
-                    type={field.type}
-                    placeholder={field.placeholder}
-                    className="border-inputbg bg-inputbg rounded-sm p-2 sm:p-3 w-full h-10 sm:h-12 placeholder-gray-500"
+                    id="fjalekalimi_p"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Fjalëkalimi"
+                    className="border-inputbg bg-inputbg rounded-sm p-2 sm:p-3 pr-10 w-full h-10 sm:h-12 placeholder-gray-500"
                     onChange={(e) =>
                       setDataPunedhenesi({
                         ...dataPunedhenesi,
-                        [field.id]: e.target.value,
+                        fjalekalimi: e.target.value,
                       })
                     }
                     required
                   />
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer">
+                    <FontAwesomeIcon
+                      icon={faEye}
+                      className={
+                        showPassword ? "!hidden" : "!block text-gray-800"
+                      }
+                      onClick={() => setShowPassword(!showPassword)}
+                      size="sm"
+                    />
+                    <FontAwesomeIcon
+                      icon={faEyeSlash}
+                      className={
+                        showPassword ? "!block text-gray-600" : "!hidden"
+                      }
+                      onClick={() => setShowPassword(!showPassword)}
+                      size="sm"
+                    />
+                  </div>
                 </div>
-              ))}
+              </div>
+
+              {/* Konfirmo Fjalekalimin */}
+              <div className="grid grid-cols-1 gap-1">
+                <label
+                  htmlFor="konfirmoFjalekalimin_p"
+                  className="text-sm sm:text-base"
+                >
+                  Konfirmo fjalëkalimin <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
+                  <input
+                    id="konfirmoFjalekalimin_p"
+                    type={showConfirmPassword ? "text" : "password"}
+                    placeholder="Konfirmo fjalëkalimin"
+                    className="border-inputbg bg-inputbg rounded-sm p-2 sm:p-3 pr-10 w-full h-10 sm:h-12 placeholder-gray-500"
+                    onChange={(e) =>
+                      setDataPunedhenesi({
+                        ...dataPunedhenesi,
+                        konfirmoFjalekalimin: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer">
+                    <FontAwesomeIcon
+                      icon={faEye}
+                      className={
+                        showConfirmPassword ? "!hidden" : "!block text-gray-800"
+                      }
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
+                      size="sm"
+                    />
+                    <FontAwesomeIcon
+                      icon={faEyeSlash}
+                      className={
+                        showConfirmPassword ? "!block text-gray-600" : "!hidden"
+                      }
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
+                      size="sm"
+                    />
+                  </div>
+                </div>
+              </div>
 
               {/* Password requirements info */}
               <div className="bg-blue-50 rounded-lg p-3 border border-blue-100 text-xs">

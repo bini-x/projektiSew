@@ -20,7 +20,7 @@ import { useAlert } from "../contexts/AlertContext";
 function ProfiliAplikantit() {
   const { perdoruesiData, setPerdoruesiData } = Perdoruesi.usePerdoruesi();
   const { id } = useParams();
-  const { showAlert } = useAlert();
+  const { showAlert, showConfirm, hideConfirm } = useAlert();
 
   const [shfaqLinkeForm, setShfaqLinkeForm] = useState(false);
   const [shfaqFormenEksperienca, setShfaqFormenEksperienca] = useState(false);
@@ -92,12 +92,13 @@ function ProfiliAplikantit() {
       );
 
       if (response.data.success) {
-        alert("U modifikua me sukses");
+        showAlert("U modifikua me sukses!", "success");
         setPerdoruesiData(response.data.data);
         setShfaqEditData(false);
       }
     } catch (error) {
       console.error(error);
+      showAlert("Gabim në përditësimin e profilit", "error");
     }
   };
 
@@ -122,12 +123,18 @@ function ProfiliAplikantit() {
       "image/gif",
     ];
     if (!llojetELejuara.includes(file.type)) {
-      alert("Vetëm fotot janë të lejuara (JPEG, PNG, WEBP, GIF)");
+      showAlert(
+        "Vetëm fotot janë të lejuara (JPEG, PNG, WEBP, GIF)",
+        "warning",
+      );
       return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      alert("Madhësia e fotos është shumë e madhe. Maksimumi 5MB");
+      showAlert(
+        "Madhësia e fotos është shumë e madhe. Maksimumi 5MB",
+        "warning",
+      );
       return;
     }
 
@@ -155,39 +162,44 @@ function ProfiliAplikantit() {
           foto: { data: true },
         }));
 
-        alert("Fotoja u ngarkua me sukses!");
+        showAlert("Fotoja u ngarkua me sukses!", "success");
       }
     } catch (error) {
       console.error(error);
-      alert(error.response?.data?.message || "Gabim në ngarkimin e fotos");
+      showAlert(
+        error.response?.data?.message || "Gabim në ngarkimin e fotos",
+        "error",
+      );
     } finally {
       setPoNgarkohetFoto(false);
     }
   };
 
   const handleFshijFoto = async () => {
-    if (!window.confirm("Jeni të sigurt që dëshironi të fshini foton?")) {
-      return;
-    }
+    showConfirm(
+      "Jeni të sigurt që dëshironi të fshini foton?",
+      "Fshi Foto",
+      async () => {
+        try {
+          const response = await axios.delete(
+            `http://localhost:3000/api/profili/${id}/foto`,
+          );
 
-    try {
-      const response = await axios.delete(
-        `http://localhost:3000/api/profili/${id}/foto`,
-      );
-
-      if (response.data.success) {
-        setFotoProfile(null);
-        setPerdoruesiData((prev) => {
-          const updated = { ...prev };
-          delete updated.foto;
-          return updated;
-        });
-        alert("Fotoja u fshi me sukses!");
-      }
-    } catch (error) {
-      console.error(error);
-      alert("Gabim në fshirjen e fotos");
-    }
+          if (response.data.success) {
+            setFotoProfile(null);
+            setPerdoruesiData((prev) => {
+              const updated = { ...prev };
+              delete updated.foto;
+              return updated;
+            });
+            showAlert("Fotoja u fshi me sukses!", "success");
+          }
+        } catch (error) {
+          console.error(error);
+          showAlert("Gabim në fshirjen e fotos", "error");
+        }
+      },
+    );
   };
 
   const [linkRi, setLinkRi] = useState({
@@ -197,7 +209,7 @@ function ProfiliAplikantit() {
 
   const handleShtoLink = async () => {
     if (!linkRi.platforma || !linkRi.linku) {
-      alert("Ju lutem plotësoni të dyja fushat");
+      showAlert("Ju lutem plotësoni të dyja fushat", "warning");
       return;
     }
 
@@ -223,39 +235,41 @@ function ProfiliAplikantit() {
           linku: "",
         });
         setShfaqLinkeForm(false);
-        alert("Linku u shtua me sukses!");
+        showAlert("Linku u shtua me sukses!", "success");
       }
     } catch (error) {
       console.error(error);
-      alert("Gabim në ruajtjen e linkut");
+      showAlert("Gabim në ruajtjen e linkut", "error");
     }
   };
 
   const handleFshijLinkin = async (index) => {
-    if (!window.confirm("Jeni të sigurt që dëshironi ta fshini këtë link?")) {
-      return;
-    }
+    showConfirm(
+      "Jeni të sigurt që dëshironi ta fshini këtë link?",
+      "Fshi Link",
+      async () => {
+        try {
+          const updatedLinks = (perdoruesiData?.linqet || []).filter(
+            (_, i) => i !== index,
+          );
 
-    try {
-      const updatedLinks = (perdoruesiData?.linqet || []).filter(
-        (_, i) => i !== index,
-      );
+          const response = await axios.put(
+            `http://localhost:3000/api/profili/${id}`,
+            {
+              linqet: updatedLinks,
+            },
+          );
 
-      const response = await axios.put(
-        `http://localhost:3000/api/profili/${id}`,
-        {
-          linqet: updatedLinks,
-        },
-      );
-
-      if (response.data.success) {
-        setPerdoruesiData(response.data.data);
-        alert("Linku u fshi me sukses!");
-      }
-    } catch (error) {
-      console.error(error);
-      alert("Gabim në fshirjen e linkut");
-    }
+          if (response.data.success) {
+            setPerdoruesiData(response.data.data);
+            showAlert("Linku u fshi me sukses!", "success");
+          }
+        } catch (error) {
+          console.error(error);
+          showAlert("Gabim në fshirjen e linkut", "error");
+        }
+      },
+    );
   };
 
   // ========== EXPERIENCE SECTION ==========
@@ -270,7 +284,10 @@ function ProfiliAplikantit() {
 
   const handleShtoEksperiencen = async () => {
     if (!eksperienceRe.titulli || !eksperienceRe.kompania) {
-      alert("Ju lutem plotësoni të paktën titullin dhe kompaninë");
+      showAlert(
+        "Ju lutem plotësoni të paktën titullin dhe kompaninë",
+        "warning",
+      );
       return;
     }
 
@@ -280,17 +297,20 @@ function ProfiliAplikantit() {
       const today = new Date();
 
       if (end < start) {
-        alert("Data e mbarimit nuk mund të jetë më herët se data e fillimit!");
+        showAlert(
+          "Data e mbarimit nuk mund të jetë më herët se data e fillimit!",
+          "warning",
+        );
         return;
       }
 
       if (start > today) {
-        alert("Data e fillimit nuk mund të jetë në të ardhmen!");
+        showAlert("Data e fillimit nuk mund të jetë në të ardhmen!", "warning");
         return;
       }
 
       if (end > today) {
-        alert("Data e mbarimit nuk mund të jetë në të ardhmen!");
+        showAlert("Data e mbarimit nuk mund të jetë në të ardhmen!", "warning");
         return;
       }
     }
@@ -328,41 +348,41 @@ function ProfiliAplikantit() {
           pershkrimi: "",
         });
         setShfaqFormenEksperienca(false);
-        alert("Eksperienca u shtua me sukses!");
+        showAlert("Eksperienca u shtua me sukses!", "success");
       }
     } catch (error) {
       console.error(error);
-      alert("Gabim në ruajtjen e eksperiencës");
+      showAlert("Gabim në ruajtjen e eksperiencës", "error");
     }
   };
 
   const handleFshijEksperiencen = async (index) => {
-    if (
-      !window.confirm("Jeni të sigurt që dëshironi ta fshini këtë eksperiencë?")
-    ) {
-      return;
-    }
+    showConfirm(
+      "Jeni të sigurt që dëshironi ta fshini këtë eksperiencë?",
+      "Fshi Eksperiencë",
+      async () => {
+        try {
+          const updatedExperiences = (
+            perdoruesiData?.eksperiencat || []
+          ).filter((_, i) => i !== index);
 
-    try {
-      const updatedExperiences = (perdoruesiData?.eksperiencat || []).filter(
-        (_, i) => i !== index,
-      );
+          const response = await axios.put(
+            `http://localhost:3000/api/profili/${id}`,
+            {
+              eksperiencat: updatedExperiences,
+            },
+          );
 
-      const response = await axios.put(
-        `http://localhost:3000/api/profili/${id}`,
-        {
-          eksperiencat: updatedExperiences,
-        },
-      );
-
-      if (response.data.success) {
-        setPerdoruesiData(response.data.data);
-        alert("Eksperienca u fshi me sukses!");
-      }
-    } catch (error) {
-      console.error(error);
-      alert("Gabim në fshirjen e eksperiencës");
-    }
+          if (response.data.success) {
+            setPerdoruesiData(response.data.data);
+            showAlert("Eksperienca u fshi me sukses!", "success");
+          }
+        } catch (error) {
+          console.error(error);
+          showAlert("Gabim në fshirjen e eksperiencës", "error");
+        }
+      },
+    );
   };
 
   // ========== EDUCATION SECTION ==========
@@ -377,7 +397,10 @@ function ProfiliAplikantit() {
 
   const handleShtoEdukimin = async () => {
     if (!edukimiRi.titulli || !edukimiRi.institucioni) {
-      alert("Ju lutem plotësoni të paktën titullin dhe institucionin");
+      showAlert(
+        "Ju lutem plotësoni të paktën titullin dhe institucionin",
+        "warning",
+      );
       return;
     }
 
@@ -387,17 +410,20 @@ function ProfiliAplikantit() {
       const today = new Date();
 
       if (end < start) {
-        alert("Data e mbarimit nuk mund të jetë më herët se data e fillimit!");
+        showAlert(
+          "Data e mbarimit nuk mund të jetë më herët se data e fillimit!",
+          "warning",
+        );
         return;
       }
 
       if (start > today) {
-        alert("Data e fillimit nuk mund të jetë në të ardhmen!");
+        showAlert("Data e fillimit nuk mund të jetë në të ardhmen!", "warning");
         return;
       }
 
       if (end > today) {
-        alert("Data e mbarimit nuk mund të jetë në të ardhmen!");
+        showAlert("Data e mbarimit nuk mund të jetë në të ardhmen!", "warning");
         return;
       }
     }
@@ -435,39 +461,41 @@ function ProfiliAplikantit() {
           pershkrimi: "",
         });
         setShfaqFormenEdukimi(false);
-        alert("Edukimi u shtua me sukses!");
+        showAlert("Edukimi u shtua me sukses!", "success");
       }
     } catch (error) {
       console.error(error);
-      alert("Gabim në ruajtjen e edukimit");
+      showAlert("Gabim në ruajtjen e edukimit", "error");
     }
   };
 
   const handleFshijEdukimin = async (index) => {
-    if (!window.confirm("Jeni të sigurt që dëshironi ta fshini këtë edukim?")) {
-      return;
-    }
+    showConfirm(
+      "Jeni të sigurt që dëshironi ta fshini këtë edukim?",
+      "Fshi Edukim",
+      async () => {
+        try {
+          const updatedEducation = (perdoruesiData?.edukimi || []).filter(
+            (_, i) => i !== index,
+          );
 
-    try {
-      const updatedEducation = (perdoruesiData?.edukimi || []).filter(
-        (_, i) => i !== index,
-      );
+          const response = await axios.put(
+            `http://localhost:3000/api/profili/${id}`,
+            {
+              edukimi: updatedEducation,
+            },
+          );
 
-      const response = await axios.put(
-        `http://localhost:3000/api/profili/${id}`,
-        {
-          edukimi: updatedEducation,
-        },
-      );
-
-      if (response.data.success) {
-        setPerdoruesiData(response.data.data);
-        alert("Edukimi u fshi me sukses!");
-      }
-    } catch (error) {
-      console.error(error);
-      alert("Gabim në fshirjen e edukimit");
-    }
+          if (response.data.success) {
+            setPerdoruesiData(response.data.data);
+            showAlert("Edukimi u fshi me sukses!", "success");
+          }
+        } catch (error) {
+          console.error(error);
+          showAlert("Gabim në fshirjen e edukimit", "error");
+        }
+      },
+    );
   };
 
   // ========== PROJECTS SECTION ==========
@@ -480,7 +508,7 @@ function ProfiliAplikantit() {
 
   const handleShtoProjekt = async () => {
     if (!projektRi.emriProjektit) {
-      alert("Ju lutem plotësoni emrin e projektit");
+      showAlert("Ju lutem plotësoni emrin e projektit", "warning");
       return;
     }
 
@@ -513,47 +541,47 @@ function ProfiliAplikantit() {
           linku: "",
         });
         setShfaqFormenProjektet(false);
-        alert("Projekti u shtua me sukses!");
+        showAlert("Projekti u shtua me sukses!", "success");
       }
     } catch (error) {
       console.error(error);
-      alert("Gabim në ruajtjen e projektit");
+      showAlert("Gabim në ruajtjen e projektit", "error");
     }
   };
 
   const handleFshijProjektin = async (index) => {
-    if (
-      !window.confirm("Jeni të sigurt që dëshironi ta fshini këtë projekt?")
-    ) {
-      return;
-    }
+    showConfirm(
+      "Jeni të sigurt që dëshironi ta fshini këtë projekt?",
+      "Fshi Projekt",
+      async () => {
+        try {
+          const updatedProjects = (perdoruesiData?.projektet || []).filter(
+            (_, i) => i !== index,
+          );
 
-    try {
-      const updatedProjects = (perdoruesiData?.projektet || []).filter(
-        (_, i) => i !== index,
-      );
+          const response = await axios.put(
+            `http://localhost:3000/api/profili/${id}`,
+            {
+              projektet: updatedProjects,
+            },
+          );
 
-      const response = await axios.put(
-        `http://localhost:3000/api/profili/${id}`,
-        {
-          projektet: updatedProjects,
-        },
-      );
-
-      if (response.data.success) {
-        setPerdoruesiData(response.data.data);
-        alert("Projekti u fshi me sukses!");
-      }
-    } catch (error) {
-      console.error(error);
-      alert("Gabim në fshirjen e projektit");
-    }
+          if (response.data.success) {
+            setPerdoruesiData(response.data.data);
+            showAlert("Projekti u fshi me sukses!", "success");
+          }
+        } catch (error) {
+          console.error(error);
+          showAlert("Gabim në fshirjen e projektit", "error");
+        }
+      },
+    );
   };
 
   // ========== SKILLS (AFTËSITË) SECTION ==========
   const handleShtoAftesine = async () => {
     if (!aftesiRe.trim()) {
-      alert("Ju lutem shkruani emrin e aftësisë");
+      showAlert("Ju lutem shkruani emrin e aftësisë", "warning");
       return;
     }
 
@@ -574,45 +602,47 @@ function ProfiliAplikantit() {
         setPerdoruesiData(response.data.data);
         setAftesiRe("");
         setShfaqFormenAftesite(false);
-        alert("Aftësia u shtua me sukses!");
+        showAlert("Aftësia u shtua me sukses!", "success");
       }
     } catch (error) {
       console.error(error);
-      alert("Gabim në ruajtjen e aftësisë");
+      showAlert("Gabim në ruajtjen e aftësisë", "error");
     }
   };
 
   const handleFshijAftesine = async (index) => {
-    if (!window.confirm("Jeni të sigurt që dëshironi ta fshini këtë aftësi?")) {
-      return;
-    }
+    showConfirm(
+      "Jeni të sigurt që dëshironi ta fshini këtë aftësi?",
+      "Fshi Aftësi",
+      async () => {
+        try {
+          const updatedSkills = (perdoruesiData?.aftesite || []).filter(
+            (_, i) => i !== index,
+          );
 
-    try {
-      const updatedSkills = (perdoruesiData?.aftesite || []).filter(
-        (_, i) => i !== index,
-      );
+          const response = await axios.put(
+            `http://localhost:3000/api/profili/${id}`,
+            {
+              aftesite: updatedSkills,
+            },
+          );
 
-      const response = await axios.put(
-        `http://localhost:3000/api/profili/${id}`,
-        {
-          aftesite: updatedSkills,
-        },
-      );
-
-      if (response.data.success) {
-        setPerdoruesiData(response.data.data);
-        alert("Aftësia u fshi me sukses!");
-      }
-    } catch (error) {
-      console.error(error);
-      alert("Gabim në fshirjen e aftësisë");
-    }
+          if (response.data.success) {
+            setPerdoruesiData(response.data.data);
+            showAlert("Aftësia u fshi me sukses!", "success");
+          }
+        } catch (error) {
+          console.error(error);
+          showAlert("Gabim në fshirjen e aftësisë", "error");
+        }
+      },
+    );
   };
 
   return (
     <div className="max-w-5xl mx-auto mb-8 mt-10 px-4">
       {/* Profile Header */}
-      <div className="bg-white rounded-3xl shadow-sm overflow-hidden mb-6 border border-[#D6E6F2]">
+      <div className="bg-white rounded-3xl shadow-sm overflow-hidden mb-6 border border-gray-200">
         {/* Cover Banner with SVG - KEEPING THIS */}
         <div className="h-32 relative overflow-hidden">
           <svg
@@ -730,7 +760,7 @@ function ProfiliAplikantit() {
             {/* Profile Info */}
             <div className="flex-1 text-center sm:text-left w-full mt-4 sm:mt-16">
               {shfaqEditData ? (
-                <div className="w-full space-y-4 bg-[#F7FBFC] p-6 rounded-2xl border border-[#D6E6F2]">
+                <div className="w-full space-y-4 bg-[#F5F7F8] p-6 rounded-2xl border border-gray-200">
                   <div className="flex flex-col sm:flex-row gap-4">
                     <input
                       type="text"
@@ -739,7 +769,7 @@ function ProfiliAplikantit() {
                         setNewData({ ...newData, emri: e.target.value })
                       }
                       placeholder="Emri"
-                      className="flex-1 px-4 py-3 bg-white border border-[#D6E6F2] rounded-xl text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#769FCD] focus:border-transparent transition"
+                      className="flex-1 px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#769FCD] focus:border-transparent transition"
                     />
                     <input
                       type="text"
@@ -748,7 +778,7 @@ function ProfiliAplikantit() {
                         setNewData({ ...newData, mbiemri: e.target.value })
                       }
                       placeholder="Mbiemri"
-                      className="flex-1 px-4 py-3 bg-white border border-[#D6E6F2] rounded-xl text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#769FCD] focus:border-transparent transition"
+                      className="flex-1 px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#769FCD] focus:border-transparent transition"
                     />
                   </div>
 
@@ -759,10 +789,10 @@ function ProfiliAplikantit() {
                       setNewData({ ...newData, profesioni: e.target.value })
                     }
                     placeholder="Profesioni"
-                    className="w-full px-4 py-3 bg-white border border-[#D6E6F2] rounded-xl text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#769FCD] focus:border-transparent transition"
+                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#769FCD] focus:border-transparent transition"
                   />
 
-                  <div className="flex items-center gap-2 text-gray-600 bg-white px-4 py-3 rounded-xl border border-[#D6E6F2]">
+                  <div className="flex items-center gap-2 text-gray-600 bg-white px-4 py-3 rounded-xl border border-gray-200">
                     <Mail size={18} className="text-gray-500" />
                     <span>{perdoruesiData?.email}</span>
                   </div>
@@ -774,14 +804,14 @@ function ProfiliAplikantit() {
                       setNewData({ ...newData, nrTelefonit: e.target.value })
                     }
                     placeholder="Numri i Telefonit"
-                    className="w-full px-4 py-3 bg-white border border-[#D6E6F2] rounded-xl text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#769FCD] focus:border-transparent transition"
+                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#769FCD] focus:border-transparent transition"
                   />
 
                   <div className="flex gap-3 pt-2">
                     <button
                       type="button"
                       onClick={() => setShfaqEditData(false)}
-                      className="flex-1 bg-white border border-gray-200 hover:bg-[#F7FBFC] text-gray-700 font-medium py-3 px-6 rounded-xl transition duration-200"
+                      className="flex-1 bg-white border border-gray-200 hover:bg-[#F5F7F8] text-gray-700 font-medium py-3 px-6 rounded-xl transition duration-200"
                     >
                       Anulo
                     </button>
@@ -855,14 +885,14 @@ function ProfiliAplikantit() {
                             href={link.linku}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-[#F7FBFC] text-gray-800 rounded-xl text-sm hover:bg-[#D6E6F2] transition-all duration-200 border border-[#D6E6F2]"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-[#F5F7F8] text-gray-700 rounded-xl text-sm hover:bg-[#D6E6F2] transition-all duration-200 border border-[#F5F7F8]"
                           >
                             <Link size={14} />
                             {link.platforma}
                           </a>
                           <button
                             onClick={() => handleFshijLinkin(index)}
-                            className="publikoPune"
+                            className="absolute -top-1.5 -right-1.5 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-md"
                           >
                             <X size={10} />
                           </button>
@@ -878,7 +908,7 @@ function ProfiliAplikantit() {
                     </div>
 
                     {shfaqLinkeForm && (
-                      <div className="mt-4 p-4 bg-[#F7FBFC] rounded-xl border border-[#D6E6F2]">
+                      <div className="mt-4 p-4 bg-[#F5F7F8] rounded-xl border border-gray-200">
                         <div className="space-y-3">
                           <input
                             type="text"
@@ -890,7 +920,7 @@ function ProfiliAplikantit() {
                                 platforma: e.target.value,
                               })
                             }
-                            className="w-full px-4 py-2.5 bg-white border border-[#D6E6F2] rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent text-sm"
+                            className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm"
                           />
                           <input
                             type="url"
@@ -899,7 +929,7 @@ function ProfiliAplikantit() {
                             onChange={(e) =>
                               setLinkRi({ ...linkRi, linku: e.target.value })
                             }
-                            className="w-full px-4 py-2.5 bg-white border border-[#D6E6F2] rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent text-sm"
+                            className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm"
                           />
                           <div className="flex gap-2 justify-end">
                             <button
@@ -936,7 +966,7 @@ function ProfiliAplikantit() {
             </h2>
             <button
               onClick={() => setShfaqFormenEksperienca(!shfaqFormenEksperienca)}
-              className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#F5F7F8] hover:bg-[#D6E6F2] border border-gray-300 transition-all duration-200"
+              className="flex items-center justify-center w-10 h-10 rounded-xl hover:bg-[#D6E6F2] transition-all duration-200"
               title="Shto eksperiencë"
             >
               <Plus size={20} className="text-gray-600" />
@@ -956,7 +986,7 @@ function ProfiliAplikantit() {
                       titulli: e.target.value,
                     })
                   }
-                  className="w-full px-4 py-3 bg-white border border-[#D6E6F2] rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent"
+                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent"
                 />
                 <input
                   type="text"
@@ -968,7 +998,7 @@ function ProfiliAplikantit() {
                       kompania: e.target.value,
                     })
                   }
-                  className="w-full px-4 py-3 bg-white border border-[#D6E6F2] rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent"
+                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent"
                 />
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <input
@@ -982,7 +1012,7 @@ function ProfiliAplikantit() {
                       })
                     }
                     max={new Date().toISOString().split("T")[0]}
-                    className="w-full px-4 py-3 bg-white border border-[#D6E6F2] rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent"
+                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent"
                   />
                   <input
                     type="date"
@@ -997,7 +1027,7 @@ function ProfiliAplikantit() {
                     max={new Date().toISOString().split("T")[0]}
                     min={eksperienceRe.dataFillimit || ""}
                     disabled={eksperienceRe.aktuale}
-                    className={`w-full px-4 py-3 bg-white border border-[#D6E6F2] rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent ${
+                    className={`w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent ${
                       eksperienceRe.aktuale
                         ? "bg-gray-50 text-gray-400 cursor-not-allowed"
                         : ""
@@ -1033,19 +1063,19 @@ function ProfiliAplikantit() {
                       pershkrimi: e.target.value,
                     })
                   }
-                  className="w-full px-4 py-3 bg-white border border-[#D6E6F2] rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent"
+                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent"
                   rows="3"
                 />
                 <div className="flex gap-3">
                   <button
                     onClick={() => setShfaqFormenEksperienca(false)}
-                    className="px-6 py-2.5 bg-white border border-[#D6E6F2] text-gray-700 rounded-xl hover:bg-[#F7FBFC] transition-all duration-200"
+                    className="px-6 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-[#F5F7F8] transition-all duration-200"
                   >
                     Anulo
                   </button>
                   <button
                     onClick={handleShtoEksperiencen}
-                    className="px-6 py-2.5 bg-[#769FCD] text-white rounded-xl hover:bg-[#5a82b3] font-medium transition-all duration-200"
+                    className="publikoPune w-fit"
                   >
                     Ruaj
                   </button>
@@ -1057,14 +1087,14 @@ function ProfiliAplikantit() {
           <div className="space-y-4">
             {!perdoruesiData?.eksperiencat ||
             perdoruesiData.eksperiencat.length === 0 ? (
-              <div className="text-center py-12 bg-[#F7FBFC] rounded-2xl border border-dashed border-[#B9D7EA]">
+              <div className="text-center py-12 bg-[#F5F7F8] rounded-2xl border border-dashed border-gray-300">
                 <p className="text-gray-500">Nuk ka përvoja të shtuara ende</p>
               </div>
             ) : (
               perdoruesiData.eksperiencat.map((exp, index) => (
                 <div
                   key={index}
-                  className="relative p-5 bg-[#F7FBFC] rounded-2xl border-l-4 border-[#769FCD] hover:shadow-md transition-all duration-200 group"
+                  className="relative p-5 bg-[#F5F7F8] rounded-2xl border-l-4 border-[#769FCD] hover:shadow-md transition-all duration-200 group"
                 >
                   <button
                     onClick={() => handleFshijEksperiencen(index)}
@@ -1095,23 +1125,23 @@ function ProfiliAplikantit() {
           </div>
         </div>
 
-        <div className="h-px bg-gradient-to-r from-transparent via-[#D6E6F2] to-transparent my-8"></div>
+        <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent my-8"></div>
 
         {/* Education Section */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">Edukimi</h2>
+            <h2 className="text-2xl font-bold text-gray-700">Edukimi</h2>
             <button
               onClick={() => setShfaqFormenEdukimi(!shfaqFormenEdukimi)}
-              className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#F7FBFC] hover:bg-[#D6E6F2] border border-[#D6E6F2] transition-all duration-200"
+              className="flex items-center justify-center w-10 h-10 rounded-xl hover:bg-[#D6E6F2] transition-all duration-200"
               title="Shto edukim"
             >
-              <Plus size={20} className="text-[#769FCD]" />
+              <Plus size={20} className="text-gray-600" />
             </button>
           </div>
 
           {shfaqFormenEdukimi && (
-            <div className="p-6 bg-[#F7FBFC] mb-6 rounded-2xl border border-[#D6E6F2]">
+            <div className="p-6 bg-[#F5F7F8] mb-6 rounded-2xl border border-gray-100">
               <div className="space-y-4">
                 <input
                   type="text"
@@ -1123,7 +1153,7 @@ function ProfiliAplikantit() {
                       titulli: e.target.value,
                     })
                   }
-                  className="w-full px-4 py-3 bg-white border border-[#D6E6F2] rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent"
+                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent"
                 />
                 <input
                   type="text"
@@ -1135,7 +1165,7 @@ function ProfiliAplikantit() {
                       institucioni: e.target.value,
                     })
                   }
-                  className="w-full px-4 py-3 bg-white border border-[#D6E6F2] rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent"
+                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent"
                 />
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <input
@@ -1149,7 +1179,7 @@ function ProfiliAplikantit() {
                       })
                     }
                     max={new Date().toISOString().split("T")[0]}
-                    className="w-full px-4 py-3 bg-white border border-[#D6E6F2] rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent"
+                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent"
                   />
                   <input
                     type="date"
@@ -1164,7 +1194,7 @@ function ProfiliAplikantit() {
                     max={new Date().toISOString().split("T")[0]}
                     min={edukimiRi.dataFillimit || ""}
                     disabled={edukimiRi.aktuale}
-                    className={`w-full px-4 py-3 bg-white border border-[#D6E6F2] rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent ${
+                    className={`w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent ${
                       edukimiRi.aktuale
                         ? "bg-gray-50 text-gray-400 cursor-not-allowed"
                         : ""
@@ -1203,19 +1233,19 @@ function ProfiliAplikantit() {
                       pershkrimi: e.target.value,
                     })
                   }
-                  className="w-full px-4 py-3 bg-white border border-[#D6E6F2] rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent"
+                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent"
                   rows="3"
                 />
                 <div className="flex gap-3">
                   <button
                     onClick={() => setShfaqFormenEdukimi(false)}
-                    className="px-6 py-2.5 bg-white border border-[#D6E6F2] text-gray-700 rounded-xl hover:bg-[#F7FBFC] transition-all duration-200"
+                    className="px-6 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-[#F5F7F8] transition-all duration-200"
                   >
                     Anulo
                   </button>
                   <button
                     onClick={handleShtoEdukimin}
-                    className="px-6 py-2.5 bg-[#769FCD] text-white rounded-xl hover:bg-[#5a82b3] font-medium transition-all duration-200"
+                    className="publikoPune w-fit"
                   >
                     Ruaj
                   </button>
@@ -1226,14 +1256,14 @@ function ProfiliAplikantit() {
 
           <div className="space-y-4">
             {!perdoruesiData?.edukimi || perdoruesiData.edukimi.length === 0 ? (
-              <div className="text-center py-12 bg-[#F7FBFC] rounded-2xl border border-dashed border-[#B9D7EA]">
+              <div className="text-center py-12 bg-[#F5F7F8] rounded-2xl border border-dashed border-gray-300">
                 <p className="text-gray-500">Nuk ka arsimim të shtuar ende</p>
               </div>
             ) : (
               perdoruesiData.edukimi.map((edu, index) => (
                 <div
                   key={index}
-                  className="relative p-5 bg-[#F7FBFC] rounded-2xl border-l-4 border-[#B9D7EA] hover:shadow-md transition-all duration-200 group"
+                  className="relative p-5 bg-[#F5F7F8] rounded-2xl border-l-4 border-[#B9D7EA] hover:shadow-md transition-all duration-200 group"
                 >
                   <button
                     onClick={() => handleFshijEdukimin(index)}
@@ -1264,30 +1294,30 @@ function ProfiliAplikantit() {
           </div>
         </div>
 
-        <div className="h-px bg-gradient-to-r from-transparent via-[#D6E6F2] to-transparent my-8"></div>
+        <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent my-8"></div>
 
         {/* Skills Section */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">Aftësitë</h2>
+            <h2 className="text-2xl font-bold text-gray-700">Aftësitë</h2>
             <button
               onClick={() => setShfaqFormenAftesite(!shfaqFormenAftesite)}
-              className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#F7FBFC] hover:bg-[#D6E6F2] border border-[#D6E6F2] transition-all duration-200"
+              className="flex items-center justify-center w-10 h-10 rounded-xl hover:bg-[#D6E6F2] transition-all duration-200"
               title="Shto aftësi"
             >
-              <Plus size={20} className="text-[#769FCD]" />
+              <Plus size={20} className="text-gray-600" />
             </button>
           </div>
 
           {shfaqFormenAftesite && (
-            <div className="p-4 bg-[#F7FBFC] rounded-2xl border border-[#D6E6F2] mb-6">
+            <div className="p-4 bg-[#F5F7F8] rounded-2xl border border-gray-100 mb-6">
               <div className="space-y-3">
                 <input
                   type="text"
                   placeholder="Emri i aftësisë (p.sh. React, Projekt Menaxhim)"
                   value={aftesiRe}
                   onChange={(e) => setAftesiRe(e.target.value)}
-                  className="w-full px-4 py-3 bg-white border border-[#D6E6F2] rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent"
+                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent"
                 />
                 <div className="flex gap-3">
                   <button
@@ -1295,13 +1325,13 @@ function ProfiliAplikantit() {
                       setShfaqFormenAftesite(false);
                       setAftesiRe("");
                     }}
-                    className="px-6 py-2.5 bg-white border border-[#D6E6F2] text-gray-700 rounded-xl hover:bg-[#F7FBFC] transition-all duration-200"
+                    className="px-6 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-[#F5F7F8] transition-all duration-200"
                   >
                     Anulo
                   </button>
                   <button
                     onClick={handleShtoAftesine}
-                    className="px-6 py-2.5 bg-[#769FCD] text-white rounded-xl hover:bg-[#5a82b3] font-medium transition-all duration-200"
+                    className="publikoPune w-fit"
                   >
                     Ruaj
                   </button>
@@ -1326,30 +1356,30 @@ function ProfiliAplikantit() {
             ))}
             {(!perdoruesiData?.aftesite ||
               perdoruesiData.aftesite.length === 0) && (
-              <div className="w-full text-center py-12 bg-[#F7FBFC] rounded-2xl border border-dashed border-[#B9D7EA]">
+              <div className="w-full text-center py-12 bg-[#F5F7F8] rounded-2xl border border-dashed border-gray-300">
                 <p className="text-gray-500">Nuk ka aftësi të shtuara ende</p>
               </div>
             )}
           </div>
         </div>
 
-        <div className="h-px bg-gradient-to-r from-transparent via-[#D6E6F2] to-transparent my-8"></div>
+        <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent my-8"></div>
 
         {/* Projects Section */}
         <div>
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">Projektet</h2>
+            <h2 className="text-2xl font-bold text-gray-700">Projektet</h2>
             <button
               onClick={() => setShfaqFormenProjektet(!shfaqFormenProjektet)}
-              className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#F7FBFC] hover:bg-[#D6E6F2] border border-[#D6E6F2] transition-all duration-200"
+              className="flex items-center justify-center w-10 h-10 rounded-xl hover:bg-[#D6E6F2] transition-all duration-200"
               title="Shto projekt"
             >
-              <Plus size={20} className="text-[#769FCD]" />
+              <Plus size={20} className="text-gray-600" />
             </button>
           </div>
 
           {shfaqFormenProjektet && (
-            <div className="p-6 bg-[#F7FBFC] mb-6 rounded-2xl border border-[#D6E6F2]">
+            <div className="p-6 bg-[#F5F7F8] mb-6 rounded-2xl border border-gray-100">
               <div className="space-y-4">
                 <input
                   type="text"
@@ -1361,7 +1391,7 @@ function ProfiliAplikantit() {
                       emriProjektit: e.target.value,
                     })
                   }
-                  className="w-full px-4 py-3 bg-white border border-[#D6E6F2] rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent"
+                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent"
                 />
                 <textarea
                   placeholder="Përshkrimi"
@@ -1372,7 +1402,7 @@ function ProfiliAplikantit() {
                       pershkrimi: e.target.value,
                     })
                   }
-                  className="w-full px-4 py-3 bg-white border border-[#D6E6F2] rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent"
+                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent"
                   rows="3"
                 />
                 <input
@@ -1385,7 +1415,7 @@ function ProfiliAplikantit() {
                       teknologjite: e.target.value,
                     })
                   }
-                  className="w-full px-4 py-3 bg-white border border-[#D6E6F2] rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent"
+                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent"
                 />
                 <input
                   type="text"
@@ -1394,18 +1424,18 @@ function ProfiliAplikantit() {
                   onChange={(e) =>
                     setProjektRi({ ...projektRi, linku: e.target.value })
                   }
-                  className="w-full px-4 py-3 bg-white border border-[#D6E6F2] rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent"
+                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent"
                 />
                 <div className="flex gap-3">
                   <button
                     onClick={() => setShfaqFormenProjektet(false)}
-                    className="px-6 py-2.5 bg-white border border-[#D6E6F2] text-gray-700 rounded-xl hover:bg-[#F7FBFC] transition-all duration-200"
+                    className="px-6 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-[#F5F7F8] transition-all duration-200"
                   >
                     Anulo
                   </button>
                   <button
                     onClick={handleShtoProjekt}
-                    className="px-6 py-2.5 bg-[#769FCD] text-white rounded-xl hover:bg-[#5a82b3] font-medium transition-all duration-200"
+                    className="publikoPune w-fit"
                   >
                     Ruaj
                   </button>
@@ -1417,14 +1447,14 @@ function ProfiliAplikantit() {
           <div className="space-y-4">
             {!perdoruesiData?.projektet ||
             perdoruesiData.projektet.length === 0 ? (
-              <div className="text-center py-12 bg-[#F7FBFC] rounded-2xl border border-dashed border-[#B9D7EA]">
+              <div className="text-center py-12 bg-[#F5F7F8] rounded-2xl border border-dashed border-gray-300">
                 <p className="text-gray-500">Nuk ka projekte të shtuara ende</p>
               </div>
             ) : (
               perdoruesiData.projektet.map((proj, index) => (
                 <div
                   key={index}
-                  className="relative p-5 bg-[#F7FBFC] rounded-2xl border-l-4 border-[#D6E6F2] hover:shadow-md transition-all duration-200 group"
+                  className="relative p-5 bg-[#F5F7F8] rounded-2xl border-l-4 border-gray-300 hover:shadow-md transition-all duration-200 group"
                 >
                   <button
                     onClick={() => handleFshijProjektin(index)}
@@ -1445,7 +1475,7 @@ function ProfiliAplikantit() {
                       {proj.teknologjite.split(",").map((tech, i) => (
                         <span
                           key={i}
-                          className="px-3 py-1 bg-white text-[#769FCD] rounded-lg text-xs font-medium border border-[#D6E6F2]"
+                          className="px-3 py-1 bg-white text-[#769FCD] rounded-lg text-xs font-medium border border-gray-200"
                         >
                           {tech.trim()}
                         </span>

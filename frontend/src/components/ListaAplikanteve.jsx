@@ -93,7 +93,7 @@ function ListaAplikanteve() {
   const currentItems = aplikantet.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#F5F7F8]">
       {/* Gradient Hero Section */}
       <div className="bg-gradient-to-br from-[#F7FBFC] to-[#B9D7EA] pb-16 backdrop-blur-sm">
         <Header withGradient={false} />
@@ -173,10 +173,10 @@ function ListaAplikanteve() {
         {/* Section Title */}
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-700 mb-3">
-            Gjen talentin që kërkon
+            Gjej talentin që kërkon
           </h2>
           <p className="text-lg text-gray-500 max-w-3xl mx-auto">
-            Shfle kandidatët dhe gjej aplikantin perfekt për pozicionin që po
+            Shfleto kandidatët dhe gjej aplikantin perfekt për pozicionin që po
             rekruton
           </p>
         </div>

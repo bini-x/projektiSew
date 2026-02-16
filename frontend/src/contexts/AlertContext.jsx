@@ -15,6 +15,13 @@ export const AlertProvider = ({ children }) => {
     type: "info",
   });
 
+  const [confirm, setConfirm] = useState({
+    open: false,
+    title: "",
+    message: "",
+    onConfirm: () => {},
+  });
+
   const showAlert = (message, type = "info") => {
     setAlert({ open: true, message, type });
   };
@@ -23,8 +30,28 @@ export const AlertProvider = ({ children }) => {
     setAlert({ open: false, message: "", type: "info" });
   };
 
+  const showConfirm = (message, title, onConfirm) => {
+    setConfirm({
+      open: true,
+      title: title || "Konfirmo veprimin",
+      message: message || "Jeni të sigurt që dëshironi të vazhdoni?",
+      onConfirm: onConfirm,
+    });
+  };
+
+  const hideConfirm = () => {
+    setConfirm({
+      open: false,
+      title: "",
+      message: "",
+      onConfirm: () => {},
+    });
+  };
+
   return (
-    <AlertContext.Provider value={{ alert, showAlert, hideAlert }}>
+    <AlertContext.Provider
+      value={{ alert, showAlert, hideAlert, confirm, showConfirm, hideConfirm }}
+    >
       {children}
     </AlertContext.Provider>
   );

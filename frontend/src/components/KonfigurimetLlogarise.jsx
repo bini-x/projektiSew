@@ -188,7 +188,7 @@ function KonfigurimetLlogarise() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F7FBFC] to-[E0F4FF">
+    <div className="min-h-screen bg-[#F5F7F8]">
       <Header withGradient={true} />
       <div className="container mx-auto px-4 py-8 max-w-3xl">
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">

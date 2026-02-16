@@ -175,7 +175,7 @@ function Header({ withGradient = false, forceNonHomePage = false }) {
         className={`relative text-base font-medium py-3 px-4 rounded-xl transition-all duration-300 flex items-center overflow-hidden ${
           active
             ? "text-[#0F4C75] bg-gradient-to-r from-[#0F4C75]/10 to-[#3282B8]/10 shadow-sm"
-            : "text-zinc-700 hover:text-[#0F4C75] hover:bg-gray-50"
+            : "text-gray-800 hover:text-[#0F4C75] hover:bg-gray-50"
         }`}
         onClick={onClick}
       >
@@ -190,7 +190,7 @@ function Header({ withGradient = false, forceNonHomePage = false }) {
   return (
     <>
       <div
-        className={`relative ${withGradient ? "bg-gradient-to-r from-[#F7FBFC] via-[#D6E6F2] to-[#C8E8FA]" : ""}`}
+        className={`relative ${withGradient ? "bg-gradient-to-r from-[#F5F7F8] via-[#DDE6ED] to-[#F5F7F8]" : ""}`}
       >
         {/* Header Content */}
         <div
@@ -378,14 +378,11 @@ function Header({ withGradient = false, forceNonHomePage = false }) {
                   <>
                     <Link
                       to="/kycja"
-                      className="px-5 py-2.5 border-2 border-[#0F4C75] rounded-xl text-[#0F4C75] font-semibold hover:bg-[#0F4C75] hover:text-white transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+                      className="px-5 py-2.5 border border-[#0F4C75] rounded-xl text-[#0F4C75] font-semibold hover:bg-linear-to-r from-[#0f4c75] to-[#6d94c5] hover:text-white transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
                     >
                       Kycu/Regjistrohu
                     </Link>
-                    <Link
-                      to="/kycja"
-                      className="px-5 py-2.5 bg-gradient-to-r from-[#0F4C75] to-[#3282B8] rounded-xl text-white font-semibold hover:from-[#3282B8] hover:to-[#0F4C75] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
-                    >
+                    <Link to="/kycja" className="publikoPune">
                       Publiko Pune
                     </Link>
                   </>
@@ -407,7 +404,9 @@ function Header({ withGradient = false, forceNonHomePage = false }) {
       </div>
 
       {isMenuOpen && (
-        <div className="md:hidden bg-white shadow-2xl rounded-2xl overflow-hidden mx-4 mt-2 border border-gray-100 animate-in fade-in slide-in-from-top-4 duration-300">
+        <div
+          className={`md:hidden ${isBallinaMysafir ? "bg-white/95 backdrop-blur-sm" : "bg-white"} shadow-2xl rounded-2xl overflow-hidden mx-4 mt-2 border ${isBallinaMysafir ? "border-white/20" : "border-gray-100"} animate-in fade-in slide-in-from-top-4 duration-300`}
+        >
           <nav className="flex flex-col py-4 px-4 space-y-1">
             <MobileNavLink to="/" onClick={closeMenu}>
               Ballina
@@ -451,7 +450,7 @@ function Header({ withGradient = false, forceNonHomePage = false }) {
                         </div>
                       )}
                     </div>
-                    <span className="font-semibold text-zinc-700">
+                    <span className="font-semibold text-gray-800">
                       {perdoruesiData.tipiPerdoruesit === "punedhenes"
                         ? perdoruesiData.kompania
                         : perdoruesiData.emri}
@@ -469,7 +468,7 @@ function Header({ withGradient = false, forceNonHomePage = false }) {
                   <div className="mt-2 ml-4 space-y-1 border-l-2 border-[#0F4C75] pl-4 animate-in fade-in slide-in-from-left-2 duration-300">
                     <Link
                       to={`/profili/${perdoruesiData._id}`}
-                      className="flex items-center gap-3 py-2.5 px-3 text-zinc-700 hover:text-[#0F4C75] transition-all duration-200 rounded-lg hover:bg-gray-50 font-medium"
+                      className="flex items-center gap-3 py-2.5 px-3 text-gray-800 hover:text-[#0F4C75] transition-all duration-200 rounded-lg hover:bg-gray-50 font-medium"
                       onClick={closeMenu}
                     >
                       <FontAwesomeIcon
@@ -482,7 +481,7 @@ function Header({ withGradient = false, forceNonHomePage = false }) {
                     {isPunedhenes ? (
                       <Link
                         to={`/profili/${perdoruesiData._id}/menaxhoShpalljet`}
-                        className="flex items-center gap-3 py-2.5 px-3 hover:text-[#0F4C75] transition-all duration-200 rounded-lg hover:bg-gray-50 font-medium"
+                        className="flex items-center gap-3 py-2.5 px-3 text-gray-800 hover:text-[#0F4C75] transition-all duration-200 rounded-lg hover:bg-gray-50 font-medium"
                         onClick={closeMenu}
                       >
                         <SquareChartGantt
@@ -494,7 +493,7 @@ function Header({ withGradient = false, forceNonHomePage = false }) {
                     ) : (
                       <Link
                         to={`/profili/${perdoruesiData._id}/menaxhoAplikimet`}
-                        className="flex items-center gap-3 py-2.5 px-3 hover:text-[#0F4C75] transition-all duration-200 rounded-lg hover:bg-gray-50 font-medium"
+                        className="flex items-center gap-3 py-2.5 px-3 text-gray-800 hover:text-[#0F4C75] transition-all duration-200 rounded-lg hover:bg-gray-50 font-medium"
                         onClick={closeMenu}
                       >
                         <SquareChartGantt
@@ -507,7 +506,7 @@ function Header({ withGradient = false, forceNonHomePage = false }) {
 
                     <Link
                       to={`/profili/${perdoruesiData._id}/konfigurimet`}
-                      className="flex items-center gap-3 py-2.5 px-3 hover:text-[#0F4C75] transition-all duration-200 rounded-lg hover:bg-gray-50 font-medium"
+                      className="flex items-center gap-3 py-2.5 px-3 text-gray-800 hover:text-[#0F4C75] transition-all duration-200 rounded-lg hover:bg-gray-50 font-medium"
                       onClick={closeMenu}
                     >
                       <Settings size={18} className="text-[#0F4C75]" />
@@ -517,7 +516,7 @@ function Header({ withGradient = false, forceNonHomePage = false }) {
                     {!isPunedhenes && (
                       <Link
                         to={`/profili/${perdoruesiData._id}/punetRuajtura`}
-                        className="flex items-center gap-3 py-2.5 px-3 hover:text-[#0F4C75] transition-all duration-200 rounded-lg hover:bg-gray-50 font-medium"
+                        className="flex items-center gap-3 py-2.5 px-3 text-gray-800 hover:text-[#0F4C75] transition-all duration-200 rounded-lg hover:bg-gray-50 font-medium"
                         onClick={closeMenu}
                       >
                         <Heart size={18} className="text-[#0F4C75]" />
@@ -544,14 +543,14 @@ function Header({ withGradient = false, forceNonHomePage = false }) {
                   <>
                     <Link
                       to="/kycja"
-                      className="px-5 py-3 bg-white border border-white rounded-xl text-[#0F4C75] font-semibold text-center hover:bg-transparent hover:text-white transition-all duration-300 transform hover:scale-[1.02]"
+                      className="px-5 py-3 bg-white border border-gray-300 rounded-xl text-gray-800 font-semibold text-center hover:bg-gray-50 hover:border-[#0F4C75] hover:text-[#0F4C75] transition-all duration-300 transform hover:scale-[1.02]"
                       onClick={closeMenu}
                     >
                       Kycu/Regjistrohu
                     </Link>
                     <Link
                       to="/kycja"
-                      className="px-5 py-3 bg-transparent border border-white rounded-xl text-white font-semibold text-center hover:bg-white hover:text-[#0F4C75] transition-all duration-300 transform hover:scale-[1.02]"
+                      className="publikoPune px-5 py-3 bg-gradient-to-r from-[#0F4C75] to-[#3282B8] border border-transparent rounded-xl text-white font-semibold text-center hover:from-[#3282B8] hover:to-[#0F4C75] transition-all duration-300 transform hover:scale-[1.02] shadow-lg"
                       onClick={closeMenu}
                     >
                       Publiko Pune
@@ -561,14 +560,14 @@ function Header({ withGradient = false, forceNonHomePage = false }) {
                   <>
                     <Link
                       to="/kycja"
-                      className="px-5 py-3 border-2 border-[#0F4C75] rounded-xl text-[#0F4C75] font-semibold text-center hover:bg-[#0F4C75] hover:text-white transition-all duration-300 transform hover:scale-[1.02]"
+                      className="px-5 py-3 border border-[#0F4C75] rounded-xl text-[#0F4C75] font-semibold text-center hover:bg-[#0F4C75] hover:text-white transition-all duration-300 transform hover:scale-[1.02]"
                       onClick={closeMenu}
                     >
                       Kycu/Regjistrohu
                     </Link>
                     <Link
                       to="/kycja"
-                      className="px-5 py-3 bg-gradient-to-r from-[#0F4C75] to-[#3282B8] rounded-xl text-white font-semibold text-center hover:from-[#3282B8] hover:to-[#0F4C75] transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-xl"
+                      className="publikoPune px-5 py-3 bg-gradient-to-r from-[#0F4C75] to-[#3282B8] rounded-xl text-white font-semibold text-center hover:from-[#3282B8] hover:to-[#0F4C75] transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-xl"
                       onClick={closeMenu}
                     >
                       Publiko Pune

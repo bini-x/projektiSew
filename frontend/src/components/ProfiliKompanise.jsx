@@ -14,13 +14,14 @@ import {
   MapPin,
   Trash2,
   Briefcase,
+  ChevronRight,
 } from "lucide-react";
 import Perdoruesi from "../PerdoruesiContext";
 import { useAlert } from "../contexts/AlertContext";
 
 function ProfiliKompanise() {
   const navigate = useNavigate();
-  const { showAlert } = useAlert();
+  const { showAlert, showConfirm, hideConfirm } = useAlert();
   const { id } = useParams();
   const { perdoruesiData, setPerdoruesiData } = Perdoruesi.usePerdoruesi();
   const [shfaqLinkeForm, setShfaqLinkeForm] = useState(false);
@@ -92,12 +93,18 @@ function ProfiliKompanise() {
       "image/gif",
     ];
     if (!llojetELejuara.includes(file.type)) {
-      alert("Vetëm fotot janë të lejuara (JPEG, PNG, WEBP, GIF)");
+      showAlert(
+        "Vetëm fotot janë të lejuara (JPEG, PNG, WEBP, GIF)",
+        "warning",
+      );
       return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      alert("Madhësia e fotos është shumë e madhe. Maksimumi 5MB");
+      showAlert(
+        "Madhësia e fotos është shumë e madhe. Maksimumi 5MB",
+        "warning",
+      );
       return;
     }
 
@@ -120,46 +127,49 @@ function ProfiliKompanise() {
         const newPhotoUrl = `http://localhost:3000/api/profili/${id}/foto?t=${Date.now()}`;
         setFotoProfile(newPhotoUrl);
 
-        // Update perdoruesiData to include foto property
         setPerdoruesiData((prev) => ({
           ...prev,
-          foto: { data: true }, // Signal that photo exists
+          foto: { data: true },
         }));
 
-        alert("Fotoja u ngarkua me sukses!");
+        showAlert("Fotoja u ngarkua me sukses!", "success");
       }
     } catch (error) {
       console.error(error);
-      alert(error.response?.data?.message || "Gabim në ngarkimin e fotos");
+      showAlert(
+        error.response?.data?.message || "Gabim në ngarkimin e fotos",
+        "error",
+      );
     } finally {
       setPoNgarkohetFoto(false);
     }
   };
 
   const handleFshijFoto = async () => {
-    if (!window.confirm("Jeni të sigurt që dëshironi të fshini foton?")) {
-      return;
-    }
+    showConfirm(
+      "Jeni të sigurt që dëshironi të fshini foton?",
+      "Fshi Foto",
+      async () => {
+        try {
+          const response = await axios.delete(
+            `http://localhost:3000/api/profili/${id}/foto`,
+          );
 
-    try {
-      const response = await axios.delete(
-        `http://localhost:3000/api/profili/${id}/foto`,
-      );
-
-      if (response.data.success) {
-        setFotoProfile(null);
-        // Update perdoruesiData to remove foto property
-        setPerdoruesiData((prev) => {
-          const updated = { ...prev };
-          delete updated.foto;
-          return updated;
-        });
-        alert("Fotoja u fshi me sukses!");
-      }
-    } catch (error) {
-      console.error(error);
-      alert("Gabim në fshirjen e fotos");
-    }
+          if (response.data.success) {
+            setFotoProfile(null);
+            setPerdoruesiData((prev) => {
+              const updated = { ...prev };
+              delete updated.foto;
+              return updated;
+            });
+            showAlert("Fotoja u fshi me sukses!", "success");
+          }
+        } catch (error) {
+          console.error(error);
+          showAlert("Gabim në fshirjen e fotos", "error");
+        }
+      },
+    );
   };
 
   const [editMode, setEditMode] = useState({
@@ -233,30 +243,32 @@ function ProfiliKompanise() {
   };
 
   const handleFshijLinkin = async (index) => {
-    if (!window.confirm("Jeni të sigurt që dëshironi ta fshini këtë link?")) {
-      return;
-    }
+    showConfirm(
+      "Jeni të sigurt që dëshironi ta fshini këtë link?",
+      "Fshi Link",
+      async () => {
+        try {
+          const updatedLinks = (perdoruesiData?.linqet || []).filter(
+            (_, i) => i !== index,
+          );
 
-    try {
-      const updatedLinks = (perdoruesiData?.linqet || []).filter(
-        (_, i) => i !== index,
-      );
+          const response = await axios.put(
+            `http://localhost:3000/api/profili/${id}`,
+            {
+              linqet: updatedLinks,
+            },
+          );
 
-      const response = await axios.put(
-        `http://localhost:3000/api/profili/${id}`,
-        {
-          linqet: updatedLinks,
-        },
-      );
-
-      if (response.data.success) {
-        setPerdoruesiData(response.data.data);
-        showAlert("Linku u fshi me sukses!", "success");
-      }
-    } catch (error) {
-      console.error(error);
-      showAlert("Gabim në fshirjen e linkut", "error");
-    }
+          if (response.data.success) {
+            setPerdoruesiData(response.data.data);
+            showAlert("Linku u fshi me sukses!", "success");
+          }
+        } catch (error) {
+          console.error(error);
+          showAlert("Gabim në fshirjen e linkut", "error");
+        }
+      },
+    );
   };
 
   const handleRuajRrethKompanise = async () => {
@@ -291,7 +303,7 @@ function ProfiliKompanise() {
   return (
     <div className="max-w-5xl mx-auto mb-8 mt-10 px-4">
       {/* Header Section */}
-      <div className="bg-white rounded-3xl shadow-sm overflow-hidden mb-6 border border-[#D6E6F2]">
+      <div className="bg-white rounded-3xl shadow-sm overflow-hidden mb-6 border border-gray-200">
         {/* Cover Banner with SVG and Action Button */}
         <div className="h-32 relative overflow-hidden">
           <svg
@@ -420,7 +432,7 @@ function ProfiliKompanise() {
               {editKompaniaMode ? (
                 <form
                   onSubmit={handleSaveKompania}
-                  className="space-y-4 bg-[#F7FBFC] p-6 rounded-2xl border border-[#D6E6F2]"
+                  className="space-y-4 bg-[#F5F7F8] p-6 rounded-2xl border border-gray-200"
                 >
                   <input
                     type="text"
@@ -432,12 +444,12 @@ function ProfiliKompanise() {
                       })
                     }
                     placeholder="Emri i kompanisë"
-                    className="w-full px-4 py-3 bg-white border border-[#D6E6F2] rounded-xl text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#769FCD]"
+                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#769FCD]"
                     required
                   />
 
-                  <div className="flex items-center gap-2 text-gray-600 bg-white px-4 py-3 rounded-xl border border-[#D6E6F2]">
-                    <Mail size={18} className="text-[#769FCD]" />
+                  <div className="flex items-center gap-2 text-gray-600 bg-white px-4 py-3 rounded-xl border border-gray-200">
+                    <Mail size={18} className="text-gray-500" />
                     <span>{perdoruesiData?.email || "email@kompania.com"}</span>
                   </div>
 
@@ -451,21 +463,18 @@ function ProfiliKompanise() {
                       })
                     }
                     placeholder="Numri i telefonit"
-                    className="w-full px-4 py-3 bg-white border border-[#D6E6F2] rounded-xl text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#769FCD]"
+                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#769FCD]"
                   />
 
                   <div className="flex gap-3">
                     <button
                       type="button"
                       onClick={() => setEditKompaniaMode(false)}
-                      className="flex-1 bg-white border-2 border-[#D6E6F2] hover:bg-[#F7FBFC] text-gray-700 font-medium py-3 px-6 rounded-xl transition-all duration-200"
+                      className="flex-1 bg-white border border-gray-200 hover:bg-[#F5F7F8] text-gray-700 font-medium py-3 px-6 rounded-xl transition-all duration-200"
                     >
                       Anulo
                     </button>
-                    <button
-                      type="submit"
-                      className="flex-1 bg-[#769FCD] hover:bg-[#5a82b3] text-white font-medium py-3 px-6 rounded-xl transition-all duration-200"
-                    >
+                    <button type="submit" className="flex-1 publikoPune">
                       Ruaj Ndryshimet
                     </button>
                   </div>
@@ -486,17 +495,17 @@ function ProfiliKompanise() {
                         });
                         setEditKompaniaMode(true);
                       }}
-                      className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#F7FBFC]  hover:bg-[#D6E6F2] border border-[#D6E6F2] transition-all duration-200"
+                      className="flex items-center justify-center w-10 h-10 rounded-xl bg-white/60 hover:bg-[#F5F7F8] border border-gray-300 transition-all duration-200"
                       title="Modifiko profilin"
                     >
-                      <Edit2 size={18} className="text-[#769FCD] " />
+                      <Edit2 size={18} className="text-gray-700" />
                     </button>
                   </div>
 
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-gray-600">
-                      <div className="w-8 h-8 rounded-lg bg-[#F7FBFC] flex items-center justify-center">
-                        <Mail size={16} className="text-[#769FCD]" />
+                      <div className="w-8 h-8 rounded-lg bg-[#F5F7F8] flex items-center justify-center">
+                        <Mail size={16} className="text-gray-700" />
                       </div>
                       <span>
                         {perdoruesiData?.email || "email@kompania.com"}
@@ -505,15 +514,15 @@ function ProfiliKompanise() {
 
                     {perdoruesiData?.nrTelefonit ? (
                       <div className="flex items-center gap-2 text-gray-600">
-                        <div className="w-8 h-8 rounded-lg bg-[#F7FBFC] flex items-center justify-center">
-                          <Phone size={16} className="text-[#769FCD]" />
+                        <div className="w-8 h-8 rounded-lg bg-[#F5F7F8] flex items-center justify-center">
+                          <Phone size={16} className="text-gray-700" />
                         </div>
                         <span>{perdoruesiData.nrTelefonit}</span>
                       </div>
                     ) : (
                       <div className="flex items-center gap-2 text-gray-600">
-                        <div className="w-8 h-8 rounded-lg bg-[#F7FBFC] flex items-center justify-center">
-                          <Phone size={16} className="text-[#769FCD]" />
+                        <div className="w-8 h-8 rounded-lg bg-[#F5F7F8] flex items-center justify-center">
+                          <Phone size={16} className="text-gray-700" />
                         </div>
                         <span className="text-gray-400">+383-44-XXX-XXX</span>
                       </div>
@@ -529,7 +538,7 @@ function ProfiliKompanise() {
                             href={link.linku}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-[#F7FBFC] text-[#769FCD] rounded-xl text-sm hover:bg-[#D6E6F2] transition-all duration-200 border border-[#D6E6F2]"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-[#F5F7F8] text-gray-700 rounded-xl text-sm hover:bg-[#D6E6F2] transition-all duration-200 border border-[#F5F7F8]"
                           >
                             <Link size={14} />
                             {link.platforma}
@@ -544,7 +553,7 @@ function ProfiliKompanise() {
                       ))}
                       <button
                         onClick={() => setShfaqLinkeForm(!shfaqLinkeForm)}
-                        className="inline-flex items-center gap-2 px-4 py-2 border-2 border-dashed border-[#B9D7EA] text-[#769FCD] rounded-xl text-sm hover:border-[#769FCD] hover:bg-[#F7FBFC] transition-all duration-200"
+                        className="inline-flex items-center gap-2 px-4 py-2 border-2 border-dashed border-gray-400 text-gray-700 rounded-xl text-sm hover:bg-[#F5F7F8] transition-all duration-200"
                       >
                         <Plus size={14} />
                         Shto Link
@@ -552,7 +561,7 @@ function ProfiliKompanise() {
                     </div>
 
                     {shfaqLinkeForm && (
-                      <div className="mt-4 p-4 bg-[#F7FBFC] rounded-xl border border-[#D6E6F2]">
+                      <div className="mt-4 p-4 bg-[#F5F7F8] rounded-xl border border-gray-200">
                         <div className="space-y-3">
                           <input
                             type="text"
@@ -564,7 +573,7 @@ function ProfiliKompanise() {
                                 platforma: e.target.value,
                               })
                             }
-                            className="w-full px-4 py-2.5 bg-white border border-[#D6E6F2] rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent text-sm"
+                            className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm"
                           />
                           <input
                             type="url"
@@ -573,18 +582,18 @@ function ProfiliKompanise() {
                             onChange={(e) =>
                               setLinkRi({ ...linkRi, linku: e.target.value })
                             }
-                            className="w-full px-4 py-2.5 bg-white border border-[#D6E6F2] rounded-xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent text-sm"
+                            className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm"
                           />
                           <div className="flex gap-2">
                             <button
                               onClick={handleShtoLink}
-                              className="px-4 py-2 bg-[#769FCD] text-white rounded-xl hover:bg-[#5a82b3] text-sm font-medium transition-all duration-200"
+                              className="publikoPune w-fit"
                             >
                               Ruaj
                             </button>
                             <button
                               onClick={() => setShfaqLinkeForm(false)}
-                              className="px-4 py-2 bg-white border border-[#D6E6F2] text-gray-700 rounded-xl hover:bg-[#F7FBFC] text-sm transition-all duration-200"
+                              className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-xl hover:bg-[#F5F7F8] text-sm transition-all duration-200"
                             >
                               Anulo
                             </button>
@@ -601,7 +610,7 @@ function ProfiliKompanise() {
       </div>
 
       {/* Main Content */}
-      <div className="bg-white rounded-3xl shadow-sm overflow-hidden p-8 border border-[#D6E6F2]">
+      <div className="bg-white rounded-3xl shadow-sm overflow-hidden p-8 border border-gray-200">
         {/* Punë të Hapura */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
@@ -610,7 +619,7 @@ function ProfiliKompanise() {
                 <Briefcase size={20} className="text-[#769FCD]" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">
+                <h2 className="text-2xl font-bold text-gray-700">
                   Punë të Hapura
                 </h2>
                 <p className="text-sm text-gray-500">
@@ -622,14 +631,14 @@ function ProfiliKompanise() {
 
           <div className="space-y-4">
             {puneHapura.length === 0 ? (
-              <div className="text-center py-12 bg-[#F7FBFC] rounded-2xl border border-dashed border-[#B9D7EA]">
-                <Briefcase size={48} className="mx-auto text-[#B9D7EA] mb-4" />
+              <div className="text-center py-12 bg-[#F5F7F8] rounded-2xl border border-dashed border-gray-300">
+                <Briefcase size={48} className="mx-auto text-gray-400 mb-4" />
                 <p className="text-gray-500 mb-4">
                   Nuk ka pozicione të hapura aktualisht
                 </p>
                 <button
                   onClick={() => navigate("/publikopune")}
-                  className="px-6 py-2.5 bg-[#769FCD] text-white rounded-xl hover:bg-[#5a82b3] font-medium transition-all duration-200"
+                  className="publikoPune w-fit"
                 >
                   Publiko Pozicionin e Parë
                 </button>
@@ -640,7 +649,7 @@ function ProfiliKompanise() {
                   <div
                     key={pune.id}
                     onClick={() => navigate(`/shpallja/${pune._id}`)}
-                    className="relative p-5 bg-[#F7FBFC] rounded-2xl border border-[#D6E6F2] hover:shadow-md hover:border-[#769FCD] transition-all duration-200 cursor-pointer group"
+                    className="relative p-5 bg-[#F5F7F8] rounded-2xl border border-gray-200 hover:shadow-md hover:border-[#769FCD] transition-all duration-200 cursor-pointer group"
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1">
@@ -652,7 +661,7 @@ function ProfiliKompanise() {
                             {pune.kategoriaPunes}
                           </span>
                           {pune.lokacioniPunes && (
-                            <span className="px-3 py-1 bg-white border border-[#D6E6F2] text-gray-700 rounded-lg text-xs font-medium flex items-center gap-1">
+                            <span className="px-3 py-1 bg-white border border-gray-200 text-gray-700 rounded-lg text-xs font-medium flex items-center gap-1">
                               <MapPin size={12} />
                               {pune.lokacioniPunes}
                             </span>
@@ -667,7 +676,7 @@ function ProfiliKompanise() {
                             {pune.aftesitePrimare?.map((ap, idx) => (
                               <span
                                 key={idx}
-                                className="text-xs text-[#769FCD] bg-white px-2 py-0.5 rounded border border-[#D6E6F2]"
+                                className="text-xs text-[#769FCD] bg-white px-2 py-0.5 rounded border border-gray-200"
                               >
                                 {ap}
                               </span>
@@ -675,7 +684,7 @@ function ProfiliKompanise() {
                             {pune.aftesiteSekondare?.map((as, idx) => (
                               <span
                                 key={idx}
-                                className="text-xs text-gray-600 bg-white px-2 py-0.5 rounded border border-[#D6E6F2]"
+                                className="text-xs text-gray-600 bg-white px-2 py-0.5 rounded border border-gray-200"
                               >
                                 {as}
                               </span>
@@ -684,19 +693,7 @@ function ProfiliKompanise() {
                         )}
                       </div>
                       <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-white group-hover:bg-[#769FCD] transition-colors">
-                        <svg
-                          className="w-4 h-4 text-[#769FCD] group-hover:text-white transition-colors"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M9 5l7 7-7 7"
-                          />
-                        </svg>
+                        <ChevronRight className="w-4 h-4 text-gray-700 group-hover:text-white transition-colors" />
                       </div>
                     </div>
                   </div>
@@ -705,7 +702,7 @@ function ProfiliKompanise() {
                   onClick={() =>
                     navigate(`/profili/${perdoruesiData?._id}/menaxhoShpalljet`)
                   }
-                  className="w-full px-6 py-3 bg-white border-2 border-[#D6E6F2] text-[#769FCD] rounded-xl hover:bg-[#F7FBFC] hover:border-[#769FCD] font-medium transition-all duration-200"
+                  className="w-full px-6 py-3 bg-white border-2 border-gray-200 text-gray-700 rounded-xl hover:bg-[#F5F7F8] hover:border-[#769FCD] font-medium transition-all duration-200"
                 >
                   Menaxho Të Gjitha Shpalljet ({puneHapura.length})
                 </button>
@@ -714,12 +711,12 @@ function ProfiliKompanise() {
           </div>
         </div>
 
-        <div className="h-px bg-gradient-to-r from-transparent via-[#D6E6F2] to-transparent my-8"></div>
+        <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent my-8"></div>
 
         {/* Rreth Kompanisë */}
         <div>
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">
+            <h2 className="text-2xl font-bold text-gray-700">
               Rreth Kompanisë
             </h2>
             {!editMode.rrethKompanise ? (
@@ -727,16 +724,16 @@ function ProfiliKompanise() {
                 onClick={() =>
                   setEditMode({ ...editMode, rrethKompanise: true })
                 }
-                className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#F7FBFC] hover:bg-[#D6E6F2] border border-[#D6E6F2] transition-all duration-200"
+                className="flex items-center justify-center w-10 h-10 rounded-xl hover:bg-[#D6E6F2] transition-all duration-200"
                 title="Modifiko përshkrimin"
               >
-                <Edit2 size={18} className="text-[#769FCD]" />
+                <Edit2 size={18} className="text-gray-600" />
               </button>
             ) : (
               <div className="flex gap-2">
                 <button
                   onClick={handleRuajRrethKompanise}
-                  className="px-4 py-2 bg-[#769FCD] text-white rounded-xl hover:bg-[#5a82b3] text-sm font-medium transition-all duration-200"
+                  className="publikoPune w-fit"
                 >
                   Ruaj
                 </button>
@@ -744,7 +741,7 @@ function ProfiliKompanise() {
                   onClick={() =>
                     setEditMode({ ...editMode, rrethKompanise: false })
                   }
-                  className="px-4 py-2 bg-white border border-[#D6E6F2] text-gray-700 rounded-xl hover:bg-[#F7FBFC] text-sm transition-all duration-200"
+                  className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-xl hover:bg-[#F5F7F8] text-sm transition-all duration-200"
                 >
                   Anulo
                 </button>
@@ -756,10 +753,10 @@ function ProfiliKompanise() {
               value={rrethKompanise}
               onChange={(e) => setRrethKompanise(e.target.value)}
               placeholder="Shkruani rreth kompanisë suaj, misionin, vizionin dhe vlerë që ofroni..."
-              className="w-full px-4 py-3 bg-[#F7FBFC] border border-[#D6E6F2] rounded-2xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent min-h-[150px] resize-none"
+              className="w-full px-4 py-3 bg-[#F5F7F8] border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#769FCD] focus:border-transparent min-h-[150px] resize-none"
             />
           ) : (
-            <div className="p-6 bg-[#F7FBFC] rounded-2xl border border-[#D6E6F2]">
+            <div className="p-6 bg-[#F5F7F8] rounded-2xl border border-gray-200">
               <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
                 {perdoruesiData?.rrethKompanise ||
                   "Nuk ka informacione të shtuar akoma. Klikoni butonin e modifikimit për të shtuar një përshkrim të kompanisë suaj."}
@@ -773,4 +770,3 @@ function ProfiliKompanise() {
 }
 
 export default ProfiliKompanise;
-

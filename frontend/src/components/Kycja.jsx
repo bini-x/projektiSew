@@ -51,7 +51,7 @@ function Kycja() {
   };
 
   return (
-    <div className="bg-linear-to-br from-[#F7FBFC] to-[#B9D7EA] pb-10  shadow-[#0F4C75] min-h-screen flex justify-center items-center p-4">
+    <div className=" bg-[#F5F7F8] pb-10  shadow-[#0F4C75] min-h-screen flex justify-center items-center p-4">
       <div
         className="w-full max-w-125
                 bg-white rounded-lg shadow-2xl 
